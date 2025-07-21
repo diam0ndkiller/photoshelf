@@ -14,3 +14,6 @@ Manually copy the `express-backend` directory to your desired location. Set `nod
 
 #### Building Frontend Server
 Enter `vue-frontend` and type `npm run build`. Then deploy the contents of the `dist` directory to your web server of choice.
+
+## Ports
+To use photoshelf, you need to open port `8090` for the frontend and port `8091` for the backend in your firewall.
