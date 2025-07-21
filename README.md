@@ -2,7 +2,7 @@
 A webserver to create albums of local photos to share and remember
 
 ## Development Setup
-Run `install_dev.sh` to setup the server. You will be prompted to enter the URL of the backend for development (normally your current system).
+Run `install_dev.sh` to setup the server. You will be prompted to replace `localhost` with the URL of the backend (in development your system's IP).
 
 Then run `express-backend/run.sh` and `vue-frontend/run.sh` to start the development server.
 
