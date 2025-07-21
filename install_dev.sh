@@ -2,10 +2,17 @@ cd "$(dirname $0)"
 
 mkdir express-backend/config
 
+cd vue-frontend
+npm install
+
+cd ../express-backend
+npm install
+
+cd ..
+
 if [[ ! -e vue-frontend/.env ]] then
     touch vue-frontend/.env
     echo "VITE_API_BASE_URL=localhost:8091" > vue-frontend/.env
-    "${EDITOR:-vi}" vue-frontend/.env
 fi
 
-echo "Now run ./express-backend/run.sh and ./vue-frontend/run.sh"
+"${EDITOR:-vi}" vue-frontend/.env
