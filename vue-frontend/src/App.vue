@@ -1,11 +1,25 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue';
+import MainFrame from './components/MainFrame.vue';
+
+import { useTheme } from 'vuetify'
+
+const theme = useTheme()
+
+if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  theme.change('dark');
+} else {
+  theme.change('light');
+}
 
 </script>
 
 <template>
-  <HelloWorld/>
+    <Suspense>
+        <v-app>
+            <MainFrame/>
+        </v-app>
+    </Suspense>
 </template>
 
-<style scoped>
+<style>
 </style>
