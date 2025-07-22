@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { getHelloworld } from '../utils/backendHandler.ts';
+import BackendHandler from '../utils/backendHandler.ts';
 
 export default {
     data() {
@@ -15,7 +15,7 @@ export default {
         }
     },
     async mounted() {
-        this.helloworldMessage = await getHelloworld();
+        this.helloworldMessage = await BackendHandler.getHelloworld();
     }
 }
 </script>
