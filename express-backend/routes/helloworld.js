@@ -8,6 +8,6 @@ const router = Router();
 import { sayHello } from '../controllers/helloworldController.js';
 
 // GET /helloworld
-router.get('/helloworld', sayHello);
+router.get('/', sayHello);
 
 export default router;

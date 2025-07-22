@@ -1,3 +1,4 @@
 express-backend/node_modules
 vue-frontend/.env
 .vscode
+photoshelf.sqlite
