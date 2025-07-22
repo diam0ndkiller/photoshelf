@@ -1,6 +1,8 @@
+import BackendHandler from "./backendHandler";
+
 export default class navigationUtils {
     static async getNavigationDrawerItems() {
-        return [
+        var items: Array<{}> = [
             {
                 title: "Home",
                 value: "/home",
@@ -8,14 +10,48 @@ export default class navigationUtils {
                     prependIcon: 'mdi-home',
                 },
             },
+            {type: 'divider'},
             {
-                title: "Albums",
-                value: "/view-albums",
+                type: 'subheader',
+                title: 'ALBUMS',
+                props: {}
+            },
+            {
+                title: "All Albums",
+                value: "/albums",
                 props: {
-                    prependIcon: 'mdi-image-album',
+                    prependIcon: 'mdi-view-grid',
                 }
             }
         ]
+
+        var albums = (await BackendHandler.listAlbums()).albums;//.splice(0, 5);
+
+        for (var album of albums) {
+            items.push({
+                title: album.name,
+                value: "/albums/" + album.id,
+                props: {
+                    prependIcon: 'mdi-image-album',
+                }
+            })
+        }
+
+        items.push({type: 'divider'});
+
+        items.push({
+            type: 'subheader',
+            title: 'PHOTOS',
+        })
+        items.push({
+            title: "All Photos",
+            value: "/photos",
+            props: {
+                prependIcon: 'mdi-image',
+            }
+        })
+
+        return items;
     }
 
     static decodePathSegments(path: string): Array<{ title: string, pathLink: string }> {
@@ -32,7 +68,7 @@ export default class navigationUtils {
 
     static PATH_SEGMENTS_DICT: { [key: string]: string } = {
         'home': 'Home',
-        'view-albums': 'Albums'
+        'albums': 'All Albums'
     }
 
     static decodeDisplayName(key: string, dict: { [key: string]: any }) {
