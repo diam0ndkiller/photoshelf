@@ -1,14 +1,17 @@
 <script setup lang="ts">
-    import navigationUtils from '@/utils/navigationUtils';
-    import HomePage from './pages/HomePage.vue';
-    import AlbumsPage from './pages/AlbumsPage.vue';
-    import PhotosPage from './pages/PhotosPage.vue';
-    import SettingsPage from './pages/SettingsPage.vue';
-    const mainNavigationDrawerItems = await navigationUtils.getNavigationDrawerItems();
+import navigationUtils from '@/utils/navigationUtils';
+import HomePage from './pages/HomePage.vue';
+import AlbumsPage from './pages/AlbumsPage.vue';
+import PhotosPage from './pages/PhotosPage.vue';
+import SettingsPage from './pages/SettingsPage.vue';
+import LoginWindow from './popups/LoginWindow.vue';
+import NavigationDrawerContents from './NavigationDrawerContents.vue';
+
 </script>
 
 <template>
     <v-app-bar
+            v-if="!showLogin"
             :elevation="2"
             color="primary"
     >
@@ -28,21 +31,23 @@
         </v-app-bar-title>
     </v-app-bar>
 
+    
     <v-navigation-drawer
+            v-if="!showLogin"
             v-model="showNavigationDrawer"
             permanent
     >
-        <v-list
-                :selected="selectedNavigationDrawerItems"
-                :items=mainNavigationDrawerItems
-                @update:selected="onNavigationDrawerSelection"
-        ></v-list>
+        <NavigationDrawerContents @navigation-drawer-selection="onNavigationDrawerSelection"/>
     </v-navigation-drawer>
 
-    <HomePage v-if="currentComponent == 'home'"/>
-    <AlbumsPage v-if="currentComponent == 'albums'" :current-path="currentPath"/>
-    <PhotosPage v-if="currentComponent == 'photos'" :current-path="currentPath"/>
-    <SettingsPage v-if="currentComponent == 'settings'" :current-path="currentPath"/>
+    <LoginWindow v-model="showLogin"/>
+
+    <HomePage v-if="!showLogin && currentComponent == 'home'"/>
+    <AlbumsPage v-if="!showLogin && currentComponent == 'albums'" :current-path="currentPath"/>
+    <PhotosPage v-if="!showLogin && currentComponent == 'photos'" :current-path="currentPath"/>
+    <SettingsPage v-if="!showLogin && currentComponent == 'settings'" :current-path="currentPath"/>
+
+
 </template>
 
 <script lang="ts">
@@ -50,9 +55,10 @@ export default {
     data() {
         return {
             showNavigationDrawer: true,
-            selectedNavigationDrawerItems: undefined,
+            selectedNavigationDrawerItems: [''],
             currentPath: '/home',
             currentComponent: 'home',
+            showLogin: true,
         }
     },
     computed: {
