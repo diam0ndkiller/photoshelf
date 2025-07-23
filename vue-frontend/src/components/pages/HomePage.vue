@@ -30,5 +30,5 @@ export default {
 </script>
 
 <style>
-@import url('../assets/style/page.css');
+@import url('../../assets/style/page.css');
 </style>

@@ -1,8 +1,9 @@
 <script setup lang="ts">
     import navigationUtils from '@/utils/navigationUtils';
-    import HomePage from './HomePage.vue';
-    import AlbumsPage from './AlbumsPage.vue';
-    import PhotosPage from './PhotosPage.vue';
+    import HomePage from './pages/HomePage.vue';
+    import AlbumsPage from './pages/AlbumsPage.vue';
+    import PhotosPage from './pages/PhotosPage.vue';
+    import SettingsPage from './pages/SettingsPage.vue';
     const mainNavigationDrawerItems = await navigationUtils.getNavigationDrawerItems();
 </script>
 
@@ -41,6 +42,7 @@
     <HomePage v-if="currentComponent == 'home'"/>
     <AlbumsPage v-if="currentComponent == 'albums'" :current-path="currentPath"/>
     <PhotosPage v-if="currentComponent == 'photos'" :current-path="currentPath"/>
+    <SettingsPage v-if="currentComponent == 'settings'" :current-path="currentPath"/>
 </template>
 
 <script lang="ts">
