@@ -10,11 +10,29 @@ export default class navigationUtils {
                     prependIcon: 'mdi-home',
                 },
             },
+            {
+                title: "Settings",
+                value: "/settings",
+                props: {
+                    prependIcon: 'mdi-cog',
+                },
+            },
+            {type: 'divider'},
+            {
+                type: 'subheader',
+                title: 'PHOTOS',
+            },
+            {
+                title: "All Photos",
+                value: "/photos",
+                props: {
+                    prependIcon: 'mdi-image',
+                }
+            },
             {type: 'divider'},
             {
                 type: 'subheader',
                 title: 'ALBUMS',
-                props: {}
             },
             {
                 title: "All Albums",
@@ -22,7 +40,7 @@ export default class navigationUtils {
                 props: {
                     prependIcon: 'mdi-view-grid',
                 }
-            }
+            },
         ]
 
         var albums = (await BackendHandler.listAlbums()).albums;//.splice(0, 5);
@@ -36,20 +54,6 @@ export default class navigationUtils {
                 }
             })
         }
-
-        items.push({type: 'divider'});
-
-        items.push({
-            type: 'subheader',
-            title: 'PHOTOS',
-        })
-        items.push({
-            title: "All Photos",
-            value: "/photos",
-            props: {
-                prependIcon: 'mdi-image',
-            }
-        })
 
         return items;
     }
