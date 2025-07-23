@@ -58,7 +58,7 @@ export default {
             selectedNavigationDrawerItems: [''],
             currentPath: '/home',
             currentComponent: 'home',
-            showLogin: true,
+            showLogin: false,
         }
     },
     computed: {
