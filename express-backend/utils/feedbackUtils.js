@@ -5,7 +5,7 @@ export default class FeedbackUtils {
     }
 
     static throwHTTPResError(res, errorMsg, errorCode) {
-        res.status(errorCode ? errorCode : 400).json({ error: errorMsg });
+        res.status(errorCode ? errorCode : 400).json({ err: errorMsg });
     }
 
     static throwHTTPResConsoleError(res, errorMsg, errorCode) {
