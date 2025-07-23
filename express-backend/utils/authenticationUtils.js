@@ -29,7 +29,7 @@ export default class AuthenticationUtils {
             if ('err' in r) return r;
             var credentials = r.credentials;
 
-            if (!username in credentials) {
+            if (!(username in credentials)) {
                 return {err: {message: 'Invalid username.'}}
             }
 

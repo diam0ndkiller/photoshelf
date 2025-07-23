@@ -11,8 +11,8 @@ router.post('/login', async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) return FeedbackUtils.throwHTTPResConsoleError(res, 'Username and Password required!', 400);
 
-    var r = AuthenticationUtils.login(username, password)
-    if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
+    var r = await AuthenticationUtils.login(username, password)
+    if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 400);
 
     res.json({token: r.token});
     FeedbackUtils.logRouteCallEndSuccess();
