@@ -40,7 +40,7 @@ import NavigationDrawerContents from './NavigationDrawerContents.vue';
         <NavigationDrawerContents @navigation-drawer-selection="onNavigationDrawerSelection"/>
     </v-navigation-drawer>
 
-    <LoginWindow v-model="showLogin"/>
+    <LoginWindow v-if="showLogin" v-model="showLogin"/>
 
     <HomePage v-if="!showLogin && currentComponent == 'home'"/>
     <AlbumsPage v-if="!showLogin && currentComponent == 'albums'" :current-path="currentPath"/>
