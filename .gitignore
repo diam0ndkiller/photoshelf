@@ -2,3 +2,5 @@ express-backend/node_modules
 vue-frontend/.env
 .vscode
 photoshelf.sqlite
+express-backend/.env
+express-backend/config

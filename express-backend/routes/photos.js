@@ -8,6 +8,9 @@ const router = express.Router();
 
 router.get('/list-all-photos', async (req, res) => {
   FeedbackUtils.logRouteCallStart('/photos/list-all-photos', 'GET');
+  
+  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
+  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
 
   var r = await DatabaseController.listAllPhotos();
   if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
@@ -19,6 +22,9 @@ router.get('/list-all-photos', async (req, res) => {
 
 router.post('/scan-photos', async (req, res) => {
   FeedbackUtils.logRouteCallStart('/photos/scan-photos', 'POST');
+  
+  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
+  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
   
   if (!req.body) return FeedbackUtils.throwHTTPResConsoleError(res, 'Request body with directory required!', 400);
 
@@ -38,6 +44,9 @@ router.post('/scan-photos', async (req, res) => {
 router.post('/force-rescan-photos', async (req, res) => {
   FeedbackUtils.logRouteCallStart('/photos/force-rescan-photos', 'POST');
   
+  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
+  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+  
   if (!req.body) return FeedbackUtils.throwHTTPResConsoleError(res, 'Request body with directory required!', 400);
 
   const dir = req.body.directory;
@@ -56,6 +65,9 @@ router.post('/force-rescan-photos', async (req, res) => {
 
 router.get('/get-file', (req, res) => {
   FeedbackUtils.logRouteCallStart('/photos/get-file', 'GET');
+  
+  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
+  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
 
   const filename = req.query.filename;
   if (!filename) return FeedbackUtils.throwHTTPResConsoleError(res, 'Filename required!', 400);

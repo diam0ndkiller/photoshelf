@@ -6,6 +6,9 @@ const router = express.Router();
 
 router.post('/init-db', async (req, res) => {
   FeedbackUtils.logRouteCallStart('/db-utils/init-db', 'POST');
+  
+  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
+  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
 
   if (!req.body) return FeedbackUtils.throwHTTPResConsoleError(res, 'Request body with directory required!', 400);
 

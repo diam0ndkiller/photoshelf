@@ -1,6 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 
@@ -19,6 +22,7 @@ import helloworldRoutes from './routes/helloworld.js';
 import dbActionRoutes from './routes/db-actions.js';
 import albumRoutes from './routes/albums.js';
 import photoRoutes from './routes/photos.js';
+import userRoutes from './routes/users.js';
 
 /**
  * Mount routes
@@ -28,6 +32,7 @@ app.use('/helloworld', helloworldRoutes);
 app.use('/db-actions', dbActionRoutes);
 app.use('/albums', albumRoutes);
 app.use('/photos', photoRoutes);
+app.use('/users', userRoutes);
 
 /**
  * Launch app
