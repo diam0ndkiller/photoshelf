@@ -1,7 +1,7 @@
 import express from 'express';
 import FeedbackUtils from '../utils/feedbackUtils.js';
 import DatabaseController from '../controllers/databaseController.js';
-import path from 'path';
+import AuthenticationUtils from '../utils/authenticationUtils.js';
 import fs from 'fs';
 
 const router = express.Router();
