@@ -6,6 +6,14 @@
   font-weight: normal;
 }
 
+a {
+  color: rgb(var(--v-theme-secondary));
+  text-decoration: underline;
+}
+a:hover {
+  color: rgb(var(--v-theme-accent));
+}
+
 body {
   min-height: 100vh;
   color: var(--color-text);
