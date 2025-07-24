@@ -1,6 +1,3 @@
-
-
-
 export default class BackendHandler {
     static TOKEN = '';
     static BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -25,6 +22,18 @@ export default class BackendHandler {
     static getToken() {
         if (this.TOKEN) return this.TOKEN;
         else return false;
+    }
+
+    static async getDatabaseLocation() {
+        return await this.fetchUrl(this.BASE_URL+'/db-actions/get-db-location', 'GET');
+    }
+
+    static async getDefaultDatabaseLocation() {
+        return await this.fetchUrl(this.BASE_URL+'/db-actions/get-default-db-location', 'GET');
+    }
+
+    static async saveDatabaseLocation(databaseLocation: string) {
+        return await this.fetchUrl(this.BASE_URL+'/db-actions/init-db', 'POST', {databaseLocation}, true);
     }
 
     static async login(username: string, password: string) {
