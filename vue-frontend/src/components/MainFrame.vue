@@ -5,7 +5,9 @@ import AlbumsPage from './pages/AlbumsPage.vue';
 import PhotosPage from './pages/PhotosPage.vue';
 import SettingsPage from './pages/SettingsPage.vue';
 import LoginWindow from './popups/LoginWindow.vue';
-import NavigationDrawerContents from './NavigationDrawerContents.vue';
+import NavigationDrawerContents from './subcomponents/NavigationDrawerContents.vue';
+import InitialSetupPage from './pages/InitialSetupPage.vue';
+import BackendHandler from '@/utils/backendHandler';
 
 </script>
 
@@ -33,7 +35,7 @@ import NavigationDrawerContents from './NavigationDrawerContents.vue';
 
     
     <v-navigation-drawer
-            v-if="!showLogin"
+            v-if="showDefaultPageContent"
             v-model="showNavigationDrawer"
             permanent
     >
@@ -42,10 +44,12 @@ import NavigationDrawerContents from './NavigationDrawerContents.vue';
 
     <LoginWindow v-if="showLogin" v-model="showLogin"/>
 
-    <HomePage v-if="!showLogin && currentComponent == 'home'"/>
-    <AlbumsPage v-if="!showLogin && currentComponent == 'albums'" :current-path="currentPath"/>
-    <PhotosPage v-if="!showLogin && currentComponent == 'photos'" :current-path="currentPath"/>
-    <SettingsPage v-if="!showLogin && currentComponent == 'settings'" :current-path="currentPath"/>
+    <InitialSetupPage v-if="!showLogin && showInitialSetup" v-model="showInitialSetup"/>
+
+    <HomePage v-if="showDefaultPageContent && currentComponent == 'home'"/>
+    <AlbumsPage v-if="showDefaultPageContent && currentComponent == 'albums'" :current-path="currentPath"/>
+    <PhotosPage v-if="showDefaultPageContent && currentComponent == 'photos'" :current-path="currentPath"/>
+    <SettingsPage v-if="showDefaultPageContent && currentComponent == 'settings'" :current-path="currentPath"/>
 
 
 </template>
@@ -59,27 +63,58 @@ export default {
             currentPath: '/home',
             currentComponent: 'home',
             showLogin: false,
+            showInitialSetup: true,
+            initialSetupMessage: '',
         }
     },
     computed: {
         pathSegments() {
             return navigationUtils.decodePathSegments(this.currentPath);
+        },
+        showDefaultPageContent() {
+            return !this.showLogin && !this.showInitialSetup;
         }
     },
     watch: {
-        
+        showLogin(newVal, oldVal) {
+            if (newVal == false) {
+                this.checkInitialSetup();
+            }
+        },
+        showInitialSetup(newVal, oldVal) {
+            if (newVal == false) {
+                this.currentPath = "/home";
+            }
+        },
+        currentPath() {
+            this.currentComponent = this.currentPath.split("/")[1];
+            console.log(this.currentComponent);
+        }
+    },
+    mounted() {
+        this.checkInitialSetup();
     },
     methods: {
         onNavigationDrawerSelection(newValue: Array<string>) {
-            this.updatePath(newValue[0])
+            if (newValue[0]) this.updatePath(newValue[0])
         },
         onAppBarPathSelection(newPath: string) {
             this.updatePath(newPath);
         },
         updatePath(newPath: string) {
+            if (!this.showDefaultPageContent) return;
             this.currentPath = newPath;
-            this.currentComponent = newPath.split("/")[1],
             console.log(newPath);
+        },
+        async checkInitialSetup() {
+            var r = await BackendHandler.getDatabaseLocation();
+            if ('err' in r || r.databaseLocation == '') {
+                if ('err' in r) this.initialSetupMessage = "You were sent here because of an error: " + r.err;
+                this.showInitialSetup = true;
+                this.currentPath = '/initial-setup';
+            } else {
+                this.showInitialSetup = false;
+            }
         }
     },
     props: {
