@@ -53,6 +53,8 @@ export default class navigationUtils {
                     prependIcon: 'mdi-image-album',
                 }
             })
+
+            this.PATH_SEGMENTS_DICT[album.id] = album.name;
         }
 
         return items;
@@ -72,7 +74,10 @@ export default class navigationUtils {
 
     static PATH_SEGMENTS_DICT: { [key: string]: string } = {
         'home': 'Home',
-        'albums': 'All Albums'
+        'albums': 'All Albums',
+        'photos': 'All Photos',
+        'settings': 'Settings',
+        'initial-setup': 'Initial Setup'
     }
 
     static decodeDisplayName(key: string, dict: { [key: string]: any }) {
