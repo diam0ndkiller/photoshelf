@@ -17,6 +17,13 @@ export default class navigationUtils {
                     prependIcon: 'mdi-cog',
                 },
             },
+            {
+                title: "Database Settings",
+                value: "/database",
+                props: {
+                    prependIcon: 'mdi-database-edit',
+                },
+            },
             {type: 'divider'},
             {
                 type: 'subheader',
@@ -77,7 +84,8 @@ export default class navigationUtils {
         'albums': 'All Albums',
         'photos': 'All Photos',
         'settings': 'App Settings',
-        'initial-setup': 'Initial Setup'
+        'initial-setup': 'Initial Setup',
+        'database': 'Database Settings'
     }
 
     static decodeDisplayName(key: string, dict: { [key: string]: any }) {

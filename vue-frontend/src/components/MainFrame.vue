@@ -51,6 +51,7 @@ import DatabaseSettingsPage from './pages/DatabaseSettingsPage.vue';
     <AlbumsPage v-if="showDefaultPageContent && currentComponent == 'albums'" :current-path="currentPath"/>
     <PhotosPage v-if="showDefaultPageContent && currentComponent == 'photos'" :current-path="currentPath"/>
     <AppSettingsPage v-if="showDefaultPageContent && currentComponent == 'settings'" :current-path="currentPath"/>
+    <DatabaseSettingsPage v-if="showDefaultPageContent && currentComponent == 'database'" :current-path="currentPath"/>
 
 </template>
 
