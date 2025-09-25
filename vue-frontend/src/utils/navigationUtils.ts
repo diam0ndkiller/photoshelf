@@ -11,7 +11,7 @@ export default class navigationUtils {
                 },
             },
             {
-                title: "Settings",
+                title: "App Settings",
                 value: "/settings",
                 props: {
                     prependIcon: 'mdi-cog',
@@ -76,7 +76,7 @@ export default class navigationUtils {
         'home': 'Home',
         'albums': 'All Albums',
         'photos': 'All Photos',
-        'settings': 'Settings',
+        'settings': 'App Settings',
         'initial-setup': 'Initial Setup'
     }
 

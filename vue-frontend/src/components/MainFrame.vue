@@ -3,11 +3,12 @@ import navigationUtils from '@/utils/navigationUtils';
 import HomePage from './pages/HomePage.vue';
 import AlbumsPage from './pages/AlbumsPage.vue';
 import PhotosPage from './pages/PhotosPage.vue';
-import SettingsPage from './pages/SettingsPage.vue';
+import AppSettingsPage from './pages/AppSettingsPage.vue';
 import LoginWindow from './popups/LoginWindow.vue';
 import NavigationDrawerContents from './subcomponents/NavigationDrawerContents.vue';
 import InitialSetupPage from './pages/InitialSetupPage.vue';
 import BackendHandler from '@/utils/backendHandler';
+import DatabaseSettingsPage from './pages/DatabaseSettingsPage.vue';
 
 </script>
 
@@ -49,8 +50,7 @@ import BackendHandler from '@/utils/backendHandler';
     <HomePage v-if="showDefaultPageContent && currentComponent == 'home'"/>
     <AlbumsPage v-if="showDefaultPageContent && currentComponent == 'albums'" :current-path="currentPath"/>
     <PhotosPage v-if="showDefaultPageContent && currentComponent == 'photos'" :current-path="currentPath"/>
-    <SettingsPage v-if="showDefaultPageContent && currentComponent == 'settings'" :current-path="currentPath"/>
-
+    <AppSettingsPage v-if="showDefaultPageContent && currentComponent == 'settings'" :current-path="currentPath"/>
 
 </template>
 
