@@ -109,7 +109,7 @@ export default {
         },
         async checkInitialSetup() {
             var r = await BackendHandler.getDatabaseLocation();
-            if ('err' in r || r.databaseLocation == '') {
+            if ('err' in r || r.databaseLocation == '' || r.databaseLocation == undefined) {
                 if ('err' in r) this.initialSetupMessage = "You were sent here because of an error: " + r.err;
                 this.showInitialSetup = true;
                 this.currentPath = '/initial-setup';
