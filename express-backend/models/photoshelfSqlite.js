@@ -80,8 +80,6 @@ export default class PhotoshelfSQLite {
             var r = this.openDatabase();
             if (r.err) return reject(r.err);
             this.database.exec(statement, (err) => {
-                this.database.close();
-
                 if (err) reject(err);
                 else resolve();
             });
@@ -93,8 +91,6 @@ export default class PhotoshelfSQLite {
             var r = this.openDatabase();
             if (r.err) return reject(r.err);
             this.database.all(statement, params, (err, rows) => {
-                this.database.close();
-
                 if (err) reject(err);
                 else resolve(rows);
             });

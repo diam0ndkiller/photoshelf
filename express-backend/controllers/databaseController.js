@@ -11,6 +11,7 @@ export default class DatabaseController {
         var database = new PhotoshelfSQLite(r.databaseLocation);
         try { await database.createIfNonExist() }
         catch (err) { return { err } }
+        database.openDatabase();
         return { database }
     }
 
@@ -18,7 +19,10 @@ export default class DatabaseController {
         var r = ConfigFileHelper.setDatabaseLocation(fileLocation);
         if ('err' in r) return r;
 
-        return await this.initializeDatabase();
+        r = await this.initializeDatabase();
+        if ('err' in r) return r;
+        r.database.closeDatabase();
+        return r;
     }
 
     static async listAlbums() {
@@ -30,6 +34,7 @@ export default class DatabaseController {
 
         try { albums = await database.all("SELECT * from 'albums' ORDER BY name ASC;", []); }
         catch (err) { return { err } }
+        finally { database.closeDatabase(); }
 
         return { albums }
     }
@@ -43,6 +48,7 @@ export default class DatabaseController {
 
         try { photos = await database.all("SELECT * from 'photos';", []); }
         catch (err) { return { err } }
+        finally { database.closeDatabase(); }
 
         return { photos }
     }
