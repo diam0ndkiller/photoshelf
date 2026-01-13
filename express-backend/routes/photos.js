@@ -25,10 +25,10 @@ router.get('/rescan-all-photos', async (req, res) => {
   
   var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
   if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
-  
+
   console.log('Starting rescanning files in all locations...');
 
-  var r = await DatabaseController.scanPhotos(dir, false);
+  var r = await DatabaseController.rescanAllPhotos();
   if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
 
   res.json({message: 'Sucessfully rescanned files in all locations'});
@@ -76,5 +76,57 @@ router.get('/get-file', (req, res) => {
     res.sendFile(filename);
   });
 });
+
+router.get('/get-photo-locations', async (req, res) => {
+  FeedbackUtils.logRouteCallStart('/photos/get-photo-locations', 'GET');
+  
+  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
+  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+
+  var r = await DatabaseController.getPhotoLocations();
+  if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
+
+  res.json(r);
+
+  FeedbackUtils.logRouteCallEndSuccess();
+})
+
+router.post('/add-photo-location', async (req, res) => {
+  FeedbackUtils.logRouteCallStart('/photos/add-photo-location', 'POST');
+  
+  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
+  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+
+  if (!req.body) return FeedbackUtils.throwHTTPResConsoleError(res, 'Request body with locationToAdd required!', 400);
+
+  const locationToAdd = req.body.locationToAdd;
+  if (!locationToAdd) return FeedbackUtils.throwHTTPResConsoleError(res, 'locationToAdd required!', 400);
+
+  var r = await DatabaseController.addPhotoLocation(locationToAdd);
+  if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
+
+  res.json(r);
+
+  FeedbackUtils.logRouteCallEndSuccess();
+})
+
+router.post('/delete-photo-location', async (req, res) => {
+  FeedbackUtils.logRouteCallStart('/photos/delete-photo-location', 'POST');
+  
+  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
+  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+
+  if (!req.body) return FeedbackUtils.throwHTTPResConsoleError(res, 'Request body with id required!', 400);
+
+  const id = req.body.id;
+  if (!id) return FeedbackUtils.throwHTTPResConsoleError(res, 'id required!', 400);
+
+  var r = await DatabaseController.deletePhotoLocation(id);
+  if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
+
+  res.json(r);
+
+  FeedbackUtils.logRouteCallEndSuccess();
+})
 
 export default router;

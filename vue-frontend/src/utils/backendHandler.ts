@@ -65,4 +65,16 @@ export default class BackendHandler {
     static async rescanAllPhotos() {
         return await this.fetchUrl(this.BASE_URL+'/photos/rescan-all-photos', 'POST')
     }
+
+    static async getPhotoLocations() {
+        return await this.fetchUrl(this.BASE_URL+'/photos/get-photo-locations', 'GET');
+    }
+
+    static async addPhotoLocation(locationToAdd: string) {
+        return await this.fetchUrl(this.BASE_URL+'/photos/add-photo-location', 'POST', {locationToAdd})
+    }
+
+    static async deletePhotoLocation(id: number) {
+        return await this.fetchUrl(this.BASE_URL+'/photos/delete-photo-location', 'POST', {id})
+    }
 }

@@ -80,4 +80,42 @@ export default class DatabaseController {
 
         return {}
     }
+
+    static async getPhotoLocations() {
+        var r = await this.initializeDatabase();
+        if ('err' in r) return { err: r.err }
+        var database = r.database;
+
+        var photoLocations;
+
+        try { photoLocations = await database.all("SELECT * from 'locations' ORDER BY path ASC;", []); }
+        catch (err) { return { err } }
+        finally { database.closeDatabase(); }
+
+        return { photoLocations }
+    }
+
+    static async addPhotoLocation(locationToAdd) {
+        var r = await this.initializeDatabase();
+        if ('err' in r) return { err: r.err }
+        var database = r.database;
+
+        try { await database.run("INSERT INTO 'locations' (path) VALUES (?)", [locationToAdd]); }
+        catch (err) { return { err } }
+        finally { database.closeDatabase(); }
+
+        return { success: true }
+    }
+
+    static async deletePhotoLocation(id) {
+        var r = await this.initializeDatabase();
+        if ('err' in r) return { err: r.err }
+        var database = r.database;
+
+        try { await database.run("DELETE FROM 'locations' WHERE id = ?", [id]); }
+        catch (err) { return { err } }
+        finally { database.closeDatabase(); }
+
+        return { success: true }
+    }
 }
