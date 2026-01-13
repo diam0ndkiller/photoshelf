@@ -58,6 +58,26 @@ export default class DatabaseController {
         if ('err' in r) return { err: r.err }
         var database = r.database;
 
-        return await FilesystemPhotoHelper.scanPhotos(database, dir, forceRescan);
+        var res = await FilesystemPhotoHelper.scanPhotos(database, dir, forceRescan);
+
+        databse.closeDatabase();
+
+        return res;
+    }
+
+    static async rescanAllPhotos() {
+        var r = await this.initializeDatabase();
+        if('err' in r) return { err: r.err }
+        var database = r.database
+
+        var rows = await database.all("SELECT (path) FROM locations", []);
+
+        rows.forEach(element => {
+            this.scanPhotos(element.path, true);
+        });
+
+        database.closeDatabase();
+
+        return {}
     }
 }

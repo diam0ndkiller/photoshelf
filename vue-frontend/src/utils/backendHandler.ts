@@ -61,4 +61,8 @@ export default class BackendHandler {
     static async listAllPhotos(): Promise<{photos: Array<{path: string, capture_date: string}>}> {
         return await this.fetchUrl(`${this.BASE_URL}/photos/list-all-photos`);
     }
+
+    static async rescanAllPhotos() {
+        return await this.fetchUrl(this.BASE_URL+'/photos/rescan-all-photos', 'POST')
+    }
 }

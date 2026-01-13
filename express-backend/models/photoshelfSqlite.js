@@ -15,6 +15,12 @@ export default class PhotoshelfSQLite {
     }
 
     CREATE_TABLES_STATEMENT = `
+        CREATE TABLE "locations" (
+            "id"    INTEGER NOT NULL UNIQUE,
+            "path"  TEXT NOT NULL,
+            PRIMARY KEY("id" AUTOINCREMENT)
+        );
+        
         CREATE TABLE "albums" (
             "id"	INTEGER NOT NULL UNIQUE,
             "name"	TEXT,
@@ -86,7 +92,7 @@ export default class PhotoshelfSQLite {
         })
     }
 
-    all(statement, params, close) {
+    all(statement, params) {
         return new Promise((resolve, reject) => {
             var r = this.openDatabase();
             if (r.err) return reject(r.err);
