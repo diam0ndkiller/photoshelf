@@ -7,7 +7,6 @@ export default class DatabaseController {
         var r = ConfigFileHelper.getDatabaseLocation();
         if ('err' in r) return r;
         if (r.databaseLocation == '') return {err: {message: 'No database location set.'}}
-        console.log(r.databaseLocation);
         var database = new PhotoshelfSQLite(r.databaseLocation);
         try { await database.createIfNonExist() }
         catch (err) { return { err } }
