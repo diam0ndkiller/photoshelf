@@ -8,6 +8,7 @@ export default class PhotoshelfSQLite {
     filePath = undefined;
     database = undefined;
     err = undefined;
+    isOpen = false;
 
     constructor(dir) {
         this.dir = dir;
@@ -66,6 +67,7 @@ export default class PhotoshelfSQLite {
 
     openDatabase() {
         return new Promise((resolve, reject) => {
+            this.isOpen = true;
             this.database = new sqlite3.Database(this.filePath, (err) => {
                 if (err) {
                     this.database.close();
@@ -78,7 +80,8 @@ export default class PhotoshelfSQLite {
     }
 
     closeDatabase() {
-        this.database.close();
+        if (this.isOpen) this.database.close();
+        this.isOpen = false;
     }
 
     exec(statement) {
