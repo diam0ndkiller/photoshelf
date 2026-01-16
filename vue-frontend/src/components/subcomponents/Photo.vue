@@ -1,0 +1,114 @@
+<script setup lang="ts">
+import BackendHandler from '@/utils/backendHandler';
+</script>
+
+<template>
+    <div :style="getDivStyle()">
+        <a :href="imageUrl" target="blank" :title="tooltip">
+            <img
+                decoding="async"
+                loading="lazy"
+                :style="getStyle()"
+                :src="srcPath"
+            />
+        </a>
+    </div>
+</template>
+
+<script lang="ts">
+export default {
+    data() {
+        return {
+        }
+    },
+    computed: {
+        imageUrl() {
+            return BackendHandler.BASE_URL + '/photos/get-file?filename=' + this.photo.path;
+        },
+        srcPath() {
+            var res = this.imageUrl;
+
+            if (this.scaleWidth) res += "&width=" + String(this.scaleWidth);
+            if (this.scaleHeight) res += "&height=" + String(this.scaleHeight);
+
+            return res;
+        },
+        filename() {
+            var s = this.photo.path.split("/");
+            return s[s.length - 1];
+        },
+        date() {
+            if (this.photo.capture_date == "undefined") return undefined;
+            else return new Date(this.photo.capture_date);
+        },
+        tooltip() {
+            var res = this.filename + ' (Click to open full-size version)';
+
+            if (this.date) res += '\n' + this.date;
+
+            return res;
+        }
+    },
+    watch: {
+        
+    },
+    methods: {
+        getStyle() {
+            var res = "max-height: 100%; max-width: 100%; object-fit: contain; ";
+
+            if (this.imgHeight) res += "height: " + this.imgHeight + ";"
+            if (this.imgWidth) res += "width: " + this.imgWidth + ";"
+
+            return res;
+        },
+        getDivStyle() {
+            var res = "display: inline-block; text-align: center; vertical-align: center; padding: 10px;";
+
+            if (this.divHeight) res += "height: " + this.divHeight + ";";
+            if (this.divWidth) res += "width: " + this.divWidth + ";";
+
+            return res;
+        }
+    },
+    props:{
+        photo: {
+            type: Object,
+            required: true
+        },
+
+        imgWidth: {
+            type: String,
+            default: undefined
+        },
+        imgHeight: {
+            type: String,
+            default: undefined
+        },
+
+        divWidth: {
+            type: String,
+            default: undefined
+        },
+        divHeight: {
+            type: String,
+            default: undefined
+        },
+
+        scaleWidth: {
+            type: Number,
+            default: undefined
+        },
+        scaleHeight: {
+            type: Number,
+            default: undefined
+        }
+    },
+    async mounted() {
+        console.log(this.photo.capture_date)
+    }
+}
+</script>
+
+<style lang="css">
+
+</style>

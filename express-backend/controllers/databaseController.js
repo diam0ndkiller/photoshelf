@@ -45,7 +45,7 @@ export default class DatabaseController {
 
         var photos;
 
-        try { photos = await database.all("SELECT * from 'photos';", []); }
+        try { photos = await database.all("SELECT * from 'photos' ORDER BY path ASC;", []); }
         catch (err) { return { err } }
         finally { database.closeDatabase(); }
 
