@@ -3,6 +3,7 @@ import FeedbackUtils from '../utils/feedbackUtils.js';
 import DatabaseController from '../controllers/databaseController.js';
 import AuthenticationUtils from '../utils/authenticationUtils.js';
 import fs from 'fs';
+import sharp from 'sharp';
 
 const router = express.Router();
 
@@ -62,7 +63,7 @@ router.post('/force-rescan-photos', async (req, res) => {
 });
 */
 
-router.get('/get-file', (req, res) => {
+router.get('/get-file', async (req, res) => {
   FeedbackUtils.logRouteCallStart('/photos/get-file', 'GET');
   
   var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
@@ -71,12 +72,47 @@ router.get('/get-file', (req, res) => {
   const filename = req.query.filename;
   if (!filename) return FeedbackUtils.throwHTTPResConsoleError(res, 'Filename required!', 400);
 
-  fs.access(filename, fs.constants.R_OK, (err) => {
-    if (err) {
-      return FeedbackUtils.throwHTTPResConsoleError(res, 'File not found: "' + filename + '"!', 404);
+  const width = req.query.width;
+  const height = req.query.height;
+
+  try {
+    await fs.promises.access(filename, fs.constants.R_OK);
+
+    res.setHeader('Content-Type', 'image/jpeg');
+
+    var readStream = fs.createReadStream(filename);
+
+    if (width) {
+      readStream = readStream.pipe(
+        sharp()
+        .resize({
+          width: Number(width),        // scale down
+          withoutEnlargement: true
+        })
+        .jpeg({ quality: 75 }) // compress
+      )
     }
-    res.sendFile(filename);
-  });
+
+    if (height) {
+      readStream = readStream.pipe(
+        sharp()
+        .resize({
+          height: Number(height),        // scale down
+          withoutEnlargement: true
+        })
+        .jpeg({ quality: 75 }) // compress
+      )
+    }
+
+    readStream.pipe(res);
+
+  } catch (err) {
+    return FeedbackUtils.throwHTTPResConsoleError(
+      res,
+      err.message,
+      404
+    );
+  }
 });
 
 router.get('/get-photo-locations', async (req, res) => {
