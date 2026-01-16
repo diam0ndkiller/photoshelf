@@ -58,12 +58,12 @@ export default class BackendHandler {
         return await this.fetchUrl(`${this.BASE_URL}/albums/list-albums`);
     }
 
-    static async listAllPhotos(): Promise<{photos: Array<{path: string, capture_date: string}>}> {
+    static async listAllPhotos(): Promise<{photos: Array<{id: number, path: string, capture_date: string}>}> {
         return await this.fetchUrl(`${this.BASE_URL}/photos/list-all-photos`);
     }
 
     static async rescanAllPhotos() {
-        return await this.fetchUrl(this.BASE_URL+'/photos/rescan-all-photos', 'POST')
+        return await this.fetchUrl(this.BASE_URL+'/photos/rescan-all-photos', 'GET')
     }
 
     static async getPhotoLocations() {
