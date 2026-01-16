@@ -17,7 +17,7 @@ const photos = (await BackendHandler.listAllPhotos()).photos;
 export default {
     data() {
         return {
-            
+            errorMessage: '',
         }
     },
     computed: {
@@ -31,6 +31,16 @@ export default {
     methods: {
         updatePath(newPath: string) {
             this.$emit('updatePath', newPath);
+        },
+        async getPhotos() {
+            this.photos = (await BackendHandler.listAllPhotos()).photos;
+        },
+        async rescanPhotos() {
+            this.errorMessage = "Started rescan";
+            var r = await BackendHandler.rescanAllPhotos();
+            this.errorMessage = r.message;
+            if ('err' in r) this.errorMessage = r.err;
+            this.getPhotos();
         }
     },
     props:{
@@ -38,7 +48,10 @@ export default {
             type: String
         }
     },
-    emits: ['updatePath']
+    emits: ['updatePath'],
+    async mounted() {
+        await this.getPhotos()
+    }
 }
 </script>
 

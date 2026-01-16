@@ -59,7 +59,7 @@ export default class DatabaseController {
 
         var res = await FilesystemPhotoHelper.scanPhotos(database, dir, forceRescan);
 
-        databse.closeDatabase();
+        database.closeDatabase();
 
         return res;
     }
@@ -71,8 +71,8 @@ export default class DatabaseController {
 
         var rows = await database.all("SELECT (path) FROM locations", []);
 
-        rows.forEach(element => {
-            this.scanPhotos(element.path, true);
+        rows.forEach(async (element) => {
+            await this.scanPhotos(element.path, true);
         });
 
         database.closeDatabase();

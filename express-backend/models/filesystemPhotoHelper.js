@@ -13,7 +13,7 @@ export default class FilesystemPhotoHelper {
 
             for (const filePath of imageFiles) {
 
-                const exists = await photoshelfSqlite.get('SELECT 1 FROM photos WHERE path = ?', [filePath]);
+                const exists = await photoshelfSqlite.get('SELECT * FROM photos WHERE path = ?', [filePath]);
                 if (exists) {
                     if (forceRescan) {
                         await photoshelfSqlite.run('DELETE FROM photos WHERE path = ?', [filePath]);
@@ -35,7 +35,7 @@ export default class FilesystemPhotoHelper {
                 // Fallback: file system modified time if no capture date
                 if (!captureDate) {
                     const stats = await fs.promises.stat(filePath);
-                    captureDate = stats.mtime;
+                    captureDate = String(stats.mtime);
                 }
 
                 // Normalize captureDate to ISO string (SQLite DATETIME format)

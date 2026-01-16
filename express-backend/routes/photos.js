@@ -31,6 +31,8 @@ router.get('/rescan-all-photos', async (req, res) => {
   var r = await DatabaseController.rescanAllPhotos();
   if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
 
+  console.log('Sucessfully rescanned files in all locations');
+
   res.json({message: 'Sucessfully rescanned files in all locations'});
 
   FeedbackUtils.logRouteCallEndSuccess();
