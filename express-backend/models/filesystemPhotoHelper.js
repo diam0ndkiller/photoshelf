@@ -14,6 +14,7 @@ export default class FilesystemPhotoHelper {
             for (const filePath of imageFiles) {
 
                 const exists = await photoshelfSqlite.get('SELECT * FROM photos WHERE path = ?', [filePath]);
+
                 if (exists) {
                     if (forceRescan) {
                         await photoshelfSqlite.run('DELETE FROM photos WHERE path = ?', [filePath]);

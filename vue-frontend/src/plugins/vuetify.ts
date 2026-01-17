@@ -20,6 +20,10 @@ const defaultTheme = {
   accent: '#5ed848ff',
   accent_lighter: '#98eb89ff',
   accent_darker: '#379e25ff',
+
+  error: '#ff0000',
+  error_lighter: '#ff5555',
+  error_darker: '#990000',
 }
 
 const lightTheme = {
@@ -28,6 +32,9 @@ const lightTheme = {
     primary: defaultTheme.blue,
     secondary: defaultTheme.blue_darker,
     accent: defaultTheme.accent,
+
+    'error': defaultTheme.error,
+    'error-background': defaultTheme.error_lighter,
     
     'background': defaultTheme.light_lighter,
     'on-background': defaultTheme.dark,
@@ -43,6 +50,9 @@ const darkTheme = {
     primary: defaultTheme.blue,
     secondary: defaultTheme.blue_lighter,
     accent: defaultTheme.accent,
+
+    'error': defaultTheme.error,
+    'error-background': defaultTheme.error_darker,
 
     'background': defaultTheme.dark,
     'on-background': defaultTheme.light,

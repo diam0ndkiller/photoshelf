@@ -66,6 +66,10 @@ export default class BackendHandler {
         return await this.fetchUrl(this.BASE_URL+'/photos/rescan-all-photos', 'GET')
     }
 
+    static async scanNewPhotos() {
+        return await this.fetchUrl(this.BASE_URL+'/photos/scan-new-photos', 'GET')
+    }
+
     static async getPhotoLocations() {
         return await this.fetchUrl(this.BASE_URL+'/photos/get-photo-locations', 'GET');
     }

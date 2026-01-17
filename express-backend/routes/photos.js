@@ -27,14 +27,32 @@ router.get('/rescan-all-photos', async (req, res) => {
   var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
   if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
 
-  console.log('Starting rescanning files in all locations...');
+  console.log('Rescanning files in all locations...');
 
-  var r = await DatabaseController.rescanAllPhotos();
+  var r = await DatabaseController.rescanPhotos(true);
   if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
 
   console.log('Sucessfully rescanned files in all locations');
 
   res.json({message: 'Sucessfully rescanned files in all locations'});
+
+  FeedbackUtils.logRouteCallEndSuccess();
+});
+
+router.get('/scan-new-photos', async (req, res) => {
+  FeedbackUtils.logRouteCallStart('/photos/rescan-all-photos', 'POST');
+  
+  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
+  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+
+  console.log('Scanning for new files in all locations...');
+
+  var r = await DatabaseController.rescanPhotos(false);
+  if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
+
+  console.log('Sucessfully scanned new files in all locations');
+
+  res.json({message: 'Sucessfully scanned new files in all locations'});
 
   FeedbackUtils.logRouteCallEndSuccess();
 });

@@ -64,16 +64,19 @@ export default class DatabaseController {
         return res;
     }
 
-    static async rescanAllPhotos() {
+    static async rescanPhotos(forceRescan) {
         var r = await this.initializeDatabase();
         if('err' in r) return { err: r.err }
         var database = r.database
 
         var rows = await database.all("SELECT (path) FROM locations", []);
 
-        rows.forEach(async (element) => {
-            await this.scanPhotos(element.path, true);
-        });
+        var res;
+
+        for (var i = 0; i < rows.length; i++) {
+            res = await this.scanPhotos(rows[i].path, forceRescan);
+            if ('err' in res) return res;
+        }
 
         database.closeDatabase();
 

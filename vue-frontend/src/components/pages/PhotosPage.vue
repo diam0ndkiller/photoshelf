@@ -9,8 +9,10 @@ import Photo from '../subcomponents/Photo.vue';
         <div class="page-content">
             <div>
                 <h1 style="display: inline;">All Photos</h1>
-                <div style="display: inline-block; margin: 2%"><v-btn color="accent" prepend-icon='mdi-refresh' text='Rescan all locations' @click="rescanPhotos()"/></div>
-                <span style="color: red">{{ errorMessage }}</span>
+                <div style="display: inline-block; margin: 2%"><v-btn color="primary" prepend-icon='mdi-refresh' text='Scan for new photos' @click="scanNewPhotos()"/></div>
+                <div style="display: inline-block; margin: 2%"><v-btn color="error-background" prepend-icon='mdi-refresh' text='Rescan all locations' @click="rescanPhotos()"/></div>
+                <span style="color: rgb(var(--v-theme-accent))">{{ statusMessage }}</span>
+                <span style="color: rgb(var(--v-theme-error))">{{ errorMessage }}</span>
             </div>
 
             <v-infinite-scroll>
@@ -33,6 +35,7 @@ export default {
     data() {
         return {
             errorMessage: '',
+            statusMessage: '',
             photos: [{id: 0, path: '', capture_date: ''}]
         }
     },
@@ -61,10 +64,21 @@ export default {
             this.photos = (await BackendHandler.listAllPhotos()).photos;
         },
         async rescanPhotos() {
-            this.errorMessage = "Started rescan";
+            this.statusMessage = "Rescanning files in all locations (this may take some time)...";
+            this.errorMessage = "";
             var r = await BackendHandler.rescanAllPhotos();
-            this.errorMessage = r.message;
+            this.statusMessage = "";
             if ('err' in r) this.errorMessage = r.err;
+            else this.statusMessage = r.message;
+            this.getPhotos();
+        },
+        async scanNewPhotos() {
+            this.statusMessage = "Scanning for new files in all locations (this may take some time)...";
+            this.errorMessage = "";
+            var r = await BackendHandler.scanNewPhotos();
+            this.statusMessage = "";
+            if ('err' in r) this.errorMessage = r.err;
+            else this.statusMessage = r.message;
             this.getPhotos();
         }
     },
