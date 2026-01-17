@@ -98,7 +98,7 @@ router.get('/get-file', async (req, res) => {
 
     res.setHeader('Content-Type', 'image/jpeg');
 
-    var readStream = fs.createReadStream(filename);
+    var readStream = fs.createReadStream(filename).pipe(sharp().rotate());
 
     if (width) {
       readStream = readStream.pipe(
