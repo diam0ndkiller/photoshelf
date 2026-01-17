@@ -39,8 +39,13 @@ export default class FilesystemPhotoHelper {
                 }
 
                 // Normalize captureDate to ISO string (SQLite DATETIME format)
-                const captureDateISO = captureDate instanceof Date ? captureDate.toISOString() : captureDate;
+                var captureDateISO = "";
 
+                if (captureDate && typeof captureDate.toIsoString === 'function') {
+                    captureDateISO = captureDate.toISOString();
+                } else {
+                    captureDateISO = String(captureDate);
+                }
                 // Insert into DB
                 await photoshelfSqlite.run('INSERT INTO photos (path, capture_date) VALUES (?, ?)', [
                     filePath,
