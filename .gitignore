@@ -4,3 +4,5 @@ vue-frontend/.env
 photoshelf.sqlite
 express-backend/.env
 express-backend/config
+express-backend/package-lock.json
+vue-frontend/package-lock.json
