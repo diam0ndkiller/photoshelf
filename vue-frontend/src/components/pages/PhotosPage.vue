@@ -10,7 +10,7 @@ import Photo from '../subcomponents/Photo.vue';
             <div>
                 <h1 style="display: inline;">All Photos</h1>
                 <div style="display: inline-block; margin: 2%"><v-btn color="primary" prepend-icon='mdi-refresh' text='Scan for new photos' @click="scanNewPhotos()"/></div>
-                <div style="display: inline-block; margin: 2%"><v-btn color="error-background" prepend-icon='mdi-refresh' text='Rescan all locations' @click="rescanPhotos()"/></div>
+                <div style="display: inline-block; margin: 2%"><v-btn color="error-background" prepend-icon='mdi-refresh' text='Rescan all photos' @click="rescanPhotos()"/></div>
                 <span style="color: rgb(var(--v-theme-accent))">{{ statusMessage }}</span>
                 <span style="color: rgb(var(--v-theme-error))">{{ errorMessage }}</span>
             </div>
