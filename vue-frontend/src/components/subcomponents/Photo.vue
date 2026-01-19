@@ -23,7 +23,8 @@ export default {
     },
     computed: {
         imageUrl() {
-            return BackendHandler.BASE_URL + '/photos/get-file?filename=' + this.photo.path;
+            console.log(encodeURIComponent(this.photo.path));
+            return BackendHandler.BASE_URL + '/photos/get-file?filename=' + encodeURIComponent(this.photo.path);
         },
         srcPath() {
             var res = this.imageUrl;
