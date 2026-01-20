@@ -57,35 +57,8 @@ router.get('/scan-new-photos', async (req, res) => {
   FeedbackUtils.logRouteCallEndSuccess();
 });
 
-/*
-router.post('/force-rescan-photos', async (req, res) => {
-  FeedbackUtils.logRouteCallStart('/photos/force-rescan-photos', 'POST');
-  
-  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
-  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
-  
-  if (!req.body) return FeedbackUtils.throwHTTPResConsoleError(res, 'Request body with directory required!', 400);
-
-  const dir = req.body.directory;
-  if (!dir) return FeedbackUtils.throwHTTPResConsoleError(res, 'Directory required!', 400);
-
-
-  console.log('Starting forced rescan in ' + dir + '...');
-
-  var r = await DatabaseController.scanPhotos(dir, true);
-  if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
-
-  res.json({message: 'Sucessfully scanned files in ' + dir});
-
-  FeedbackUtils.logRouteCallEndSuccess();
-});
-*/
-
 router.get('/get-file', async (req, res) => {
   FeedbackUtils.logRouteCallStart('/photos/get-file', 'GET');
-  
-  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
-  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
 
   const filename = req.query.filename;
   if (!filename) return FeedbackUtils.throwHTTPResConsoleError(res, 'Filename required!', 400);
