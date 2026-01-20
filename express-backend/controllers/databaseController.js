@@ -38,6 +38,20 @@ export default class DatabaseController {
         return { albums }
     }
 
+    static async getAlbumInformation(id) {
+        var r = await this.initializeDatabase();
+        if ('err' in r) return { err: r.err }
+        var database = r.database;
+
+        var album;
+
+        try { album = await database.get("SELECT * from 'albums' WHERE id = ?;", [id]); }
+        catch (err) { return { err } }
+        finally { database.closeDatabase(); }
+
+        return { album }
+    }
+
     static async listAllPhotos() {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }

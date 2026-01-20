@@ -19,4 +19,21 @@ router.get('/list-albums', async (req, res) => {
   FeedbackUtils.logRouteCallEndSuccess();
 })
 
+router.get('/album-information', async (req, res) => {
+  FeedbackUtils.logRouteCallStart('/albums/album-information', 'GET');
+
+  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
+  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+
+  const id = req.query.id;
+  if (!id) return FeedbackUtils.throwHTTPResConsoleError(res, 'ID required!', 400);
+
+  var r = await DatabaseController.getAlbumInformation(id);
+  if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
+
+  res.json(r);
+
+  FeedbackUtils.logRouteCallEndSuccess();
+})
+
 export default router;

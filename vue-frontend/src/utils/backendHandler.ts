@@ -58,6 +58,10 @@ export default class BackendHandler {
         return await this.fetchUrl(`${this.BASE_URL}/albums/list-albums`);
     }
 
+    static async getAlbumInformation(albumId: Number): Promise<{album: {id: number, name: string}}> {
+        return await this.fetchUrl(`${this.BASE_URL}/albums/album-information?id=${albumId}`);        
+    }
+
     static async listAllPhotos(): Promise<{photos: Array<{id: number, path: string, capture_date: string}>}> {
         return await this.fetchUrl(`${this.BASE_URL}/photos/list-all-photos`);
     }
