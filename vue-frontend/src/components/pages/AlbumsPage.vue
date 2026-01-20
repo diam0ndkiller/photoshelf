@@ -7,10 +7,15 @@ const albums = (await BackendHandler.listAlbums()).albums;
 <template>
     <v-main>
         <div class="page-content">
-            <h1>{{ currentPath }}</h1>
-            <ul>
-                <li v-for="album in albums">{{ album.name }}</li>
-            </ul>
+            <div>
+                <h1 style="display: inline;">All Albums</h1>
+                <div style="display: inline-block; margin: 2%"><v-btn color="accent" prepend-icon='mdi-plus-circle-outline' text='New Album' @click="toggleAddAlbum()"/></div>
+                <span style="color: rgb(var(--v-theme-accent))">{{ statusMessage }}</span>
+                <span style="color: rgb(var(--v-theme-error))">{{ errorMessage }}</span>
+                <ul>
+                    <li v-for="album in albums">{{ album.name }}</li>
+                </ul>
+            </div>
         </div>
     </v-main>
 </template>
@@ -19,7 +24,9 @@ const albums = (await BackendHandler.listAlbums()).albums;
 export default {
     data() {
         return {
-            
+            statusMessage: "",
+            errorMessage: "",
+            showAddAlbumPopup: false,
         }
     },
     computed: {
@@ -31,11 +38,15 @@ export default {
     methods: {
         updatePath(newPath: string) {
             this.$emit('updatePath', newPath);
+        },
+        toggleAddAlbum() {
+            this.showAddAlbumPopup = !this.showAddAlbumPopup;
         }
     },
     props: {
         currentPath: {
             type: String,
+            required: true,
         }
     },
     emits: ['updatePath']
