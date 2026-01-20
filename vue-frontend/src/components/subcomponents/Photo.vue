@@ -6,14 +6,14 @@ import BackendHandler from '@/utils/backendHandler';
     <div :style="getDivStyle()">
         <v-menu location="center center" origin="top start">
             <template v-slot:activator="{ props }">
-                <a style="display: inline-block;" href="#" :title="tooltip" v-bind="props">
+                <button class="image-link" :title="tooltip" v-bind="props">
                     <img
                         decoding="async"
                         loading="lazy"
                         :style="getStyle()"
                         :src="srcPath"
                     />
-                </a>
+                </button>
             </template>
             <v-list>
                 <template v-for="item in menuItems">
@@ -136,5 +136,9 @@ export default {
 </script>
 
 <style lang="css">
-
+.image-link {
+  all: unset;
+  cursor: pointer;
+  display: inline-block;
+}
 </style>
