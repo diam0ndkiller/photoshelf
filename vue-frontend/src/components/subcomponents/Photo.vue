@@ -4,14 +4,30 @@ import BackendHandler from '@/utils/backendHandler';
 
 <template>
     <div :style="getDivStyle()">
-        <a :href="imageUrl" target="blank" :title="tooltip">
-            <img
-                decoding="async"
-                loading="lazy"
-                :style="getStyle()"
-                :src="srcPath"
-            />
-        </a>
+        <v-menu location="center center" origin="top start">
+            <template v-slot:activator="{ props }">
+                <a style="display: inline-block;" href="#" :title="tooltip" v-bind="props">
+                    <img
+                        decoding="async"
+                        loading="lazy"
+                        :style="getStyle()"
+                        :src="srcPath"
+                    />
+                </a>
+            </template>
+            <v-list>
+                <template v-for="item in menuItems">
+                    <v-list-item
+                        :prepend-icon="item.icon"
+                        :title="item.title"
+                        :value="item.value"
+                        @click="item.action"
+                    >
+                        
+                    </v-list-item>
+                </template>
+            </v-list>
+        </v-menu>
     </div>
 </template>
 
@@ -19,6 +35,34 @@ import BackendHandler from '@/utils/backendHandler';
 export default {
     data() {
         return {
+            menuItems: [
+                { title: 'View full-size', icon: 'mdi-open-in-new', value: 'add', action: this.openFullSizeView},
+                { title: 'Add to album...', icon: 'mdi-image-album', value: 'edit', action: this.addToAlbum}
+            ]
+        }
+    },
+    methods: {
+        getStyle() {
+            var res = "max-height: 100%; max-width: 100%; object-fit: contain; ";
+
+            if (this.imgHeight) res += "height: " + this.imgHeight + ";"
+            if (this.imgWidth) res += "width: " + this.imgWidth + ";"
+
+            return res;
+        },
+        getDivStyle() {
+            var res = "display: inline-block; text-align: center; vertical-align: center; padding: 10px;";
+
+            if (this.divHeight) res += "height: " + this.divHeight + ";";
+            if (this.divWidth) res += "width: " + this.divWidth + ";";
+
+            return res;
+        },
+        openFullSizeView() {
+            window.open(this.imageUrl, "blank");
+        },
+        addToAlbum() {
+
         }
     },
     computed: {
@@ -51,24 +95,6 @@ export default {
     },
     watch: {
         
-    },
-    methods: {
-        getStyle() {
-            var res = "max-height: 100%; max-width: 100%; object-fit: contain; ";
-
-            if (this.imgHeight) res += "height: " + this.imgHeight + ";"
-            if (this.imgWidth) res += "width: " + this.imgWidth + ";"
-
-            return res;
-        },
-        getDivStyle() {
-            var res = "display: inline-block; text-align: center; vertical-align: center; padding: 10px;";
-
-            if (this.divHeight) res += "height: " + this.divHeight + ";";
-            if (this.divWidth) res += "width: " + this.divWidth + ";";
-
-            return res;
-        }
     },
     props:{
         photo: {
