@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import BackendHandler from '@/utils/backendHandler';
+import { BackendHandler } from '@/utils/backendHandler';
 import Photo from '../subcomponents/Photo.vue';
-
 </script>
 
 <template>

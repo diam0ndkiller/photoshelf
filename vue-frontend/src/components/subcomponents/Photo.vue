@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BackendHandler from '@/utils/backendHandler';
+import { BackendHandler } from '@/utils/backendHandler';
 </script>
 
 <template>

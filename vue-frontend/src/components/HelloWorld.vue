@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import BackendHandler from '../utils/backendHandler.ts';
+import { BackendHandler } from '../utils/backendHandler.ts';
 
 export default {
     data() {

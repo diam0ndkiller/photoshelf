@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BackendHandler from '@/utils/backendHandler';
+import { BackendHandler } from '@/utils/backendHandler';
 import Album from '../subcomponents/Album.vue';
 
 const albums = (await BackendHandler.listAlbums()).albums;

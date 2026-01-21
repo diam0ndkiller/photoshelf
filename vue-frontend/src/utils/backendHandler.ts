@@ -1,4 +1,8 @@
-export default class BackendHandler {
+export namespace BackendHandler {
+    export type PhotoType = {id: number, path: string, capture_date: string, location_id: number, location_path: string};
+}
+
+export class BackendHandler {
     static TOKEN = '';
     static BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -62,7 +66,7 @@ export default class BackendHandler {
         return await this.fetchUrl(`${this.BASE_URL}/albums/album-information?id=${albumId}`);        
     }
 
-    static async listAllPhotos(): Promise<{photos: Array<{id: number, path: string, capture_date: string}>}> {
+    static async listAllPhotos(): Promise<{photos: Array<BackendHandler.PhotoType>}> {
         return await this.fetchUrl(`${this.BASE_URL}/photos/list-all-photos`);
     }
 

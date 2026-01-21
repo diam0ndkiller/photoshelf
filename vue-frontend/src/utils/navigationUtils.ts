@@ -1,4 +1,4 @@
-import BackendHandler from "./backendHandler";
+import { BackendHandler } from "./backendHandler";
 
 export default class navigationUtils {
     static async getNavigationDrawerItems() {

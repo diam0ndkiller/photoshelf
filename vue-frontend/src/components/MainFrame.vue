@@ -7,7 +7,7 @@ import AppSettingsPage from './pages/AppSettingsPage.vue';
 import LoginWindow from './popups/LoginWindow.vue';
 import NavigationDrawerContents from './subcomponents/NavigationDrawerContents.vue';
 import InitialSetupPage from './pages/InitialSetupPage.vue';
-import BackendHandler from '@/utils/backendHandler';
+import { BackendHandler } from '@/utils/backendHandler';
 import DatabaseSettingsPage from './pages/DatabaseSettingsPage.vue';
 
 </script>
