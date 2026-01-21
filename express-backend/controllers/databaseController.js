@@ -59,19 +59,19 @@ export default class DatabaseController {
 
         var photos;
 
-        try { photos = await database.all("SELECT * from 'photos' ORDER BY path ASC;", []); }
+        try { photos = await database.all("SELECT photos.*, locations.path AS location_path from photos JOIN locations ON photos.location_id = locations.id ORDER BY path ASC;", []); }
         catch (err) { return { err } }
         finally { database.closeDatabase(); }
 
         return { photos }
     }
 
-    static async scanPhotos(dir, forceRescan) {
+    static async scanPhotos(dir, location_id, forceRescan) {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }
         var database = r.database;
 
-        var res = await FilesystemPhotoHelper.scanPhotos(database, dir, forceRescan);
+        var res = await FilesystemPhotoHelper.scanPhotos(database, dir, location_id, forceRescan);
 
         database.closeDatabase();
 
@@ -83,12 +83,12 @@ export default class DatabaseController {
         if('err' in r) return { err: r.err }
         var database = r.database
 
-        var rows = await database.all("SELECT (path) FROM locations", []);
+        var rows = await database.all("SELECT * FROM locations", []);
 
         var res;
 
         for (var i = 0; i < rows.length; i++) {
-            res = await this.scanPhotos(rows[i].path, forceRescan);
+            res = await this.scanPhotos(rows[i].path, rows[i].id, forceRescan);
             if ('err' in res) return res;
         }
 

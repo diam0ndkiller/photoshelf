@@ -3,7 +3,7 @@ import path from 'path';
 import { exiftool } from 'exiftool-vendored';
 
 export default class FilesystemPhotoHelper {
-    static async scanPhotos(photoshelfSqlite, dir, forceRescan) {
+    static async scanPhotos(photoshelfSqlite, dir, location_id, forceRescan) {
         try {
             const allFiles = await this.walkDir(dir);
 
@@ -48,9 +48,10 @@ export default class FilesystemPhotoHelper {
                     captureDateISO = String(captureDate);
                 }
                 // Insert into DB
-                await photoshelfSqlite.run('INSERT INTO photos (path, capture_date) VALUES (?, ?)', [
+                await photoshelfSqlite.run('INSERT INTO photos (path, capture_date, location_id) VALUES (?, ?, ?)', [
                     filePath,
                     captureDateISO,
+                    location_id
                 ]);
             }
         } catch (err) {

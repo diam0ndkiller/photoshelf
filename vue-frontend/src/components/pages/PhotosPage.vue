@@ -15,15 +15,18 @@ import Photo from '../subcomponents/Photo.vue';
             </div>
 
             <v-infinite-scroll>
-                <template v-for="photoRow in photos2D">
-                    <div>
-                        <Photo v-for="photo in photoRow" :photo="photo"
-                            divHeight="25vh" divWidth="25%"
-                            imgHeight="25vh"
-                            :scaleHeight="250"
-                        />
-                    </div>
-                </template>                
+                <template v-for="photoLocationGroup in photos3D(photos)">
+                    <h2>{{ photoLocationGroup.location_path }}:</h2>
+                    <template v-for="photoRow in photoLocationGroup.photos">
+                        <div>
+                            <Photo v-for="photo in photoRow" :photo="photo"
+                                divHeight="25vh" divWidth="25%"
+                                imgHeight="25vh"
+                                :scaleHeight="250"
+                            />
+                        </div>
+                    </template>   
+                </template>             
             </v-infinite-scroll>
         </div>
     </v-main>
@@ -35,21 +38,12 @@ export default {
         return {
             errorMessage: '',
             statusMessage: '',
-            photos: [{id: 0, path: '', capture_date: ''}]
+            photos: [{id: 0, path: '', capture_date: '', location_id: 0, location_path: ''}]
         }
     },
     computed: {
         currentSubComponent() {
             return this.currentPath?.split("/")[2];
-        },
-        photos2D() {
-            var res = [];
-
-            for (let i = 0; i < this.photos.length; i += 4) {
-                res.push(this.photos.slice(i, i + 4));
-            }
-
-            return res;
         }
     },
     watch: {
@@ -58,6 +52,41 @@ export default {
     methods: {
         updatePath(newPath: string) {
             this.$emit('updatePath', newPath);
+        },
+        photos3D(photos: Array<BackendHandler.PhotoType>) {
+            var groupedByLocation = [];
+            var currentLocationPath = '';
+            var currentLocationIndex = -1;
+
+            for (let i = 0; i < photos.length; i++) {
+                if (photos[i].location_path == '') continue;
+
+                if (photos[i].location_path != currentLocationPath) {
+                    currentLocationIndex++;
+                    currentLocationPath = photos[i].location_path;
+                    groupedByLocation.push({location_path: currentLocationPath, photos: new Array<BackendHandler.PhotoType>()});
+                }
+                groupedByLocation[currentLocationIndex].photos.push(photos[i]);
+            }
+
+            var splicedRes = [];
+
+            for (let i = 0; i < groupedByLocation.length; i++) {
+                splicedRes.push({location_path: groupedByLocation[i].location_path, photos: this.photos2D(groupedByLocation[i].photos)});
+            }
+
+            console.log(splicedRes);
+
+            return splicedRes;
+        },
+        photos2D(photos: Array<BackendHandler.PhotoType>) {
+            var res = [];
+
+            for (let i = 0; i < photos.length; i += 4) {
+                res.push(photos.slice(i, i + 4));
+            }
+
+            return res;
         },
         async getPhotos() {
             this.photos = (await BackendHandler.listAllPhotos()).photos;
