@@ -29,10 +29,10 @@ import { BackendHandler } from '@/utils/backendHandler';
                         <v-btn icon="mdi-delete" color="red" @click="deleteLocation(loc.id)"/>
                     </v-list-item>
                 </v-list>
-                <nobr>
+                <span class="nobr">
                     <v-text-field v-model="locationToAdd" label="Add a photo location path"/>
                     <v-btn prepend-icon="mdi-folder-multiple-plus" color="accent" @click="addPhotoLocation">Add</v-btn>
-                </nobr>
+                </span>
             </v-card-item>
         </v-card>
     </div>
