@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { BackendHandler } from '@/utils/backendHandler';
 import Album from '../subcomponents/Album.vue';
-
-const albums = (await BackendHandler.listAlbums()).albums;
 </script>
 
 <template>
@@ -43,6 +41,7 @@ export default {
             showAddAlbumPopup: false,
             newAlbumName: "",
             createErrorMessage: "",
+            albums: [{id: -1, name: "Loading..."}],
         }
     },
     methods: {
@@ -52,10 +51,21 @@ export default {
         toggleAddAlbum() {
             this.showAddAlbumPopup = !this.showAddAlbumPopup;
         },
+        clearMessages() {
+            this.createErrorMessage = this.errorMessage = this.statusMessage = "";
+        },
         async createAlbum() {
+            this.clearMessages();
             var res = this.newAlbumName == '' ? {err: 'No album name given.'} : await BackendHandler.createAlbum(this.newAlbumName);
             if ('err' in res) this.createErrorMessage = res.err;
-            else this.showAddAlbumPopup = false;
+            else {
+                this.showAddAlbumPopup = false;
+                this.statusMessage = `Successfully created album ${this.newAlbumName}`
+                this.getAlbums();
+            }
+        },
+        async getAlbums() {
+            this.albums = (await BackendHandler.listAlbums()).albums;
         }
     },
     computed: {
