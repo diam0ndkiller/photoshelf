@@ -13,7 +13,11 @@ import Album from '../subcomponents/Album.vue';
                 <span style="color: rgb(var(--v-theme-accent))">{{ statusMessage }}</span>
                 <span style="color: rgb(var(--v-theme-error))">{{ errorMessage }}</span>
                 <ul>
-                    <li v-for="album in albums">{{ album.name }}</li>
+                    <template v-for="album in albums">
+                        <li v-if="album.id != -1">
+                            {{ album.name }} <v-btn prepend-icon="mdi-delete" color="error" text="Delete album" @click="deleteAlbum(album.id)"/>
+                        </li>
+                    </template>
                 </ul>
             </div>
         </div>
@@ -53,6 +57,15 @@ export default {
         },
         clearMessages() {
             this.createErrorMessage = this.errorMessage = this.statusMessage = "";
+        },
+        async deleteAlbum(id: Number) {
+            this.clearMessages();
+            var res = await BackendHandler.deleteAlbum(id);
+            if ('err' in res) this.errorMessage = res.err;
+            else {
+                await this.getAlbums();
+                this.statusMessage = `Successfully deleted album #${id}`;
+            }
         },
         async createAlbum() {
             this.clearMessages();

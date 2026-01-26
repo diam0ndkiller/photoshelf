@@ -47,7 +47,23 @@ router.post('/create-album', async (req, res) => {
 
   var r = await DatabaseController.createAlbum(name);
 
-  console.log(r);
+  if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
+
+  res.json(r);
+
+  FeedbackUtils.logRouteCallEndSuccess();
+})
+
+router.post('/delete-album', async (req, res) => {
+  FeedbackUtils.logRouteCallStart('/albums/delete-album', 'POST');
+
+  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
+  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+
+  const id = req.body.id;
+  if (!id) return FeedbackUtils.throwHTTPResConsoleError(res, 'ID required!', 400);
+
+  var r = await DatabaseController.deleteAlbum(id);
 
   if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
 

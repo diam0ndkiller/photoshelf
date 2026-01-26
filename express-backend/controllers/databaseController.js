@@ -54,6 +54,18 @@ export default class DatabaseController {
         finally { database.closeDatabase(); }
     }
 
+    static async deleteAlbum(id) {
+        var r = await this.initializeDatabase();
+        if ('err' in r) return { err: r.err }
+        var database = r.database;
+
+        try {
+            var res = await database.run("DELETE FROM albums WHERE id = ?;", [id]);
+            return { success: true };
+        } catch (err) { return { err } }
+        finally { database.closeDatabase(); }
+    }
+
     static async getAlbumInformation(id) {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }
