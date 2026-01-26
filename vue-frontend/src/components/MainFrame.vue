@@ -89,7 +89,6 @@ export default {
         },
         currentPath() {
             this.currentComponent = this.currentPath.split("/")[1];
-            console.log(this.currentComponent);
         }
     },
     mounted() {
@@ -105,7 +104,6 @@ export default {
         updatePath(newPath: string) {
             if (!this.showDefaultPageContent) return;
             this.currentPath = newPath;
-            console.log(newPath);
         },
         async checkInitialSetup() {
             var r = await BackendHandler.getDatabaseLocation();

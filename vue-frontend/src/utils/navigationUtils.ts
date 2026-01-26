@@ -68,7 +68,6 @@ export default class navigationUtils {
     }
 
     static decodePathSegments(path: string): Array<{ title: string, pathLink: string }> {
-        console.log(path);
         const pathElements = path.split("/").splice(1);
         var output: Array<{ title: string, pathLink: string }> = [];
         for (let i = 0; i < pathElements.length; i++) {
