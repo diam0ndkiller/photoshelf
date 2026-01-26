@@ -38,6 +38,22 @@ export default class DatabaseController {
         return { albums }
     }
 
+    static async createAlbum(name) {
+        var r = await this.initializeDatabase();
+        if ('err' in r) return { err: r.err }
+        var database = r.database;
+
+        try {
+            var exists = await database.get("SELECT * from 'albums' WHERE name = ?;", [name]);
+            if (exists) return {err: {message: `Album ${name} already exists.`}};
+
+            var res = await database.run("INSERT INTO albums (name) VALUES (?);", [name]);
+
+            return {success: true};
+        } catch (err) { return { err } }
+        finally { database.closeDatabase(); }
+    }
+
     static async getAlbumInformation(id) {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }

@@ -64,6 +64,10 @@ export class BackendHandler {
         return await this.fetchUrl(`${this.BASE_URL}/albums/list-albums`);
     }
 
+    static async createAlbum(name: String) {
+        return await this.fetchUrl(`${this.BASE_URL}/albums/create-album`, 'POST', {name})
+    }
+
     static async getAlbumInformation(albumId: Number): Promise<{album: {id: number, name: string}}> {
         return await this.fetchUrl(`${this.BASE_URL}/albums/album-information?id=${albumId}`);        
     }

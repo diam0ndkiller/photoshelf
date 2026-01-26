@@ -36,4 +36,24 @@ router.get('/album-information', async (req, res) => {
   FeedbackUtils.logRouteCallEndSuccess();
 })
 
+router.post('/create-album', async (req, res) => {
+  FeedbackUtils.logRouteCallStart('/albums/create-album', 'POST');
+
+  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
+  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+
+  const name = req.body.name;
+  if (!name) return FeedbackUtils.throwHTTPResConsoleError(res, 'Name required!', 400);
+
+  var r = await DatabaseController.createAlbum(name);
+
+  console.log(r);
+
+  if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
+
+  res.json(r);
+
+  FeedbackUtils.logRouteCallEndSuccess();
+})
+
 export default router;

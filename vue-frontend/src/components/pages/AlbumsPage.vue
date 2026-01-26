@@ -19,6 +19,18 @@ const albums = (await BackendHandler.listAlbums()).albums;
                 </ul>
             </div>
         </div>
+        <v-dialog width="50%" v-model="showAddAlbumPopup">
+            <v-card>
+                <v-card-item title="Create Album">
+                    Create a new album to organize your photos.
+                </v-card-item>
+                <v-card-item>
+                    <v-text-field autofocus label="Album Name" v-model="newAlbumName"/>
+                    <v-btn @click="createAlbum()" prepend-icon="mdi-content-save-plus-outline" text="Create" color="accent"/>
+                    <span style="color: rgb(var(--v-theme-error))">{{ createErrorMessage }}</span>
+                </v-card-item>
+            </v-card>
+        </v-dialog>
     </v-main>
 </template>
 
@@ -29,6 +41,21 @@ export default {
             statusMessage: "",
             errorMessage: "",
             showAddAlbumPopup: false,
+            newAlbumName: "",
+            createErrorMessage: "",
+        }
+    },
+    methods: {
+        updatePath(newPath: string) {
+            this.$emit('updatePath', newPath);
+        },
+        toggleAddAlbum() {
+            this.showAddAlbumPopup = !this.showAddAlbumPopup;
+        },
+        async createAlbum() {
+            var res = this.newAlbumName == '' ? {err: 'No album name given.'} : await BackendHandler.createAlbum(this.newAlbumName);
+            if ('err' in res) this.createErrorMessage = res.err;
+            else this.showAddAlbumPopup = false;
         }
     },
     computed: {
@@ -45,14 +72,6 @@ export default {
     },
     watch: {
         
-    },
-    methods: {
-        updatePath(newPath: string) {
-            this.$emit('updatePath', newPath);
-        },
-        toggleAddAlbum() {
-            this.showAddAlbumPopup = !this.showAddAlbumPopup;
-        }
     },
     props: {
         currentPath: {
