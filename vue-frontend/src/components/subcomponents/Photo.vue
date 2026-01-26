@@ -130,7 +130,6 @@ export default {
         }
     },
     async mounted() {
-        console.log(this.photo.capture_date)
     }
 }
 </script>

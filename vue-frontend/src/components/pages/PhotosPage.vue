@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { BackendHandler } from '@/utils/backendHandler';
 import Photo from '../subcomponents/Photo.vue';
+import { Logger } from '@/utils/logger';
 </script>
 
 <template>
@@ -75,7 +76,7 @@ export default {
                 splicedRes.push({location_path: groupedByLocation[i].location_path, photos: this.photos2D(groupedByLocation[i].photos)});
             }
 
-            console.log(splicedRes);
+            Logger.debug(splicedRes);
 
             return splicedRes;
         },

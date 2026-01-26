@@ -9,6 +9,7 @@ import NavigationDrawerContents from './subcomponents/NavigationDrawerContents.v
 import InitialSetupPage from './pages/InitialSetupPage.vue';
 import { BackendHandler } from '@/utils/backendHandler';
 import DatabaseSettingsPage from './pages/DatabaseSettingsPage.vue';
+import { Logger } from '@/utils/logger';
 
 </script>
 
@@ -102,6 +103,8 @@ export default {
             this.updatePath(newPath);
         },
         updatePath(newPath: string) {
+            Logger.info(`Navigating to ${newPath}`)
+            
             if (!this.showDefaultPageContent) return;
             this.currentPath = newPath;
         },

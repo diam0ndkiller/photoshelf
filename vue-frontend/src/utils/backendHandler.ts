@@ -1,3 +1,5 @@
+import { Logger } from "./logger";
+
 export namespace BackendHandler {
     export type PhotoType = {id: number, path: string, capture_date: string, location_id: number, location_path: string};
 }
@@ -7,7 +9,7 @@ export class BackendHandler {
     static BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
     static async fetchUrl(url: string, method: string = 'GET', body: object | undefined = undefined, auth: boolean = true, cache = "no-store") {
-        console.log("fetching", url, method);
+        Logger.info(`Fetching ${url} ${method}`);
         var obj: RequestInit = {
             method,
             headers: {
