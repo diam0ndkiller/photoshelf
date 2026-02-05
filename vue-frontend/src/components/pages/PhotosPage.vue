@@ -24,6 +24,7 @@ import { Logger } from '@/utils/logger';
                                 divHeight="25vh" divWidth="25%"
                                 imgHeight="25vh"
                                 :scaleHeight="250"
+                                :albums="albums"
                             />
                         </div>
                     </template>   
@@ -39,7 +40,8 @@ export default {
         return {
             errorMessage: '',
             statusMessage: '',
-            photos: [{id: 0, path: '', capture_date: '', location_id: 0, location_path: ''}]
+            photos: [{id: 0, path: '', capture_date: '', location_id: 0, location_path: ''}],
+            albums: [{id: -1, name: ''}],
         }
     },
     computed: {
@@ -92,6 +94,9 @@ export default {
         async getPhotos() {
             this.photos = (await BackendHandler.listAllPhotos()).photos;
         },
+        async getAlbums() {
+            this.albums = (await BackendHandler.listAlbums()).albums;
+        },
         async rescanPhotos() {
             this.statusMessage = "Rescanning files in all locations (this may take some time)...";
             this.errorMessage = "";
@@ -118,7 +123,8 @@ export default {
     },
     emits: ['updatePath'],
     async mounted() {
-        await this.getPhotos()
+        await this.getPhotos();
+        await this.getAlbums();
     }
 }
 </script>

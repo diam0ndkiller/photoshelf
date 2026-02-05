@@ -127,6 +127,10 @@ export default {
         scaleHeight: {
             type: Number,
             default: undefined
+        },
+        albums: {
+            type: Array<BackendHandler.AlbumType>,
+            default: []
         }
     },
     async mounted() {
