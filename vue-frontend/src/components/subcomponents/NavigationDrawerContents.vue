@@ -8,7 +8,7 @@ const navigationDrawerItems = await navigationUtils.getNavigationDrawerItems();
     <v-list
             :items="navigationDrawerItems"
             @update:selected="onNavigationDrawerSelection"
-            :selected="selected"
+            :selected="[selected]"
     ></v-list>
 </template>
 
@@ -16,25 +16,28 @@ const navigationDrawerItems = await navigationUtils.getNavigationDrawerItems();
 export default {
     data() {
         return {
-            selected: ['/home'],
         }
     },
     computed: {
         
     },
     watch: {
-        
+        selected() {
+            this.$emit('update:selected', this.selected);
+        }
     },
     methods: {
         onNavigationDrawerSelection(newVal: Array<string>) {
-            this.$emit('navigation-drawer-selection', newVal);
-            if (newVal[0]) this.selected = newVal;
+            this.$emit('update:selected', newVal[0]);
         }
     },
     props:{
-        
+        selected: {
+            type: String,
+            default: '/home',
+        }
     },
-    emits: ['navigation-drawer-selection']
+    emits: ['update:selected']
 }
 </script>
 

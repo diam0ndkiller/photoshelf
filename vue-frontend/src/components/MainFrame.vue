@@ -41,7 +41,7 @@ import { Logger } from '@/utils/logger';
             v-model="showNavigationDrawer"
             permanent
     >
-        <NavigationDrawerContents @navigation-drawer-selection="onNavigationDrawerSelection"/>
+        <NavigationDrawerContents v-model:selected="selectedNavigationDrawerItem"/>
     </v-navigation-drawer>
 
     <LoginWindow v-if="showLogin" v-model="showLogin"/>
@@ -61,7 +61,7 @@ export default {
     data() {
         return {
             showNavigationDrawer: true,
-            selectedNavigationDrawerItems: [''],
+            selectedNavigationDrawerItem: '/home',
             currentPath: '/home',
             currentComponent: 'home',
             showLogin: false,
@@ -90,15 +90,16 @@ export default {
         },
         currentPath() {
             this.currentComponent = this.currentPath.split("/")[1];
+            this.selectedNavigationDrawerItem = this.currentPath;
+        },
+        selectedNavigationDrawerItem() {
+            this.updatePath(this.selectedNavigationDrawerItem)
         }
     },
     mounted() {
         this.checkInitialSetup();
     },
     methods: {
-        onNavigationDrawerSelection(newValue: Array<string>) {
-            if (newValue[0]) this.updatePath(newValue[0])
-        },
         onAppBarPathSelection(newPath: string) {
             this.updatePath(newPath);
         },
