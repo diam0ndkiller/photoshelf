@@ -2,6 +2,7 @@ import { Logger } from "./logger";
 
 export namespace BackendHandler {
     export type PhotoType = {id: number, path: string, capture_date: string, location_id: number, location_path: string};
+    export type AlbumType = {id: number, name: string};
 }
 
 export class BackendHandler {
@@ -60,7 +61,7 @@ export class BackendHandler {
         return await this.fetchUrl(`${this.BASE_URL}/helloworld`);
     }
 
-    static async listAlbums(): Promise<{albums: Array<{id: number, name: string}>}> {
+    static async listAlbums(): Promise<{albums: Array<BackendHandler.AlbumType>}> {
         return await this.fetchUrl(`${this.BASE_URL}/albums/list-albums`);
     }
 
@@ -72,7 +73,7 @@ export class BackendHandler {
         return await this.fetchUrl(`${this.BASE_URL}/albums/delete-album`, 'POST', {id})
     }
 
-    static async getAlbumInformation(albumId: Number): Promise<{album: {id: number, name: string}}> {
+    static async getAlbumInformation(albumId: Number): Promise<{album: BackendHandler.AlbumType}> {
         return await this.fetchUrl(`${this.BASE_URL}/albums/album-information?id=${albumId}`);        
     }
 

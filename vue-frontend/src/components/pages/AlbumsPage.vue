@@ -15,7 +15,7 @@ import Album from '../subcomponents/Album.vue';
                 <ul>
                     <template v-for="album in albums">
                         <li v-if="album.id != -1">
-                            {{ album.name }} <v-btn prepend-icon="mdi-delete" color="error" text="Delete album" @click="deleteAlbum(album.id)"/>
+                            {{ album.name }} <v-btn prepend-icon="mdi-delete" color="error" text="Delete album" @click="prepareDeleteAlbum(album)"/>
                         </li>
                     </template>
                 </ul>
@@ -33,6 +33,21 @@ import Album from '../subcomponents/Album.vue';
                 </v-card-item>
             </v-card>
         </v-dialog>
+        <v-dialog width="50%" v-model="showDeleteAlbumPopup">
+            <v-card>
+                <v-card-item title="Delete Album">
+                    Are you sure you want to delete the album <code>{{ albumToDelete.name }}</code>?
+                </v-card-item>
+                <v-card-item>
+                    <span style="margin-right: 5px">
+                        <v-btn prepend-icon="mdi-delete" text="Delete" color="error" @click="deleteAlbum(albumToDelete.id)"/>
+                    </span>
+                    <span style="margin-left: 5px">
+                        <v-btn prepend-icon="mdi-close-octagon" text="Cancel" color="primary" @click="showDeleteAlbumPopup = !showDeleteAlbumPopup"/>
+                    </span>
+                </v-card-item>
+            </v-card>
+        </v-dialog>
     </v-main>
 </template>
 
@@ -45,6 +60,8 @@ export default {
             showAddAlbumPopup: false,
             newAlbumName: "",
             createErrorMessage: "",
+            showDeleteAlbumPopup: false,
+            albumToDelete: {id: -1, name: ''},
             albums: [{id: -1, name: "Loading..."}],
         }
     },
@@ -58,11 +75,16 @@ export default {
         clearMessages() {
             this.createErrorMessage = this.errorMessage = this.statusMessage = "";
         },
+        prepareDeleteAlbum(album: BackendHandler.AlbumType) {
+            this.showDeleteAlbumPopup = true;
+            this.albumToDelete = album;
+        },
         async deleteAlbum(id: Number) {
             this.clearMessages();
             var res = await BackendHandler.deleteAlbum(id);
             if ('err' in res) this.errorMessage = res.err;
             else {
+                this.showDeleteAlbumPopup = false;
                 await this.getAlbums();
                 this.statusMessage = `Successfully deleted album #${id}`;
                 this.updateNavigationDrawerItems();
@@ -107,7 +129,10 @@ export default {
             required: true,
         }
     },
-    emits: ['updatePath', 'updateNavigationDrawerItems']
+    emits: ['updatePath', 'updateNavigationDrawerItems'],
+    async mounted() {
+        this.getAlbums();
+    }
 }
 </script>
 
