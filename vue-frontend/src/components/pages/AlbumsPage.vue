@@ -65,6 +65,7 @@ export default {
             else {
                 await this.getAlbums();
                 this.statusMessage = `Successfully deleted album #${id}`;
+                this.updateNavigationDrawerItems();
             }
         },
         async createAlbum() {
@@ -73,12 +74,16 @@ export default {
             if ('err' in res) this.createErrorMessage = res.err;
             else {
                 this.showAddAlbumPopup = false;
+                await this.getAlbums();
                 this.statusMessage = `Successfully created album ${this.newAlbumName}`
-                this.getAlbums();
+                this.updateNavigationDrawerItems();
             }
         },
         async getAlbums() {
             this.albums = (await BackendHandler.listAlbums()).albums;
+        },
+        updateNavigationDrawerItems() {
+            this.$emit('updateNavigationDrawerItems', true);
         }
     },
     computed: {
@@ -102,7 +107,7 @@ export default {
             required: true,
         }
     },
-    emits: ['updatePath']
+    emits: ['updatePath', 'updateNavigationDrawerItems']
 }
 </script>
 

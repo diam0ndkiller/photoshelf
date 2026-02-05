@@ -41,7 +41,7 @@ import { Logger } from '@/utils/logger';
             v-model="showNavigationDrawer"
             permanent
     >
-        <NavigationDrawerContents v-model:selected="selectedNavigationDrawerItem"/>
+        <NavigationDrawerContents v-model:selected="selectedNavigationDrawerItem" :refreshKey="refreshNavigationDrawerKey"/>
     </v-navigation-drawer>
 
     <LoginWindow v-if="showLogin" v-model="showLogin"/>
@@ -49,7 +49,7 @@ import { Logger } from '@/utils/logger';
     <InitialSetupPage v-if="!showLogin && showInitialSetup" v-model="showInitialSetup"/>
 
     <HomePage v-if="showDefaultPageContent && currentComponent == 'home'"/>
-    <AlbumsPage v-if="showDefaultPageContent && currentComponent == 'albums'" :current-path="currentPath"/>
+    <AlbumsPage v-if="showDefaultPageContent && currentComponent == 'albums'" :current-path="currentPath" @updateNavigationDrawerItems="refreshNavigationDrawer"/>
     <PhotosPage v-if="showDefaultPageContent && currentComponent == 'photos'" :current-path="currentPath"/>
     <AppSettingsPage v-if="showDefaultPageContent && currentComponent == 'settings'" :current-path="currentPath"/>
     <DatabaseSettingsPage v-if="showDefaultPageContent && currentComponent == 'database'" :current-path="currentPath"/>
@@ -67,6 +67,7 @@ export default {
             showLogin: false,
             showInitialSetup: true,
             initialSetupMessage: '',
+            refreshNavigationDrawerKey: 0,
         }
     },
     computed: {
@@ -118,6 +119,9 @@ export default {
             } else {
                 this.showInitialSetup = false;
             }
+        },
+        refreshNavigationDrawer(...args: any[]) {
+            this.refreshNavigationDrawerKey++;
         }
     },
     props: {

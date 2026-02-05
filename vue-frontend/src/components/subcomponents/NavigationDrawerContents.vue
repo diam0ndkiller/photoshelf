@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import navigationUtils from '@/utils/navigationUtils';
-
-const navigationDrawerItems = await navigationUtils.getNavigationDrawerItems();
 </script>
 
 <template>
@@ -16,6 +14,7 @@ const navigationDrawerItems = await navigationUtils.getNavigationDrawerItems();
 export default {
     data() {
         return {
+            navigationDrawerItems: [{}],
         }
     },
     computed: {
@@ -24,20 +23,33 @@ export default {
     watch: {
         selected() {
             this.$emit('update:selected', this.selected);
+        },
+        async refreshKey() {
+            await this.loadItems();
         }
     },
     methods: {
         onNavigationDrawerSelection(newVal: Array<string>) {
             this.$emit('update:selected', newVal[0]);
+        },
+        async loadItems() {
+            this.navigationDrawerItems = await navigationUtils.getNavigationDrawerItems();
         }
     },
     props:{
         selected: {
             type: String,
             default: '/home',
+        },
+        refreshKey: {
+            type: Number,
+            required: true
         }
     },
-    emits: ['update:selected']
+    emits: ['update:selected'],
+    async mounted() {
+        await this.loadItems();
+    }
 }
 </script>
 
