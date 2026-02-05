@@ -87,6 +87,7 @@ export default {
                 this.showDeleteAlbumPopup = false;
                 await this.getAlbums();
                 this.statusMessage = `Successfully deleted album #${id}`;
+                this.albumToDelete = {id: -1, name: ''};
                 this.updateNavigationDrawerItems();
             }
         },
@@ -98,6 +99,7 @@ export default {
                 this.showAddAlbumPopup = false;
                 await this.getAlbums();
                 this.statusMessage = `Successfully created album ${this.newAlbumName}`
+                this.newAlbumName = '';
                 this.updateNavigationDrawerItems();
             }
         },
