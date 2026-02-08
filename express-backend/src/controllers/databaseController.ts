@@ -127,7 +127,7 @@ export default class DatabaseController {
         return {}
     }
 
-    static async addPhotoToAlbum(photoId: string, albumId: string) {
+    static async addPhotoToAlbum(photoId: number, albumId: number) {
         var r = await this.initializeDatabase();
         if ('err' in r) return {err: r.err }
         var database = r.database;

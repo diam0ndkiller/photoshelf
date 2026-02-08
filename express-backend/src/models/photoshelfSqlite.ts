@@ -29,10 +29,11 @@ export default class PhotoshelfSQLite {
         );
 
         CREATE TABLE "photos" (
+            "id"    INTEGER NOT NULL UNIQUE,
             "path"	TEXT NOT NULL UNIQUE,
             "capture_date"	DATETIME,
             "location_id"  INTEGER,
-            PRIMARY KEY("path"),
+            PRIMARY KEY("id"),
             FOREIGN KEY("location_id") REFERENCES "locations"("id")
         );
 

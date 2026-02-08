@@ -39,7 +39,7 @@ export type MenuEntryType = {title: string, icon: string, value: any, action: Fu
                                             :prepend-icon="submenuItem.icon"
                                             :title="submenuItem.title"
                                             :value="submenuItem.value"
-                                            @click="submenuItem.action?.(item.value)"
+                                            @click="submenuItem.action?.(submenuItem.value)"
                                         />
                                     </template>
                                 </v-list>
@@ -87,8 +87,8 @@ export default {
 
             return output;
         },
-        async addToAlbum(id: number) {
-            var res = await BackendHandler.addPhotoToAlbum(id, this.photo.id);
+        async addToAlbum(albumId: number) {
+            var res = await BackendHandler.addPhotoToAlbum(this.photo.id, albumId);
         }
     },
     computed: {

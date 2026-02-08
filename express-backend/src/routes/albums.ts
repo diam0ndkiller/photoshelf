@@ -79,10 +79,10 @@ router.post('/add-to-album', async (req, res) => {
   if ('err' in isAuthenticated) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
 
   const photoId = req.body.photoId;
-  if (!photoId || typeof photoId !== 'string') return FeedbackUtils.throwHTTPResConsoleError(res, 'Photo ID required!', 400);
+  if (!photoId || typeof photoId !== 'number') return FeedbackUtils.throwHTTPResConsoleError(res, 'Photo ID required!', 400);
 
   const albumId = req.body.albumId;
-  if (!albumId || typeof albumId !== 'string') return FeedbackUtils.throwHTTPResConsoleError(res, 'Album ID required!', 400);
+  if (!albumId || typeof albumId !== 'number') return FeedbackUtils.throwHTTPResConsoleError(res, 'Album ID required!', 400);
 
   var r = await DatabaseController.addPhotoToAlbum(photoId, albumId);
 
