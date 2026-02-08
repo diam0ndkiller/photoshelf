@@ -40,10 +40,10 @@ export default class PhotoshelfSQLite {
         CREATE TABLE "albums_contents" (
             "album_id"	INTEGER NOT NULL,
             "type"	TEXT NOT NULL,
-            "idx"	INTEGER NOT NULL,
-            "photo_path"	TEXT,
+            "index"	INTEGER NOT NULL,
+            "photo_id"	INTEGER,
             "title"	TEXT,
-            FOREIGN KEY("photo_path") REFERENCES "photos"("path"),
+            FOREIGN KEY("photo_id") REFERENCES "photos"("id"),
             FOREIGN KEY("album_id") REFERENCES "albums"("id")
         );
     `;
