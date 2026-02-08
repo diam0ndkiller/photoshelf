@@ -2,7 +2,7 @@
 import { BackendHandler } from '@/utils/backendHandler';
 import Photo from '../subcomponents/Photo.vue';
 import { Logger } from '@/utils/logger';
-import type { PhotoType } from '@shared/types';
+import type { Photo as PhotoType } from '@shared/databasetypes';
 </script>
 
 <template>

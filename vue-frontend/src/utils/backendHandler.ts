@@ -1,6 +1,6 @@
 import { Logger } from "./logger";
 
-import type {AlbumType, PhotoType} from '@shared/types';
+import type {Album as AlbumType, Photo as PhotoType} from '@shared/databasetypes';
 
 export class BackendHandler {
     static TOKEN = '';

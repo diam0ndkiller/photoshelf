@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { BackendHandler } from '@/utils/backendHandler';
 import Album from '../subcomponents/Album.vue';
-import type { AlbumType } from '@shared/types';
+import type { Album as AlbumType } from '@shared/databasetypes';
 </script>
 
 <template>
