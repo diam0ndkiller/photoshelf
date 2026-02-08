@@ -10,8 +10,8 @@ const router = express.Router();
 router.post('/init-db', async (req, res) => {
   FeedbackUtils.logRouteCallStart('/db-utils/init-db', 'POST');
   
-  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
-  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+  var isAuthenticated = AuthenticationUtils.checkAuthentication(req);
+  if ('err' in isAuthenticated) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
 
   if (!req.body) return FeedbackUtils.throwHTTPResConsoleError(res, 'Request body with databaseLocation required!', 400);
 
@@ -27,8 +27,8 @@ router.post('/init-db', async (req, res) => {
 router.get('/get-default-db-location', (req, res) => {
   FeedbackUtils.logRouteCallStart('/db-utils/get-default-db-location', 'GET');
 
-  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
-  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+  var isAuthenticated = AuthenticationUtils.checkAuthentication(req);
+  if ('err' in isAuthenticated) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
 
   var databaseLocation = path.join(process.cwd(), 'data');
 
@@ -39,8 +39,8 @@ router.get('/get-default-db-location', (req, res) => {
 router.get('/get-db-location', async (req, res) => {
   FeedbackUtils.logRouteCallStart('/db-utils/get-db-location', 'GET');
   
-  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
-  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+  var isAuthenticated = AuthenticationUtils.checkAuthentication(req);
+  if ('err' in isAuthenticated) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
 
   var r = ConfigFileHelper.getDatabaseLocation();
   if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);

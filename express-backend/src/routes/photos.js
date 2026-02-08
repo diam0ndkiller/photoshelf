@@ -10,8 +10,8 @@ const router = express.Router();
 router.get('/list-all-photos', async (req, res) => {
   FeedbackUtils.logRouteCallStart('/photos/list-all-photos', 'GET');
   
-  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
-  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+  var isAuthenticated = AuthenticationUtils.checkAuthentication(req);
+  if ('err' in isAuthenticated) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
 
   var r = await DatabaseController.listAllPhotos();
   if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
@@ -24,8 +24,8 @@ router.get('/list-all-photos', async (req, res) => {
 router.get('/rescan-all-photos', async (req, res) => {
   FeedbackUtils.logRouteCallStart('/photos/rescan-all-photos', 'POST');
   
-  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
-  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+  var isAuthenticated = AuthenticationUtils.checkAuthentication(req);
+  if ('err' in isAuthenticated) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
 
   console.log('Rescanning files in all locations...');
 
@@ -42,8 +42,8 @@ router.get('/rescan-all-photos', async (req, res) => {
 router.get('/scan-new-photos', async (req, res) => {
   FeedbackUtils.logRouteCallStart('/photos/rescan-all-photos', 'POST');
   
-  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
-  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+  var isAuthenticated = AuthenticationUtils.checkAuthentication(req);
+  if ('err' in isAuthenticated) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
 
   console.log('Scanning for new files in all locations...');
 
@@ -109,8 +109,8 @@ router.get('/get-file', async (req, res) => {
 router.get('/get-photo-locations', async (req, res) => {
   FeedbackUtils.logRouteCallStart('/photos/get-photo-locations', 'GET');
   
-  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
-  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+  var isAuthenticated = AuthenticationUtils.checkAuthentication(req);
+  if ('err' in isAuthenticated) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
 
   var r = await DatabaseController.getPhotoLocations();
   if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
@@ -123,8 +123,8 @@ router.get('/get-photo-locations', async (req, res) => {
 router.post('/add-photo-location', async (req, res) => {
   FeedbackUtils.logRouteCallStart('/photos/add-photo-location', 'POST');
   
-  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
-  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+  var isAuthenticated = AuthenticationUtils.checkAuthentication(req);
+  if ('err' in isAuthenticated) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
 
   if (!req.body) return FeedbackUtils.throwHTTPResConsoleError(res, 'Request body with locationToAdd required!', 400);
 
@@ -142,8 +142,8 @@ router.post('/add-photo-location', async (req, res) => {
 router.post('/delete-photo-location', async (req, res) => {
   FeedbackUtils.logRouteCallStart('/photos/delete-photo-location', 'POST');
   
-  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
-  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+  var isAuthenticated = AuthenticationUtils.checkAuthentication(req);
+  if ('err' in isAuthenticated) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
 
   if (!req.body) return FeedbackUtils.throwHTTPResConsoleError(res, 'Request body with id required!', 400);
 
