@@ -1,7 +1,7 @@
 import FilesystemPhotoHelper from "../models/filesystemPhotoHelper.js";
 import PhotoshelfSQLite from "../models/photoshelfSqlite.js";
 import ConfigFileHelper from '../models/configFileHelper.js';
-import { Album, PhotoLocation, Photo } from "@shared/databasetypes.js";
+import { Album, PhotoLocation, Photo, AlbumContentLink } from "@shared/databasetypes.js";
 
 export default class DatabaseController {
     static async initializeDatabase() {
@@ -132,7 +132,22 @@ export default class DatabaseController {
         if ('err' in r) return {err: r.err }
         var database = r.database;
 
-        // TODO:
+        try {
+            database.run(`  INSERT INTO "albums_contents" ("album_id", "index", "type", "photo_id", "title")
+                            VALUES (
+                                ?,
+                                COALESCE(
+                                    (SELECT MAX("index") + 1 FROM "albums_contents" WHERE "album_id" = ?), 0
+                                ),
+                                "photo",
+                                ?,
+                                ""
+                            );`, [albumId, albumId, photoId]);
+        }
+        catch (err) { return { err } }
+        finally { database.closeDatabase(); }
+
+        return {success: true}
     }
 
     static async getPhotoLocations() {
