@@ -76,7 +76,7 @@ export class BackendHandler {
     }
 
     static async listAllPhotos(): Promise<{photos: Array<PhotoType>}> {
-        return await this.fetchUrl(`${this.BASE_URL}/photos/list-all-photos`, 'POST');
+        return await this.fetchUrl(`${this.BASE_URL}/photos/list-all-photos`, 'GET');
     }
 
     static async rescanAllPhotos() {
@@ -84,7 +84,7 @@ export class BackendHandler {
     }
 
     static async scanNewPhotos() {
-        return await this.fetchUrl(this.BASE_URL+'/photos/scan-new-photos', 'GET')
+        return await this.fetchUrl(this.BASE_URL+'/photos/scan-new-photos', 'POST')
     }
 
     static async addPhotoToAlbum(photoId: number, albumId: number): Promise<ErrorResultObject | SuccessObject> {

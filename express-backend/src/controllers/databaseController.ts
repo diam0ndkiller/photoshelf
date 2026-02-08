@@ -1,7 +1,7 @@
 import FilesystemPhotoHelper from "../models/filesystemPhotoHelper.js";
 import PhotoshelfSQLite from "../models/photoshelfSqlite.js";
 import ConfigFileHelper from '../models/configFileHelper.js';
-import { Album, PhotoLocation, Photo, AlbumContentLink } from "@shared/databasetypes.js";
+import { Album, PhotoLocation, Photo, AlbumContentLink, JoinedAlbumContentLink } from "@shared/databasetypes.js";
 import { ErrorResultObject, TrueSuccessObject } from "@shared/types.js";
 
 export default class DatabaseController {
@@ -56,7 +56,7 @@ export default class DatabaseController {
         finally { database.closeDatabase(); }
     }
 
-    static async deleteAlbum(id: string): Promise<ErrorResultObject | TrueSuccessObject> {
+    static async deleteAlbum(id: number): Promise<ErrorResultObject | TrueSuccessObject> {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }
         var database = r.database;
@@ -156,7 +156,7 @@ export default class DatabaseController {
         if ('err' in r) return { err: r.err }
         var database = r.database;
 
-        var photoLocations;
+        var photoLocations: Array<PhotoLocation>;
 
         try { photoLocations = await database.all<PhotoLocation>("SELECT * from 'locations' ORDER BY path ASC;", []); }
         catch (err) { return { err } }

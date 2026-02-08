@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { BackendHandler } from '@/utils/backendHandler';
-
-
+import type { Album as AlbumType } from '@shared/databasetypes';
 </script>
 
 <template>
@@ -12,7 +11,7 @@ Viewing Album {{ albumInformation.name }} with id {{ albumInformation.id }}
 export default {
     data() {
         return {
-            albumInformation: {id: -1, name: "loading..."},
+            albumInformation: {} as AlbumType
         }
     },
     computed: {

@@ -61,7 +61,7 @@ router.post('/delete-album', async (req, res) => {
   if ('err' in isAuthenticated) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
 
   const id = req.body.id;
-  if (!id || typeof id !== 'string') return FeedbackUtils.throwHTTPResConsoleError(res, 'ID required!', 400);
+  if (!id || typeof id !== 'number') return FeedbackUtils.throwHTTPResConsoleError(res, 'ID required!', 400);
 
   var r = await DatabaseController.deleteAlbum(id);
 
