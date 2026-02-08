@@ -103,7 +103,7 @@ export default {
             this.errorMessage = "";
             var r = await BackendHandler.rescanAllPhotos();
             this.statusMessage = "";
-            if ('err' in r) this.errorMessage = r.err;
+            if ('err' in r) this.errorMessage = r.err.message;
             else this.statusMessage = r.message;
             this.getPhotos();
         },

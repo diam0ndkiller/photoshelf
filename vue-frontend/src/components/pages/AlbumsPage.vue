@@ -83,7 +83,7 @@ export default {
         async deleteAlbum(id: Number) {
             this.clearMessages();
             var res = await BackendHandler.deleteAlbum(id);
-            if ('err' in res) this.errorMessage = res.err;
+            if ('err' in res) this.errorMessage = res.err.message;
             else {
                 this.showDeleteAlbumPopup = false;
                 await this.getAlbums();
@@ -95,7 +95,7 @@ export default {
         async createAlbum() {
             this.clearMessages();
             var res = this.newAlbumName == '' ? {err: 'No album name given.'} : await BackendHandler.createAlbum(this.newAlbumName);
-            if ('err' in res) this.createErrorMessage = res.err;
+            if ('err' in res) this.createErrorMessage = res.err.message;
             else {
                 this.showAddAlbumPopup = false;
                 await this.getAlbums();

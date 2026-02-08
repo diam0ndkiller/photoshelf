@@ -7,7 +7,8 @@ export default class FeedbackUtils {
     }
 
     static throwHTTPResError(res: Response, errorMsg: string, errorCode: number = 400) {
-        res.status(errorCode).json({ err: errorMsg });
+        if (errorMsg == undefined) errorMsg = "undefined";
+        res.status(errorCode).json({ err: { message: errorMsg } });
     }
 
     static throwHTTPResConsoleError(res: Response, errorMsg: string, errorCode: number = 400) {
