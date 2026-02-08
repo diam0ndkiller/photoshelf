@@ -9,14 +9,17 @@ import type { Album as AlbumType } from '@shared/databasetypes';
         <div class="page-content">
             <Album v-if="inAlbum" :id="albumId"/>
             <div v-else>
-                <h1 style="display: inline;">All Albums</h1>
-                <div style="display: inline-block; margin: 2%"><v-btn color="accent" prepend-icon='mdi-plus-circle-outline' text='New Album' @click="toggleAddAlbum()"/></div>
-                <span style="color: rgb(var(--v-theme-accent))">{{ statusMessage }}</span>
-                <span style="color: rgb(var(--v-theme-error))">{{ errorMessage }}</span>
+                <div class="page-heading">
+                    <h1>All Albums</h1>
+                    <div class="flex-spacer"></div>
+                    <span style="color: rgb(var(--v-theme-accent))">{{ statusMessage }}</span>
+                    <span style="color: rgb(var(--v-theme-error))">{{ errorMessage }}</span>
+                    <div><v-btn color="accent-background" prepend-icon='mdi-plus-circle' text='New Album' @click="toggleAddAlbum()"/></div>
+                </div>
                 <ul>
                     <template v-for="album in albums">
                         <li v-if="album.id != -1">
-                            {{ album.name }} <v-btn prepend-icon="mdi-delete" color="error" text="Delete album" @click="prepareDeleteAlbum(album)"/>
+                            {{ album.name }} <v-btn prepend-icon="mdi-delete" color="error-background" text="Delete album" @click="prepareDeleteAlbum(album)"/>
                         </li>
                     </template>
                 </ul>

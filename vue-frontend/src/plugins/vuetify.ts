@@ -31,7 +31,9 @@ const lightTheme = {
   colors: {
     primary: defaultTheme.blue,
     secondary: defaultTheme.blue_darker,
-    accent: defaultTheme.accent,
+
+    'accent': defaultTheme.accent,
+    'accent-background': defaultTheme.accent_lighter,
 
     'error': defaultTheme.error,
     'error-background': defaultTheme.error_lighter,
@@ -49,7 +51,9 @@ const darkTheme = {
   colors: {
     primary: defaultTheme.blue,
     secondary: defaultTheme.blue_lighter,
-    accent: defaultTheme.accent,
+
+    'accent': defaultTheme.accent,
+    'accent-background': defaultTheme.accent_darker,
 
     'error': defaultTheme.error,
     'error-background': defaultTheme.error_darker,

@@ -8,12 +8,13 @@ import type { Photo as PhotoType } from '@shared/databasetypes';
 <template>
     <v-main>
         <div class="page-content">
-            <div>
-                <h1 style="display: inline;">All Photos</h1>
-                <div style="display: inline-block; margin: 2%"><v-btn color="primary" prepend-icon='mdi-refresh' text='Scan for new photos' @click="scanNewPhotos()"/></div>
-                <div style="display: inline-block; margin: 2%"><v-btn color="error-background" prepend-icon='mdi-refresh' text='Rescan all photos' @click="rescanPhotos()"/></div>
+            <div class="page-heading">
+                <h1>All Photos</h1>
+                <div class="flex-spacer"></div>
                 <span style="color: rgb(var(--v-theme-accent))">{{ statusMessage }}</span>
                 <span style="color: rgb(var(--v-theme-error))">{{ errorMessage }}</span>
+                <div style="display: inline-block"><v-btn color="primary" prepend-icon='mdi-refresh' text='Scan for new photos' @click="scanNewPhotos()"/></div>
+                <div style="display: inline-block"><v-btn color="error-background" prepend-icon='mdi-refresh' text='Rescan all photos' @click="rescanPhotos()"/></div>
             </div>
 
             <v-infinite-scroll>
