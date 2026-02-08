@@ -76,11 +76,11 @@ export class BackendHandler {
     }
 
     static async listAllPhotos(): Promise<{photos: Array<PhotoType>}> {
-        return await this.fetchUrl(`${this.BASE_URL}/photos/list-all-photos`, 'GET');
+        return await this.fetchUrl(`${this.BASE_URL}/photos/list-all-photos`, 'POST');
     }
 
     static async rescanAllPhotos() {
-        return await this.fetchUrl(this.BASE_URL+'/photos/rescan-all-photos', 'GET')
+        return await this.fetchUrl(this.BASE_URL+'/photos/rescan-all-photos', 'POST')
     }
 
     static async scanNewPhotos() {

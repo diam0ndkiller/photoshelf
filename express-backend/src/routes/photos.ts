@@ -21,7 +21,7 @@ router.get('/list-all-photos', async (req, res) => {
   FeedbackUtils.logRouteCallEndSuccess();
 })
 
-router.get('/rescan-all-photos', async (req, res) => {
+router.post('/rescan-all-photos', async (req, res) => {
   FeedbackUtils.logRouteCallStart('/photos/rescan-all-photos', 'POST');
   
   var isAuthenticated = AuthenticationUtils.checkAuthentication(req);
@@ -39,7 +39,7 @@ router.get('/rescan-all-photos', async (req, res) => {
   FeedbackUtils.logRouteCallEndSuccess();
 });
 
-router.get('/scan-new-photos', async (req, res) => {
+router.post('/scan-new-photos', async (req, res) => {
   FeedbackUtils.logRouteCallStart('/photos/rescan-all-photos', 'POST');
   
   var isAuthenticated = AuthenticationUtils.checkAuthentication(req);
