@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { BackendHandler } from '@/utils/backendHandler';
+import type { AlbumType, PhotoType } from '@shared/types';
 import type { PropType } from 'vue';
 
 export type MenuEntryType = {title: string, icon: string, value: any, action: Function | undefined, submenu?: Array<MenuEntryType>};
@@ -129,7 +130,7 @@ export default {
     },
     props:{
         photo: {
-            type: Object as PropType<BackendHandler.PhotoType>,
+            type: Object as PropType<PhotoType>,
             required: true
         },
 
@@ -160,7 +161,7 @@ export default {
             default: undefined
         },
         albums: {
-            type: Array<BackendHandler.AlbumType>,
+            type: Array<AlbumType>,
             default: []
         }
     },

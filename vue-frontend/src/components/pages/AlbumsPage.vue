@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { BackendHandler } from '@/utils/backendHandler';
 import Album from '../subcomponents/Album.vue';
+import type { AlbumType } from '@shared/types';
 </script>
 
 <template>
@@ -75,7 +76,7 @@ export default {
         clearMessages() {
             this.createErrorMessage = this.errorMessage = this.statusMessage = "";
         },
-        prepareDeleteAlbum(album: BackendHandler.AlbumType) {
+        prepareDeleteAlbum(album: AlbumType) {
             this.showDeleteAlbumPopup = true;
             this.albumToDelete = album;
         },

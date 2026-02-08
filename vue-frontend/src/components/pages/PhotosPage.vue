@@ -2,6 +2,7 @@
 import { BackendHandler } from '@/utils/backendHandler';
 import Photo from '../subcomponents/Photo.vue';
 import { Logger } from '@/utils/logger';
+import type { PhotoType } from '@shared/types';
 </script>
 
 <template>
@@ -56,7 +57,7 @@ export default {
         updatePath(newPath: string) {
             this.$emit('updatePath', newPath);
         },
-        photos3D(photos: Array<BackendHandler.PhotoType>) {
+        photos3D(photos: Array<PhotoType>) {
             var groupedByLocation = [];
             var currentLocationPath = '';
             var currentLocationIndex = -1;
@@ -67,7 +68,7 @@ export default {
                 if (photos[i].location_path != currentLocationPath) {
                     currentLocationIndex++;
                     currentLocationPath = photos[i].location_path;
-                    groupedByLocation.push({location_path: currentLocationPath, photos: new Array<BackendHandler.PhotoType>()});
+                    groupedByLocation.push({location_path: currentLocationPath, photos: new Array<PhotoType>()});
                 }
                 groupedByLocation[currentLocationIndex].photos.push(photos[i]);
             }
@@ -82,7 +83,7 @@ export default {
 
             return splicedRes;
         },
-        photos2D(photos: Array<BackendHandler.PhotoType>) {
+        photos2D(photos: Array<PhotoType>) {
             var res = [];
 
             for (let i = 0; i < photos.length; i += 4) {
