@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { BackendHandler } from '@/utils/backendHandler';
 import type { Album as AlbumType, JoinedAlbumContentLink } from '@shared/databasetypes';
+import AlbumSheet from './AlbumSheet.vue';
 </script>
 
 <template>
@@ -13,8 +14,9 @@ import type { Album as AlbumType, JoinedAlbumContentLink } from '@shared/databas
             </template>
             <v-color-picker/>
         </v-menu>
-
     </div>
+    
+    <AlbumSheet :contents="pages(albumContents)[0]"/>
 </template>
 
 <script lang="ts">
@@ -32,7 +34,15 @@ export default {
         
     },
     methods: {
-        
+        pages(contents: Array<JoinedAlbumContentLink>) {
+            var res = [];
+
+            for (let i = 0; i < contents.length; i += 4) {
+                res.push(contents.slice(i, i + 4));
+            }
+
+            return res;
+        },
     },
     props:{
         id: {
