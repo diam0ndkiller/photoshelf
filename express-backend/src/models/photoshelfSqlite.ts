@@ -39,12 +39,13 @@ export default class PhotoshelfSQLite {
 
         CREATE TABLE "albums_contents" (
             "album_id"	INTEGER NOT NULL,
-            "type"	TEXT NOT NULL,
             "index"	INTEGER NOT NULL,
+            "type"	TEXT NOT NULL,
             "photo_id"	INTEGER,
             "title"	TEXT,
             FOREIGN KEY("photo_id") REFERENCES "photos"("id"),
-            FOREIGN KEY("album_id") REFERENCES "albums"("id")
+            FOREIGN KEY("album_id") REFERENCES "albums"("id"),
+            UNIQUE ("album_id", "index")
         );
     `;
 
@@ -87,7 +88,7 @@ export default class PhotoshelfSQLite {
         this.isOpen = false;
     }
 
-    exec(statement: string): Promise<ErrorResultObject | TrueSuccessObject> {
+    exec(statement: string): Promise<TrueSuccessObject> {
         return new Promise((resolve, reject) => {
             var r = this.openDatabase();
             if ('err' in r) return reject(r.err);
@@ -98,7 +99,7 @@ export default class PhotoshelfSQLite {
         })
     }
 
-    all<T>(statement: string, params: Array<any>): Promise<ErrorResultObject | Array<T>> {
+    all<T>(statement: string, params: Array<any>): Promise<Array<T>> {
         return new Promise((resolve, reject) => {
             var r = this.openDatabase();
             if ('err' in r) return reject(r.err);
@@ -109,7 +110,7 @@ export default class PhotoshelfSQLite {
         })
     }
 
-    get<T>(statement: string, params: Array<any>): Promise<ErrorResultObject | T> {
+    get<T>(statement: string, params: Array<any>): Promise<T> {
         return new Promise((resolve, reject) => {
             this.database.get(statement, params, (err, row) => {
                 if (err) reject(err);
@@ -118,7 +119,7 @@ export default class PhotoshelfSQLite {
         })
     }
 
-    run(statement: string, params: Array<any>): Promise<ErrorResultObject | TrueSuccessObject> {
+    run(statement: string, params: Array<any>): Promise<TrueSuccessObject> {
         return new Promise((resolve, reject) => {
             this.database.run(statement, params, (err) => {
                 if (err) reject(err);
