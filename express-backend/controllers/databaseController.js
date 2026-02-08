@@ -125,6 +125,14 @@ export default class DatabaseController {
         return {}
     }
 
+    static async addPhotoToAlbum(photoId, albumId) {
+        var r = await this.initializeDatabase();
+        if ('err' in r) return {err: r.err }
+        var database = r.database;
+
+        // TODO:
+    }
+
     static async getPhotoLocations() {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }

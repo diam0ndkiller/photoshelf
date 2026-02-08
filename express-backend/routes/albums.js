@@ -72,4 +72,25 @@ router.post('/delete-album', async (req, res) => {
   FeedbackUtils.logRouteCallEndSuccess();
 })
 
+router.post('/add-to-album', async (req, res) => {
+  FeedbackUtils.logRouteCallStart('/albums/add-to-album', 'POST');
+
+  var isAuthenticated = AuthenticationUtils.isAuthenticated(req);
+  if (isAuthenticated !== true) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+
+  const photoId = req.body.photoId;
+  if (!photoId) return FeedbackUtils.throwHTTPResConsoleError(res, 'Photo ID required!', 400);
+
+  const albumId = req.body.albumId;
+  if (!albumId) return FeedbackUtils.throwHTTPResConsoleError(res, 'Album ID required!', 400);
+
+  var r = await DatabaseController.addPhotoToAlbum(photoId, albumId);
+
+  if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
+
+  res.json(r);
+
+  FeedbackUtils.logRouteCallEndSuccess();
+})
+
 export default router;
