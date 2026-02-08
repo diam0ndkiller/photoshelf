@@ -61,7 +61,7 @@ router.get('/get-file', async (req, res) => {
   FeedbackUtils.logRouteCallStart('/photos/get-file', 'GET');
 
   const filename = req.query.filename;
-  if (!filename) return FeedbackUtils.throwHTTPResConsoleError(res, 'Filename required!', 400);
+  if (!filename || typeof filename !== 'string') return FeedbackUtils.throwHTTPResConsoleError(res, 'Filename required!', 400);
 
   const width = req.query.width;
   const height = req.query.height;
@@ -129,7 +129,7 @@ router.post('/add-photo-location', async (req, res) => {
   if (!req.body) return FeedbackUtils.throwHTTPResConsoleError(res, 'Request body with locationToAdd required!', 400);
 
   const locationToAdd = req.body.locationToAdd;
-  if (!locationToAdd) return FeedbackUtils.throwHTTPResConsoleError(res, 'locationToAdd required!', 400);
+  if (!locationToAdd || typeof locationToAdd !== 'string') return FeedbackUtils.throwHTTPResConsoleError(res, 'locationToAdd required!', 400);
 
   var r = await DatabaseController.addPhotoLocation(locationToAdd);
   if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
@@ -148,7 +148,7 @@ router.post('/delete-photo-location', async (req, res) => {
   if (!req.body) return FeedbackUtils.throwHTTPResConsoleError(res, 'Request body with id required!', 400);
 
   const id = req.body.id;
-  if (!id) return FeedbackUtils.throwHTTPResConsoleError(res, 'id required!', 400);
+  if (!id || typeof id !== 'string') return FeedbackUtils.throwHTTPResConsoleError(res, 'id required!', 400);
 
   var r = await DatabaseController.deletePhotoLocation(id);
   if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);

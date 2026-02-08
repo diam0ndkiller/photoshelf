@@ -1,9 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import { exiftool } from 'exiftool-vendored';
+import PhotoshelfSQLite from './photoshelfSqlite.js';
 
 export default class FilesystemPhotoHelper {
-    static async scanPhotos(photoshelfSqlite, dir, location_id, forceRescan) {
+    static async scanPhotos(photoshelfSqlite: PhotoshelfSQLite, dir: string, location_id: number, forceRescan: boolean) {
         try {
             const allFiles = await this.walkDir(dir);
 
@@ -63,7 +64,7 @@ export default class FilesystemPhotoHelper {
         return { message: 'success' }
     }
 
-    static async walkDir(currentPath) {
+    static async walkDir(currentPath: string) {
         const entries = await fs.promises.readdir(currentPath, { withFileTypes: true });
         let files = [];
 
@@ -79,7 +80,7 @@ export default class FilesystemPhotoHelper {
         return files;
     }
 
-    static isImageFile(filepath) {
+    static isImageFile(filepath: string) {
         const ext = path.extname(filepath).toLowerCase();
         const imageExts = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.heic', '.tiff', '.webp'];
         return imageExts.includes(ext);

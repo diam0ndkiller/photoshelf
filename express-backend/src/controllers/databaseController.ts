@@ -1,6 +1,7 @@
 import FilesystemPhotoHelper from "../models/filesystemPhotoHelper.js";
 import PhotoshelfSQLite from "../models/photoshelfSqlite.js";
 import ConfigFileHelper from '../models/configFileHelper.js';
+import { AlbumType, PhotoLocationType, PhotoType } from "@shared/types.js";
 
 export default class DatabaseController {
     static async initializeDatabase() {
@@ -31,7 +32,7 @@ export default class DatabaseController {
 
         var albums;
 
-        try { albums = await database.all("SELECT * from 'albums' ORDER BY name ASC;", []); }
+        try { albums = await database.all<AlbumType>("SELECT * from 'albums' ORDER BY name ASC;", []); }
         catch (err) { return { err } }
         finally { database.closeDatabase(); }
 
@@ -73,7 +74,7 @@ export default class DatabaseController {
 
         var album;
 
-        try { album = await database.get("SELECT * from 'albums' WHERE id = ?;", [id]); }
+        try { album = await database.get<AlbumType>("SELECT * from 'albums' WHERE id = ?;", [id]); }
         catch (err) { return { err } }
         finally { database.closeDatabase(); }
 
@@ -87,14 +88,14 @@ export default class DatabaseController {
 
         var photos;
 
-        try { photos = await database.all("SELECT photos.*, locations.path AS location_path from photos JOIN locations ON photos.location_id = locations.id ORDER BY path ASC;", []); }
+        try { photos = await database.all<PhotoType>("SELECT photos.*, locations.path AS location_path from photos JOIN locations ON photos.location_id = locations.id ORDER BY path ASC;", []); }
         catch (err) { return { err } }
         finally { database.closeDatabase(); }
 
         return { photos }
     }
 
-    static async scanPhotos(dir: string, location_id: string, forceRescan: boolean) {
+    static async scanPhotos(dir: string, location_id: number, forceRescan: boolean) {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }
         var database = r.database;
@@ -111,7 +112,8 @@ export default class DatabaseController {
         if('err' in r) return { err: r.err }
         var database = r.database
 
-        var rows = await database.all("SELECT * FROM locations", []);
+        var rows = await database.all<PhotoLocationType>("SELECT * FROM locations", []);
+        if ('err' in rows) return rows;
 
         var res;
 
@@ -140,7 +142,7 @@ export default class DatabaseController {
 
         var photoLocations;
 
-        try { photoLocations = await database.all("SELECT * from 'locations' ORDER BY path ASC;", []); }
+        try { photoLocations = await database.all<PhotoLocationType>("SELECT * from 'locations' ORDER BY path ASC;", []); }
         catch (err) { return { err } }
         finally { database.closeDatabase(); }
 

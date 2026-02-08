@@ -8,8 +8,11 @@ router.post('/login', async (req, res) => {
     
     if (!req.body) return FeedbackUtils.throwHTTPResConsoleError(res, 'Request body with username and password required!', 400);
 
-    const { username, password } = req.body;
-    if (!username || !password) return FeedbackUtils.throwHTTPResConsoleError(res, 'Username and Password required!', 400);
+    const username = req.body;
+    if (!username || typeof username !== 'string') return FeedbackUtils.throwHTTPResConsoleError(res, 'Username required!', 400);
+
+    const password = req.body;
+    if (!password || typeof password !== 'string') return FeedbackUtils.throwHTTPResConsoleError(res, 'Password required!', 400);
 
     var r = await AuthenticationUtils.login(username, password)
     if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 400);
@@ -23,8 +26,11 @@ router.post('/add-user', async (req, res) => {
     
     if (!req.body) return FeedbackUtils.throwHTTPResConsoleError(res, 'Request body with username and password required!', 400);
 
-    const { username, password } = req.body;
-    if (!username || !password) return FeedbackUtils.throwHTTPResConsoleError(res, 'Username and Password required!', 400);
+    const username = req.body;
+    if (!username || typeof username !== 'string') return FeedbackUtils.throwHTTPResConsoleError(res, 'Username required!', 400);
+
+    const password = req.body;
+    if (!password || typeof password !== 'string') return FeedbackUtils.throwHTTPResConsoleError(res, 'Password required!', 400);
 
     var r = await AuthenticationUtils.addUser(req, username, password);
     if (r && 'err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);

@@ -1,16 +1,16 @@
 import sqlite3 from 'sqlite3';
 import path from 'path';
 import fs from 'fs';
-import FeedbackUtils from '../utils/feedbackUtils.js';
+import { ErrorResultObject, TrueSuccessObject } from '@shared/types.js';
 
 export default class PhotoshelfSQLite {
     dir = undefined;
     filePath = undefined;
-    database = undefined;
+    database: sqlite3.Database = undefined;
     err = undefined;
     isOpen = false;
 
-    constructor(dir) {
+    constructor(dir: string) {
         this.dir = dir;
         this.filePath = path.join(dir, 'photoshelf.sqlite');
     }
@@ -47,7 +47,7 @@ export default class PhotoshelfSQLite {
         );
     `;
 
-    createIfNonExist() {
+    createIfNonExist(): Promise<ErrorResultObject | void> {
         return new Promise((resolve, reject) => {
             if (!fs.existsSync(this.dir)) {
                 fs.mkdirSync(this.dir, { recursive: true });
@@ -63,65 +63,65 @@ export default class PhotoshelfSQLite {
             this.openDatabase();
             this.exec(this.CREATE_TABLES_STATEMENT)
                 .then(() => resolve())
-                .catch(err => reject(err));
+                .catch(err => reject({err}));
         });
     }
 
-    openDatabase() {
+    openDatabase(): Promise<ErrorResultObject | TrueSuccessObject> {
         return new Promise((resolve, reject) => {
             this.isOpen = true;
             this.database = new sqlite3.Database(this.filePath, (err) => {
                 if (err) {
                     this.database.close();
-                    return reject(err);
+                    return reject({err});
                 }
             });
             
-            resolve();
+            resolve({success: true});
         });
     }
 
-    closeDatabase() {
+    closeDatabase(): void {
         if (this.isOpen) this.database.close();
         this.isOpen = false;
     }
 
-    exec(statement) {
+    exec(statement: string): Promise<ErrorResultObject | TrueSuccessObject> {
         return new Promise((resolve, reject) => {
             var r = this.openDatabase();
-            if (r.err) return reject(r.err);
+            if ('err' in r) return reject(r.err);
             this.database.exec(statement, (err) => {
                 if (err) reject(err);
-                else resolve();
+                else resolve({success: true});
             });
         })
     }
 
-    all(statement, params) {
+    all<T>(statement: string, params: Array<any>): Promise<ErrorResultObject | Array<T>> {
         return new Promise((resolve, reject) => {
             var r = this.openDatabase();
-            if (r.err) return reject(r.err);
+            if ('err' in r) return reject(r.err);
             this.database.all(statement, params, (err, rows) => {
                 if (err) reject(err);
-                else resolve(rows);
+                else resolve(rows as Array<T>);
             });
         })
     }
 
-    get(statement, params) {
+    get<T>(statement: string, params: Array<any>): Promise<ErrorResultObject | T> {
         return new Promise((resolve, reject) => {
             this.database.get(statement, params, (err, row) => {
                 if (err) reject(err);
-                else resolve(row);
+                else resolve(row as T);
             });
         })
     }
 
-    run(statement, params) {
+    run(statement: string, params: Array<any>): Promise<ErrorResultObject | TrueSuccessObject> {
         return new Promise((resolve, reject) => {
             this.database.run(statement, params, (err) => {
                 if (err) reject(err);
-                else resolve();
+                else resolve({success: true});
             });
         })
     }

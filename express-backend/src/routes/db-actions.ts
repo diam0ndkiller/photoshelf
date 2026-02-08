@@ -16,7 +16,7 @@ router.post('/init-db', async (req, res) => {
   if (!req.body) return FeedbackUtils.throwHTTPResConsoleError(res, 'Request body with databaseLocation required!', 400);
 
   const dir = req.body.databaseLocation;
-  if (!dir) return FeedbackUtils.throwHTTPResConsoleError(res, 'DatabaseLocation required!', 400);
+  if (!dir || typeof dir !== 'string') return FeedbackUtils.throwHTTPResConsoleError(res, 'DatabaseLocation required!', 400);
 
   var r = await DatabaseController.firstTimeInitDatabase(dir);
   if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);

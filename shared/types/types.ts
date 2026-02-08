@@ -35,3 +35,8 @@ export interface AlbumType {
     id: number,
     name: string
 };
+
+export interface PhotoLocationType {
+    id: number,
+    path: string
+}
