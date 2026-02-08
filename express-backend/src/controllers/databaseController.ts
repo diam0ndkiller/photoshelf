@@ -14,11 +14,11 @@ export default class DatabaseController {
         return { database }
     }
 
-    static async firstTimeInitDatabase(fileLocation) {
-        var r = ConfigFileHelper.setDatabaseLocation(fileLocation);
-        if ('err' in r) return r;
+    static async firstTimeInitDatabase(fileLocation: string) {
+        var setDatabaseLocationResult = ConfigFileHelper.setDatabaseLocation(fileLocation);
+        if ('err' in setDatabaseLocationResult) return setDatabaseLocationResult;
 
-        r = await this.initializeDatabase();
+        var r = await this.initializeDatabase();
         if ('err' in r) return r;
         r.database.closeDatabase();
         return r;
@@ -38,7 +38,7 @@ export default class DatabaseController {
         return { albums }
     }
 
-    static async createAlbum(name) {
+    static async createAlbum(name: string) {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }
         var database = r.database;
@@ -54,7 +54,7 @@ export default class DatabaseController {
         finally { database.closeDatabase(); }
     }
 
-    static async deleteAlbum(id) {
+    static async deleteAlbum(id: string) {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }
         var database = r.database;
@@ -66,7 +66,7 @@ export default class DatabaseController {
         finally { database.closeDatabase(); }
     }
 
-    static async getAlbumInformation(id) {
+    static async getAlbumInformation(id: string) {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }
         var database = r.database;
@@ -94,7 +94,7 @@ export default class DatabaseController {
         return { photos }
     }
 
-    static async scanPhotos(dir, location_id, forceRescan) {
+    static async scanPhotos(dir: string, location_id: string, forceRescan: boolean) {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }
         var database = r.database;
@@ -106,7 +106,7 @@ export default class DatabaseController {
         return res;
     }
 
-    static async rescanPhotos(forceRescan) {
+    static async rescanPhotos(forceRescan: boolean) {
         var r = await this.initializeDatabase();
         if('err' in r) return { err: r.err }
         var database = r.database
@@ -125,7 +125,7 @@ export default class DatabaseController {
         return {}
     }
 
-    static async addPhotoToAlbum(photoId, albumId) {
+    static async addPhotoToAlbum(photoId: string, albumId: string) {
         var r = await this.initializeDatabase();
         if ('err' in r) return {err: r.err }
         var database = r.database;
@@ -147,7 +147,7 @@ export default class DatabaseController {
         return { photoLocations }
     }
 
-    static async addPhotoLocation(locationToAdd) {
+    static async addPhotoLocation(locationToAdd: string) {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }
         var database = r.database;
@@ -159,7 +159,7 @@ export default class DatabaseController {
         return { success: true }
     }
 
-    static async deletePhotoLocation(id) {
+    static async deletePhotoLocation(id: string) {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }
         var database = r.database;
