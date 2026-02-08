@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { BackendHandler } from '@/utils/backendHandler';
+import type { PropType } from 'vue';
+
+export type MenuEntryType = {title: string, icon: string, value: any, action: Function | undefined, submenu?: Array<MenuEntryType>};
 </script>
 
 <template>
@@ -21,9 +24,26 @@ import { BackendHandler } from '@/utils/backendHandler';
                         :prepend-icon="item.icon"
                         :title="item.title"
                         :value="item.value"
-                        @click="item.action"
+                        @click="item.action?.()"
                     >
+                        <template v-if="'submenu' in item" v-slot:append>
+                            <v-icon icon="mdi-chevron-right"></v-icon>
+                        </template>
                         
+                        <template v-if="'submenu' in item">
+                            <v-menu submenu open-on-hover activator="parent">
+                                <v-list>
+                                    <template v-for="submenuItem in item.submenu">
+                                        <v-list-item
+                                            :prepend-icon="submenuItem.icon"
+                                            :title="submenuItem.title"
+                                            :value="submenuItem.value"
+                                            @click="submenuItem.action?.(item.value)"
+                                        />
+                                    </template>
+                                </v-list>
+                            </v-menu>
+                        </template>
                     </v-list-item>
                 </template>
             </v-list>
@@ -35,10 +55,6 @@ import { BackendHandler } from '@/utils/backendHandler';
 export default {
     data() {
         return {
-            menuItems: [
-                { title: 'View full-size', icon: 'mdi-open-in-new', value: 'add', action: this.openFullSizeView},
-                { title: 'Add to album...', icon: 'mdi-image-album', value: 'edit', action: this.addToAlbum}
-            ]
         }
     },
     methods: {
@@ -61,11 +77,26 @@ export default {
         openFullSizeView() {
             window.open(this.imageUrl, "blank");
         },
-        addToAlbum() {
+        getAlbumMenuItems(): Array<MenuEntryType> {
+            var output: Array<MenuEntryType> = [];
 
+            this.albums.forEach(album => {
+                output.push({ title: album.name, icon: 'mdi-image-album', value: album.id, action: this.addToAlbum});
+            });
+
+            return output;
+        },
+        async addToAlbum(id: number) {
+            var res = await BackendHandler.addPhotoToAlbum(id, this.photo.id);
         }
     },
     computed: {
+        menuItems(): Array<MenuEntryType> {
+            return [
+                { title: 'View full-size', icon: 'mdi-open-in-new', value: 'fullSize', action: this.openFullSizeView},
+                { title: 'Add to album...', icon: 'mdi-image-album', value: 'addToAlbum', action: undefined, submenu: this.getAlbumMenuItems() }
+            ]
+        },
         imageUrl() {
             return BackendHandler.BASE_URL + '/photos/get-file?filename=' + encodeURIComponent(this.photo.path);
         },
@@ -98,7 +129,7 @@ export default {
     },
     props:{
         photo: {
-            type: Object,
+            type: Object as PropType<BackendHandler.PhotoType>,
             required: true
         },
 

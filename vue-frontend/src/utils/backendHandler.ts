@@ -89,6 +89,10 @@ export class BackendHandler {
         return await this.fetchUrl(this.BASE_URL+'/photos/scan-new-photos', 'GET')
     }
 
+    static async addPhotoToAlbum(albumId: number, photoId: number) {
+        return await this.fetchUrl(this.BASE_URL+'/albums/add-to-album', 'POST', {albumId, photoId})
+    }
+
     static async getPhotoLocations() {
         return await this.fetchUrl(this.BASE_URL+'/photos/get-photo-locations', 'GET');
     }
