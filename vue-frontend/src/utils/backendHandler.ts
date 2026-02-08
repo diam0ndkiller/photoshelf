@@ -1,9 +1,6 @@
 import { Logger } from "./logger";
 
-export namespace BackendHandler {
-    export type PhotoType = {id: number, path: string, capture_date: string, location_id: number, location_path: string};
-    export type AlbumType = {id: number, name: string};
-}
+import type {AlbumType, PhotoType} from '@shared/types';
 
 export class BackendHandler {
     static TOKEN = '';
@@ -61,7 +58,7 @@ export class BackendHandler {
         return await this.fetchUrl(`${this.BASE_URL}/helloworld`, 'GET');
     }
 
-    static async listAlbums(): Promise<{albums: Array<BackendHandler.AlbumType>}> {
+    static async listAlbums(): Promise<{albums: Array<AlbumType>}> {
         return await this.fetchUrl(`${this.BASE_URL}/albums/list-albums`, 'GET');
     }
 
@@ -73,11 +70,11 @@ export class BackendHandler {
         return await this.fetchUrl(`${this.BASE_URL}/albums/delete-album`, 'POST', {id})
     }
 
-    static async getAlbumInformation(albumId: Number): Promise<{album: BackendHandler.AlbumType}> {
+    static async getAlbumInformation(albumId: Number): Promise<{album: AlbumType}> {
         return await this.fetchUrl(`${this.BASE_URL}/albums/album-information?id=${albumId}`, 'GET');        
     }
 
-    static async listAllPhotos(): Promise<{photos: Array<BackendHandler.PhotoType>}> {
+    static async listAllPhotos(): Promise<{photos: Array<PhotoType>}> {
         return await this.fetchUrl(`${this.BASE_URL}/photos/list-all-photos`, 'GET');
     }
 

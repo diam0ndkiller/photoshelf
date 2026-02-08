@@ -22,3 +22,16 @@ export interface TrueSuccessObject extends SuccessObject {
 export interface FalseSuccessObject extends SuccessObject {
     success: false;
 }
+
+export interface PhotoType {
+    id: number,
+    path: string,
+    capture_date: string,
+    location_id: number,
+    location_path: string
+};
+
+export interface AlbumType {
+    id: number,
+    name: string
+};
