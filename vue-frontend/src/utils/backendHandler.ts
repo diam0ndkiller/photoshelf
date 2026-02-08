@@ -1,6 +1,7 @@
 import { Logger } from "./logger";
 
 import type {Album as AlbumType, Photo as PhotoType} from '@shared/databasetypes';
+import type {ErrorResultObject, SuccessObject} from '@shared/types';
 
 export class BackendHandler {
     static TOKEN = '';
@@ -86,7 +87,7 @@ export class BackendHandler {
         return await this.fetchUrl(this.BASE_URL+'/photos/scan-new-photos', 'GET')
     }
 
-    static async addPhotoToAlbum(photoId: number, albumId: number) {
+    static async addPhotoToAlbum(photoId: number, albumId: number): Promise<ErrorResultObject | SuccessObject> {
         return await this.fetchUrl(this.BASE_URL+'/albums/add-to-album', 'POST', {photoId, albumId})
     }
 

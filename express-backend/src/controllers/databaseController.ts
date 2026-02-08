@@ -2,9 +2,10 @@ import FilesystemPhotoHelper from "../models/filesystemPhotoHelper.js";
 import PhotoshelfSQLite from "../models/photoshelfSqlite.js";
 import ConfigFileHelper from '../models/configFileHelper.js';
 import { Album, PhotoLocation, Photo, AlbumContentLink } from "@shared/databasetypes.js";
+import { ErrorResultObject, TrueSuccessObject } from "@shared/types.js";
 
 export default class DatabaseController {
-    static async initializeDatabase() {
+    static async initializeDatabase(): Promise<ErrorResultObject | {database: PhotoshelfSQLite}> {
         var r = ConfigFileHelper.getDatabaseLocation();
         if ('err' in r) return r;
         if (r.databaseLocation == '') return {err: {message: 'No database location set.'}}
@@ -15,7 +16,7 @@ export default class DatabaseController {
         return { database }
     }
 
-    static async firstTimeInitDatabase(fileLocation: string) {
+    static async firstTimeInitDatabase(fileLocation: string): Promise<ErrorResultObject | {database: PhotoshelfSQLite}> {
         var setDatabaseLocationResult = ConfigFileHelper.setDatabaseLocation(fileLocation);
         if ('err' in setDatabaseLocationResult) return setDatabaseLocationResult;
 
@@ -25,7 +26,7 @@ export default class DatabaseController {
         return r;
     }
 
-    static async listAlbums() {
+    static async listAlbums(): Promise<ErrorResultObject | {albums: Array<Album>}> {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }
         var database = r.database;
@@ -39,7 +40,7 @@ export default class DatabaseController {
         return { albums }
     }
 
-    static async createAlbum(name: string) {
+    static async createAlbum(name: string): Promise<ErrorResultObject | TrueSuccessObject> {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }
         var database = r.database;
@@ -55,7 +56,7 @@ export default class DatabaseController {
         finally { database.closeDatabase(); }
     }
 
-    static async deleteAlbum(id: string) {
+    static async deleteAlbum(id: string): Promise<ErrorResultObject | TrueSuccessObject> {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }
         var database = r.database;
@@ -67,12 +68,12 @@ export default class DatabaseController {
         finally { database.closeDatabase(); }
     }
 
-    static async getAlbumInformation(id: string) {
+    static async getAlbumInformation(id: string): Promise<ErrorResultObject | {album: Album}> {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }
         var database = r.database;
 
-        var album;
+        var album: Album;
 
         try { album = await database.get<Album>("SELECT * from 'albums' WHERE id = ?;", [id]); }
         catch (err) { return { err } }
@@ -81,12 +82,12 @@ export default class DatabaseController {
         return { album }
     }
 
-    static async listAllPhotos() {
+    static async listAllPhotos(): Promise<ErrorResultObject | {photos: Array<Photo>}> {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }
         var database = r.database;
 
-        var photos;
+        var photos: Array<Photo>;
 
         try { photos = await database.all<Photo>("SELECT photos.*, locations.path AS location_path from photos JOIN locations ON photos.location_id = locations.id ORDER BY path ASC;", []); }
         catch (err) { return { err } }
@@ -95,7 +96,7 @@ export default class DatabaseController {
         return { photos }
     }
 
-    static async scanPhotos(dir: string, location_id: number, forceRescan: boolean) {
+    static async scanPhotos(dir: string, location_id: number, forceRescan: boolean): Promise<ErrorResultObject | TrueSuccessObject> {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }
         var database = r.database;
@@ -107,27 +108,27 @@ export default class DatabaseController {
         return res;
     }
 
-    static async rescanPhotos(forceRescan: boolean) {
+    static async rescanPhotos(forceRescan: boolean): Promise<ErrorResultObject | TrueSuccessObject> {
         var r = await this.initializeDatabase();
         if('err' in r) return { err: r.err }
         var database = r.database
 
-        var rows = await database.all<PhotoLocation>("SELECT * FROM locations", []);
-        if ('err' in rows) return rows;
+        try {
+            var rows = await database.all<PhotoLocation>("SELECT * FROM locations", []);
+            var res: ErrorResultObject | TrueSuccessObject;
 
-        var res;
-
-        for (var i = 0; i < rows.length; i++) {
-            res = await this.scanPhotos(rows[i].path, rows[i].id, forceRescan);
-            if ('err' in res) return res;
+            for (var i = 0; i < rows.length; i++) {
+                res = await this.scanPhotos(rows[i].path, rows[i].id, forceRescan);
+                if ('err' in res) return res;
+            }
         }
+        catch (err) { return {err} }
+        finally { database.closeDatabase() };
 
-        database.closeDatabase();
-
-        return {}
+        return {success: true}
     }
 
-    static async addPhotoToAlbum(photoId: number, albumId: number) {
+    static async addPhotoToAlbum(photoId: number, albumId: number): Promise<ErrorResultObject | TrueSuccessObject> {
         var r = await this.initializeDatabase();
         if ('err' in r) return {err: r.err }
         var database = r.database;
@@ -150,7 +151,7 @@ export default class DatabaseController {
         return {success: true}
     }
 
-    static async getPhotoLocations() {
+    static async getPhotoLocations(): Promise<ErrorResultObject | {photoLocations: Array<PhotoLocation>}> {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }
         var database = r.database;
@@ -164,7 +165,7 @@ export default class DatabaseController {
         return { photoLocations }
     }
 
-    static async addPhotoLocation(locationToAdd: string) {
+    static async addPhotoLocation(locationToAdd: string): Promise<ErrorResultObject | TrueSuccessObject> {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }
         var database = r.database;
@@ -176,7 +177,7 @@ export default class DatabaseController {
         return { success: true }
     }
 
-    static async deletePhotoLocation(id: string) {
+    static async deletePhotoLocation(id: string): Promise<ErrorResultObject | TrueSuccessObject> {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }
         var database = r.database;

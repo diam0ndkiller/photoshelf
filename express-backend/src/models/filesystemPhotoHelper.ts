@@ -2,9 +2,10 @@ import fs from 'fs';
 import path from 'path';
 import { exiftool } from 'exiftool-vendored';
 import PhotoshelfSQLite from './photoshelfSqlite.js';
+import { ErrorResultObject, TrueSuccessObject } from '@shared/types.js';
 
 export default class FilesystemPhotoHelper {
-    static async scanPhotos(photoshelfSqlite: PhotoshelfSQLite, dir: string, location_id: number, forceRescan: boolean) {
+    static async scanPhotos(photoshelfSqlite: PhotoshelfSQLite, dir: string, location_id: number, forceRescan: boolean): Promise<ErrorResultObject | TrueSuccessObject> {
         try {
             const allFiles = await this.walkDir(dir);
 
@@ -61,7 +62,7 @@ export default class FilesystemPhotoHelper {
             photoshelfSqlite.closeDatabase();
             await exiftool.end(); // important to close exiftool process when done
         }
-        return { message: 'success' }
+        return { success: true }
     }
 
     static async walkDir(currentPath: string) {
