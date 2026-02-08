@@ -1,3 +1,3 @@
 cd "$(dirname $0)"
 
-node src/index.js
+npm run dev
