@@ -151,6 +151,24 @@ export default class DatabaseController {
         return {success: true}
     }
 
+    static async getAlbumContents(id: string): Promise<ErrorResultObject | {contents: Array<JoinedAlbumContentLink>}> {
+        var r = await this.initializeDatabase();
+        if ('err' in r) return {err: r.err }
+        var database = r.database;
+
+        var rows: Array<JoinedAlbumContentLink>;
+
+        try {
+            rows = await database.all<JoinedAlbumContentLink>(`SELECT "albums_contents".*, "photos"."path" as "photo_path", "photos"."capture_date" as "photo_capture_date"
+                                    FROM "albums_contents" JOIN "photos" ON "albums_contents"."photo_id" = "photos"."id"
+                                    WHERE "album_id" = ? ORDER BY "albums_contents"."index" ASC;`, [id])
+        }
+        catch (err) { return {err} }
+        finally { database.closeDatabase(); }
+
+        return {contents: rows}
+    }
+
     static async getPhotoLocations(): Promise<ErrorResultObject | {photoLocations: Array<PhotoLocation>}> {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }

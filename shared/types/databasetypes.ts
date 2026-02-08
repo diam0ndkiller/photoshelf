@@ -23,3 +23,8 @@ export interface AlbumContentLink {
     photo_id: number,
     title: string
 }
+
+export interface JoinedAlbumContentLink extends AlbumContentLink{
+    photo_path: string,
+    photo_capture_date: string
+}

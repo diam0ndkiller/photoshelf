@@ -93,4 +93,22 @@ router.post('/add-to-album', async (req, res) => {
   FeedbackUtils.logRouteCallEndSuccess();
 })
 
+router.get('/get-album-contents', async (req, res) => {
+  FeedbackUtils.logRouteCallStart('/albums/get-album-contents', 'GET');
+
+  var isAuthenticated = AuthenticationUtils.checkAuthentication(req);
+  if ('err' in isAuthenticated) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+
+  const id = req.query.id;
+  if (!id || typeof id !== 'string') return FeedbackUtils.throwHTTPResConsoleError(res, 'ID required!', 400);
+
+  var r = await DatabaseController.getAlbumContents(id);
+
+  if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
+
+  res.json(r);
+
+  FeedbackUtils.logRouteCallEndSuccess();
+})
+
 export default router;

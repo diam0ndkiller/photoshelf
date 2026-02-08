@@ -1,6 +1,6 @@
 import { Logger } from "./logger";
 
-import type {Album as AlbumType, Photo as PhotoType} from '@shared/databasetypes';
+import type {Album as AlbumType, JoinedAlbumContentLink, Photo as PhotoType} from '@shared/databasetypes';
 import type {ErrorResultObject, SuccessObject} from '@shared/types';
 
 export class BackendHandler {
@@ -89,6 +89,10 @@ export class BackendHandler {
 
     static async addPhotoToAlbum(photoId: number, albumId: number): Promise<ErrorResultObject | SuccessObject> {
         return await this.fetchUrl(this.BASE_URL+'/albums/add-to-album', 'POST', {photoId, albumId})
+    }
+
+    static async getAlbumContents(id: number): Promise<{contents: Array<JoinedAlbumContentLink>}> {
+        return await this.fetchUrl(this.BASE_URL+`/albums/get-album-contents?id=${id}`, 'GET')
     }
 
     static async getPhotoLocations() {
