@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
+    "rootDir": "..",
     "outDir": "./dist",
 
     "module": "nodenext",
@@ -18,7 +18,7 @@
     // "exactOptionalPropertyTypes": true,
 
     // Style Options
-    // "noImplicitReturns": true,
+    "noImplicitReturns": true,
     // "noImplicitOverride": true,
     // "noUnusedLocals": true,
     // "noUnusedParameters": true,
@@ -34,7 +34,15 @@
     "skipLibCheck": true,
 
     "allowJs": true,
-    "checkJs": false
+    "checkJs": false,
+
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["../shared/types/*"]
+    }
   },
-  "include": ["src/**/*"]
+  "include": [
+    "src/**/*",
+    "../shared/types/**/*"
+  ]
 }
