@@ -17,7 +17,13 @@ export type MenuEntryType = {title: string, icon: string, value: any, action: Fu
                         :style="getStyle()"
                         :src="srcPath"
                     />
-                </button>
+                </button><br>
+                <span style="color: rgb(var(--v-theme-accent))" v-if="showSuccessMessage" :title="`Successfully added to album ${albumNameToAddTo}`">
+                    <b><v-icon>mdi-check-decagram</v-icon> {{ albumNameToAddTo }}</b>
+                </span>
+                <span style="color: rgb(var(--v-theme-error))" v-if="showErrorMessage" :title="errorMessage">
+                    <b><v-icon>mdi-alert-decagram</v-icon> {{ albumNameToAddTo }}</b>
+                </span>
             </template>
             <v-list>
                 <template v-for="item in menuItems">
@@ -56,6 +62,10 @@ export type MenuEntryType = {title: string, icon: string, value: any, action: Fu
 export default {
     data() {
         return {
+            albumNameToAddTo: "",
+            errorMessage: "",
+            showErrorMessage: false,
+            showSuccessMessage: false,
         }
     },
     methods: {
@@ -82,20 +92,31 @@ export default {
             var output: Array<MenuEntryType> = [];
 
             this.albums.forEach(album => {
-                output.push({ title: album.name, icon: 'mdi-image-album', value: album.id, action: this.addToAlbum});
+                output.push({ title: album.name, icon: 'mdi-image-album', value: album, action: this.addToAlbum});
             });
 
             return output;
         },
-        async addToAlbum(albumId: number) {
-            var res = await BackendHandler.addPhotoToAlbum(this.photo.id, albumId);
+        async addToAlbum(album: AlbumType) {
+            this.albumNameToAddTo = album.name;
+            var res = await BackendHandler.addPhotoToAlbum(this.photo.id, album.id);
+            if ('err' in res) {
+                this.showSuccessMessage = false;
+                this.errorMessage = res.err.message;
+                this.showErrorMessage = true;
+            }
+            else {
+                this.showErrorMessage = false;
+                this.errorMessage = "";
+                this.showSuccessMessage = true;
+            }
         }
     },
     computed: {
         menuItems(): Array<MenuEntryType> {
             return [
                 { title: 'View full-size', icon: 'mdi-open-in-new', value: 'fullSize', action: this.openFullSizeView},
-                { title: 'Add to album...', icon: 'mdi-image-album', value: 'addToAlbum', action: undefined, submenu: this.getAlbumMenuItems() }
+                { title: 'Add to album...', icon: 'mdi-book-plus', value: 'addToAlbum', action: undefined, submenu: this.getAlbumMenuItems() }
             ]
         },
         imageUrl() {
