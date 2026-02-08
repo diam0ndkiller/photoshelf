@@ -1,12 +1,14 @@
 # photoshelf
 ## Main Ideas:
 - [ ] View ablum overview
+    - [x] Create / Delete albums
 - [ ] View albums
-    - 4 photos per page
-- [x] View all photos
-- [ ] Create ablum
-- [ ] Edit album
-    - [ ] Select photos to add
-    - [ ] Add spacer (skip to next page)
+    - 4 spots per page
+        - Photo (+Comment)
+        - Heading
+        - Spacer
+    - [ ] Add spacers (~~skip to next page~~ / one spacer per spot)
     - [ ] Add comment per photo / subheadings
-    - backend: ordered list of photos / headings / spacers
+    - [ ] Delete photo from album (ripple delete)
+- [x] View all photos
+    - [x] Add photos to albums
