@@ -58,11 +58,11 @@ export class BackendHandler {
     }
 
     static async getHelloworld() {
-        return await this.fetchUrl(`${this.BASE_URL}/helloworld`);
+        return await this.fetchUrl(`${this.BASE_URL}/helloworld`, 'GET');
     }
 
     static async listAlbums(): Promise<{albums: Array<BackendHandler.AlbumType>}> {
-        return await this.fetchUrl(`${this.BASE_URL}/albums/list-albums`);
+        return await this.fetchUrl(`${this.BASE_URL}/albums/list-albums`, 'GET');
     }
 
     static async createAlbum(name: String) {
@@ -74,11 +74,11 @@ export class BackendHandler {
     }
 
     static async getAlbumInformation(albumId: Number): Promise<{album: BackendHandler.AlbumType}> {
-        return await this.fetchUrl(`${this.BASE_URL}/albums/album-information?id=${albumId}`);        
+        return await this.fetchUrl(`${this.BASE_URL}/albums/album-information?id=${albumId}`, 'GET');        
     }
 
     static async listAllPhotos(): Promise<{photos: Array<BackendHandler.PhotoType>}> {
-        return await this.fetchUrl(`${this.BASE_URL}/photos/list-all-photos`);
+        return await this.fetchUrl(`${this.BASE_URL}/photos/list-all-photos`, 'GET');
     }
 
     static async rescanAllPhotos() {
