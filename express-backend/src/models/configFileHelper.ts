@@ -1,12 +1,15 @@
+import { BackendConfig, BackendConfigCredentials, ErrorResultObject } from '@shared/types.js';
 import fs from 'fs';
 
-const DEFAULT_CONFIG = {
+const DEFAULT_CONFIG: BackendConfig = {
     databaseLocation: "",
     credentials: {}
 }
 
 export default class ConfigFileHelper {
-    static readConfig() {
+    
+
+    static readConfig(): ErrorResultObject | {config: BackendConfig} {
         var config = DEFAULT_CONFIG;
 
         try { config = JSON.parse(fs.readFileSync('./config/config.json', 'utf8')); }
@@ -15,20 +18,20 @@ export default class ConfigFileHelper {
         return { config };
     }
 
-    static writeConfig(config) {
+    static writeConfig(config): ErrorResultObject | {config: BackendConfig} {
         try { fs.writeFileSync('./config/config.json', JSON.stringify(config)); }
         catch (err) { return { err }; }
 
         return { config };
     }
 
-    static getDatabaseLocation() {
+    static getDatabaseLocation(): ErrorResultObject | {databaseLocation: string} {
         var r = this.readConfig();
         if ('err' in r) return r;
         else return {databaseLocation: r.config.databaseLocation};
     }
 
-    static setDatabaseLocation(dir) {
+    static setDatabaseLocation(dir: string): ErrorResultObject | {config: BackendConfig} {
         var r = this.readConfig();
         if ('err' in r) return r;
 
@@ -38,13 +41,13 @@ export default class ConfigFileHelper {
         return this.writeConfig(config);
     }
 
-    static getCredentials() {
+    static getCredentials(): ErrorResultObject | {credentials: BackendConfigCredentials} {
         var r = this.readConfig();
         if ('err' in r) return r;
         else return {credentials: r.config.credentials};
     }
 
-    static addUser(username, bcryptedPassword) {
+    static addUser(username: string, bcryptedPassword: string): ErrorResultObject | {config: BackendConfig} {
         var r = this.readConfig();
         if ('err' in r) return r;
 
