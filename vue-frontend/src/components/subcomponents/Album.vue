@@ -4,7 +4,17 @@ import type { Album as AlbumType, JoinedAlbumContentLink } from '@shared/databas
 </script>
 
 <template>
-Viewing Album {{ albumInformation.name }} with id {{ albumInformation.id }}
+    <div class="page-heading">
+        <h1>Album <b>{{ albumInformation.name }}</b></h1>
+        <div class="flex-spacer"></div>
+        <v-menu :close-on-content-click="false">
+            <template v-slot:activator="{ props }">
+                <v-btn prepend-icon="mdi-palette" v-bind="props" color="primary">Set Background Color</v-btn>
+            </template>
+            <v-color-picker/>
+        </v-menu>
+
+    </div>
 </template>
 
 <script lang="ts">
