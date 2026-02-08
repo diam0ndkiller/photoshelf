@@ -1,3 +1,3 @@
 cd "$(dirname $0)"
 
-node index.js
+node src/index.js
