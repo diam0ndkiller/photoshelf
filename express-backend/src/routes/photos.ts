@@ -4,6 +4,7 @@ import DatabaseController from '../controllers/databaseController.js';
 import AuthenticationUtils from '../utils/authenticationUtils.js';
 import fs from 'fs';
 import sharp from 'sharp';
+import FilesystemPhotoHelper from 'src/models/filesystemPhotoHelper.js';
 
 const router = express.Router();
 
@@ -13,10 +14,13 @@ router.get('/list-all-photos', async (req, res) => {
   var isAuthenticated = AuthenticationUtils.checkAuthentication(req);
   if ('err' in isAuthenticated) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
 
-  var r = await DatabaseController.listAllPhotos();
-  if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
+  var listAllPhotosResult = await DatabaseController.listAllPhotos();
+  if ('err' in listAllPhotosResult) return FeedbackUtils.throwHTTPResConsoleError(res, listAllPhotosResult.err.message, 500);
 
-  res.json(r);
+  var updateValidLocationsResult = await FilesystemPhotoHelper.updateValidLocations();
+  if ('err' in updateValidLocationsResult) return FeedbackUtils.throwHTTPResConsoleError(res, updateValidLocationsResult.err.message, 500);
+
+  res.json(listAllPhotosResult);
 
   FeedbackUtils.logRouteCallEndSuccess();
 })
@@ -62,6 +66,8 @@ router.get('/get-file', async (req, res) => {
 
   const filename = req.query.filename;
   if (!filename || typeof filename !== 'string') return FeedbackUtils.throwHTTPResConsoleError(res, 'Filename required!', 400);
+
+  if (!FilesystemPhotoHelper.checkPhotoValid(filename)) return FeedbackUtils.throwHTTPResConsoleError(res, 'File not in a tracked location.', 400);
 
   const width = req.query.width;
   const height = req.query.height;

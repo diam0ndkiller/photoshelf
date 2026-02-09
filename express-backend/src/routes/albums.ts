@@ -2,6 +2,7 @@ import express from 'express';
 import FeedbackUtils from '../utils/feedbackUtils.js';
 import DatabaseController from '../controllers/databaseController.js';
 import AuthenticationUtils from '../utils/authenticationUtils.js';
+import FilesystemPhotoHelper from 'src/models/filesystemPhotoHelper.js';
 
 const router = express.Router();
 
@@ -103,8 +104,10 @@ router.get('/get-album-contents', async (req, res) => {
   if (!id || typeof id !== 'string') return FeedbackUtils.throwHTTPResConsoleError(res, 'ID required!', 400);
 
   var r = await DatabaseController.getAlbumContents(id);
-
   if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
+  
+  var updateValidLocationsResult = await FilesystemPhotoHelper.updateValidLocations();
+  if ('err' in updateValidLocationsResult) return FeedbackUtils.throwHTTPResConsoleError(res, updateValidLocationsResult.err.message, 500);
 
   res.json(r);
 

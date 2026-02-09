@@ -3,8 +3,35 @@ import path from 'path';
 import { exiftool } from 'exiftool-vendored';
 import PhotoshelfSQLite from './photoshelfSqlite.js';
 import { ErrorResultObject, TrueSuccessObject } from '@shared/types.js';
+import { Photo, PhotoLocation } from '@shared/databasetypes.js';
+import DatabaseController from 'src/controllers/databaseController.js';
 
 export default class FilesystemPhotoHelper {
+    static validLocations: Array<PhotoLocation> = [];
+
+    static async updateValidLocations(): Promise<ErrorResultObject | TrueSuccessObject> {
+        var r = await DatabaseController.initializeDatabase();
+        if ('err' in r) return {err: r.err }
+        var database = r.database;
+
+        try {
+            this.validLocations = await database.all<PhotoLocation>('SELECT * from "locations";', []);
+        } catch (err) { return {err} }
+        finally { database.closeDatabase() }
+
+        return {success: true}
+    }
+
+    static checkPhotoValid(path: string): boolean {
+        var found = false;
+
+        this.validLocations.forEach(element => {
+            if (path.startsWith(element.path)) found = true;
+        });
+
+        return found
+    }
+
     static async scanPhotos(photoshelfSqlite: PhotoshelfSQLite, dir: string, location_id: number, forceRescan: boolean): Promise<ErrorResultObject | TrueSuccessObject> {
         try {
             const allFiles = await this.walkDir(dir);
