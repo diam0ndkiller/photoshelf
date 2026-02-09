@@ -115,10 +115,10 @@ export default {
     },
     computed: {
         menuItems(): Array<MenuEntryType> {
-            return [
-                { title: 'View full-size', icon: 'mdi-open-in-new', value: 'fullSize', action: this.openFullSizeView},
-                { title: 'Add to album...', icon: 'mdi-book-plus', value: 'addToAlbum', action: undefined, submenu: this.getAlbumMenuItems() }
-            ]
+            var result = [];
+            result.push({ title: 'View full-size', icon: 'mdi-open-in-new', value: 'fullSize', action: this.openFullSizeView});
+            if (this.albums.length > 0) result.push({ title: 'Add to album...', icon: 'mdi-book-plus', value: 'addToAlbum', action: undefined, submenu: this.getAlbumMenuItems() });
+            return result;
         },
         imageUrl() {
             return BackendHandler.BASE_URL + '/photos/get-file?filename=' + encodeURIComponent(this.photo.path);
