@@ -2,6 +2,7 @@
 import { BackendHandler } from '@/utils/backendHandler';
 import type { Album as AlbumType, JoinedAlbumContentLink } from '@shared/databasetypes';
 import Photo from './Photo.vue';
+import vuetify from '@/plugins/vuetify';
 </script>
 
 <template>
@@ -24,13 +25,27 @@ import Photo from './Photo.vue';
 
     <div class="box-wrapper">
         <div class="page-box" :style="`background-color: ${albumInformation.background_color};`">
-            <v-container class="double-page-grid">
-                <div class="cell" v-for="contentItem in getPages(paddedAlbumContents)[page]">
-                    <Photo v-if="contentItem.type == 'photo'" divHeight="100%" divWidth="100%" imgHeight="min(36vh, 36vw*(3/4))"
-                            :photo="{id: contentItem.photo_id, path: contentItem.photo_path, capture_date: contentItem.photo_capture_date}"
-                    />
+            <div class="double-page-grid">
+                <div class="cell" v-for="contentItem in albumContentPages[page]">
+
+                    <!-- DISPLAYING PHOTO -->
+                    
+                    <template v-if="contentItem.type == 'photo'">
+                        <Photo divHeight="100%" divWidth="100%" :imgHeight="editMode ? 'min(30vh, 30vw*(3/4))' : 'min(34vh, 34vw*(3/4))'"
+                                :photo="{id: contentItem.photo_id, path: contentItem.photo_path, capture_date: contentItem.photo_capture_date}"
+                        />
+                        <p v-if="!editMode" :style="styleOnSheet">{{ contentItem.title }}</p>
+                    </template>
+
+
+
+                    <!-- DISPLAYING HEADING -->
+
+                    <template v-if="contentItem.type == 'heading'">
+                        <h1 v-if="!editMode" :style="styleOnSheet">{{ contentItem.title }}</h1>
+                    </template>
                 </div>
-            </v-container>
+            </div>
         </div>
     </div>
 
@@ -75,6 +90,12 @@ export default {
             }
             return result
         },
+        themeOnSheet() {
+            return this.isLight(this.albumInformation.background_color) ? vuetify.theme.themes.value['light'] : vuetify.theme.themes.value['dark'];
+        },
+        styleOnSheet() {
+            return `background-color: ${this.albumInformation.background_color}; color: ${this.themeOnSheet.colors['on-background']};`
+        },
         albumsListWithoutSelf() {
             const result: Array<AlbumType> = [];
             this.albumsList.forEach(element => {
@@ -85,6 +106,9 @@ export default {
         totalPageNumber() {
             return this.paddedAlbumContents.length / 4
         },
+        albumContentPages() {
+            return this.getPages(this.albumContents);
+        }
     },
     watch: {
         
@@ -124,7 +148,24 @@ export default {
             this.updateData();
             this.toggleEditMode();
             this.showSaveConfirmation = false;
-        }
+        },
+        isLight(hex: String) {
+            hex = hex.replace('#', '')
+
+            // Support short form (#fff)
+            if (hex.length === 3) {
+                hex = hex.split('').map(c => c + c).join('')
+            }
+
+            const r = parseInt(hex.substr(0,2), 16)
+            const g = parseInt(hex.substr(2,2), 16)
+            const b = parseInt(hex.substr(4,2), 16)
+
+            // Perceived brightness formula
+            const brightness = 0.299*r + 0.587*g + 0.114*b
+
+            return brightness > 130 // threshold for "light" vs "dark"
+        },
     },
     props:{
         id: {
@@ -157,7 +198,7 @@ export default {
   grid-template-rows: repeat(2, 1fr);
   grid-template-columns: repeat(2, 1fr);
   grid-auto-flow: column;
-  gap: 10px;
+  gap: 0;
   height: 100%;
   justify-items: center;
   align-items: center;
@@ -168,5 +209,10 @@ export default {
   min-height: 0;
   max-height: 100%;
   max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 0 16px;
 }
 </style>
