@@ -7,6 +7,7 @@ import navigationUtils from '@/utils/navigationUtils';
             :items="navigationDrawerItems"
             @update:selected="onNavigationDrawerSelection"
             :selected="[selected]"
+            mandatory
     ></v-list>
 </template>
 
