@@ -160,7 +160,7 @@ export default class DatabaseController {
 
         try {
             rows = await database.all<JoinedAlbumContentLink>(`SELECT "albums_contents".*, "photos"."path" as "photo_path", "photos"."capture_date" as "photo_capture_date"
-                                    FROM "albums_contents" JOIN "photos" ON "albums_contents"."photo_id" = "photos"."id"
+                                    FROM "albums_contents" LEFT JOIN "photos" ON "albums_contents"."photo_id" = "photos"."id"
                                     WHERE "album_id" = ? ORDER BY "albums_contents"."index" ASC;`, [id])
         }
         catch (err) { return {err} }
