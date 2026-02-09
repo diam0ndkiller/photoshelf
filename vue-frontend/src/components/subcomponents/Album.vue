@@ -19,7 +19,13 @@ import Photo from './Photo.vue';
 
     <div class="box-wrapper">
         <div class="page-box" :style="`background-color: ${albumInformation.background_color};`">
-
+            <v-container class="double-page-grid">
+                <div class="cell" v-for="contentItem in getPages(paddedAlbumContents)[page]">
+                    <Photo v-if="contentItem.type == 'photo'" divHeight="100%" divWidth="100%" imgHeight="min(36vh, 36vw*(3/4))"
+                            :photo="{id: contentItem.photo_id, path: contentItem.photo_path, capture_date: contentItem.photo_capture_date}"
+                    />
+                </div>
+            </v-container>
         </div>
     </div>
 </template>
@@ -99,5 +105,23 @@ export default {
 .page-box {
   width: min(80vw, 80vh*(4/3));
   height: min(80vh, 80vw*(3/4));
+}
+
+.double-page-grid {
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-flow: column;
+  gap: 10px;
+  height: 100%;
+  justify-items: center;
+  align-items: center;
+}
+
+.cell {
+  min-width: 0;
+  min-height: 0;
+  max-height: 100%;
+  max-width: 100%;
 }
 </style>
