@@ -8,11 +8,11 @@ import Photo from './Photo.vue';
     <div class="page-heading">
         <h1>Album <b>{{ albumInformation.name }}</b></h1>
         <div class="flex-spacer"></div>
-        <v-menu :close-on-content-click="false">
+        <v-menu v-if="editMode" :close-on-content-click="false">
             <template v-slot:activator="{ props }">
                 <v-btn prepend-icon="mdi-palette" v-bind="props" color="primary">Set Background Color</v-btn>
             </template>
-            <v-color-picker/>
+            <v-color-picker mode="hex" v-model="albumInformation.background_color"/>
         </v-menu>
         <v-btn icon="mdi-fullscreen" title="Toggle Fullscreen" @click="toggleFullscreen"/>
     </div>
