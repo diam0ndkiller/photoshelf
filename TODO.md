@@ -18,3 +18,4 @@
 - [ ] Homepage
 - [ ] Reorder photos
 - [ ] Update install scripts
+- [ ] Enable auth :)
