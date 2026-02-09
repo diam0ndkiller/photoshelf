@@ -44,7 +44,7 @@ import type { Album as AlbumType } from '@shared/databasetypes';
                 </v-card-item>
                 <v-card-item>
                     <span style="margin-right: 5px">
-                        <v-btn prepend-icon="mdi-delete" text="Delete" color="error" @click="deleteAlbum(albumToDelete.id)"/>
+                        <v-btn prepend-icon="mdi-delete" text="Delete" color="error-background" @click="deleteAlbum(albumToDelete.id)"/>
                     </span>
                     <span style="margin-left: 5px">
                         <v-btn prepend-icon="mdi-close-octagon" text="Cancel" color="primary" @click="showDeleteAlbumPopup = !showDeleteAlbumPopup"/>
