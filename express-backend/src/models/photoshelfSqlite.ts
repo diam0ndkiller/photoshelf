@@ -100,7 +100,7 @@ export default class PhotoshelfSQLite {
         })
     }
 
-    all<T>(statement: string, params: Array<any>): Promise<Array<T>> {
+    all<T>(statement: string, params?: Array<any>): Promise<Array<T>> {
         return new Promise((resolve, reject) => {
             var r = this.openDatabase();
             if ('err' in r) return reject(r.err);
@@ -111,7 +111,7 @@ export default class PhotoshelfSQLite {
         })
     }
 
-    get<T>(statement: string, params: Array<any>): Promise<T> {
+    get<T>(statement: string, params?: Array<any>): Promise<T> {
         return new Promise((resolve, reject) => {
             this.database.get(statement, params, (err, row) => {
                 if (err) reject(err);
@@ -120,7 +120,7 @@ export default class PhotoshelfSQLite {
         })
     }
 
-    run(statement: string, params: Array<any>): Promise<TrueSuccessObject> {
+    run(statement: string, params?: Array<any>): Promise<TrueSuccessObject> {
         return new Promise((resolve, reject) => {
             this.database.run(statement, params, (err) => {
                 if (err) reject(err);
