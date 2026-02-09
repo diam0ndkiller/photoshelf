@@ -20,3 +20,4 @@
 - [ ] Update install scripts
 - [ ] Enable auth :)
 - [ ] App config page
+- [ ] Pin albums to sidebar
