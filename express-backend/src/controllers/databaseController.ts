@@ -169,6 +169,23 @@ export default class DatabaseController {
         return {contents: rows}
     }
 
+    static async saveAlbumInformation(information: Album): Promise<ErrorResultObject | TrueSuccessObject> {
+        var r = await this.initializeDatabase();
+        if ('err' in r) return {err: r.err }
+        var database = r.database;
+
+        try {
+            await database.run(`INSERT INTO "albums" ("id", "name", "background_color")
+                                VALUES (?, ?, ?)
+                                ON CONFLICT("id") DO UPDATE SET
+                                "name"=excluded.name, "background_color"=excluded.background_color;`,
+                                [information.id, information.name, information.background_color]);
+        } catch (err) { return {err} }
+        finally { database.closeDatabase(); }
+
+        return {success: true}
+    }
+    
     static async getPhotoLocations(): Promise<ErrorResultObject | {photoLocations: Array<PhotoLocation>}> {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }

@@ -94,6 +94,9 @@ import vuetify from '@/plugins/vuetify';
                 <span style="margin-left: 5px">
                     <v-btn prepend-icon="mdi-close-octagon" text="Cancel" color="primary" @click="showSaveConfirmation = !showSaveConfirmation"/>
                 </span>
+                <span style="color: rgb(var(--v-theme-error))">
+                    {{ errorMessage }}
+                </span>
             </v-card-item>
         </v-card>
     </v-dialog>
@@ -109,6 +112,7 @@ export default {
             showSaveConfirmation: false,
             page: 0,
             albumsList: [] as AlbumType[],
+            errorMessage: "",
         }
     },
     computed: {
@@ -172,7 +176,14 @@ export default {
         toggleEditMode() {
             this.editMode = !this.editMode;
         },
-        saveChanges() {
+        async saveChanges() {
+            var saveInformationResult = await BackendHandler.saveAlbumInformation(this.albumInformation);
+            if ('err' in saveInformationResult) {
+                this.errorMessage = saveInformationResult.err.message;
+                return
+            }
+            
+            this.updateData();
             this.toggleEditMode();
             this.showSaveConfirmation = false;
         },

@@ -3,6 +3,7 @@ import FeedbackUtils from '../utils/feedbackUtils.js';
 import DatabaseController from '../controllers/databaseController.js';
 import AuthenticationUtils from '../utils/authenticationUtils.js';
 import FilesystemPhotoHelper from 'src/models/filesystemPhotoHelper.js';
+import { Album, JoinedAlbumContentLink } from '@shared/databasetypes.js';
 
 const router = express.Router();
 
@@ -108,6 +109,30 @@ router.get('/get-album-contents', async (req, res) => {
   
   var updateValidLocationsResult = await FilesystemPhotoHelper.updateValidLocations();
   if ('err' in updateValidLocationsResult) return FeedbackUtils.throwHTTPResConsoleError(res, updateValidLocationsResult.err.message, 500);
+
+  res.json(r);
+
+  FeedbackUtils.logRouteCallEndSuccess();
+})
+
+router.post('/save-album-information', async (req, res) => {
+  FeedbackUtils.logRouteCallStart('/albums/save-album-information', 'POST');
+
+  var isAuthenticated = AuthenticationUtils.checkAuthentication(req);
+  if ('err' in isAuthenticated) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+
+  const reqInformation = req.body.information;
+  if (!reqInformation) return FeedbackUtils.throwHTTPResConsoleError(res, 'Information required!', 400);
+
+  var albumInformation: Album;
+
+  try {
+    albumInformation = reqInformation as Album;
+  } catch (err) { return FeedbackUtils.throwHTTPResConsoleError(res, err.message, 400); }
+
+  var r = await DatabaseController.saveAlbumInformation(albumInformation);
+
+  if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
 
   res.json(r);
 
