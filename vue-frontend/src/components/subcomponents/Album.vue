@@ -18,6 +18,7 @@ import Photo from './Photo.vue';
             </template>
             <v-color-picker mode="hex" v-model="albumInformation.background_color"/>
         </v-menu>
+        <v-btn :icon="editMode ? 'mdi-content-save-edit' : 'mdi-pencil'" :title="editMode ? 'Save & Exit Edit Mode' : 'Enter Edit Mode'" @click="clickToggleEditModeButton"/>
         <v-btn icon="mdi-fullscreen" title="Toggle Fullscreen" @click="toggleFullscreen"/>
     </div>
 
@@ -32,6 +33,23 @@ import Photo from './Photo.vue';
             </v-container>
         </div>
     </div>
+
+    <v-dialog width="50%" v-model="showSaveConfirmation">
+        <v-card>
+            <v-card-item title="Do you want to save all changes?"/>
+            <v-card-item>
+                <span style="margin-right: 5px">
+                    <v-btn prepend-icon="mdi-content-save" text="Save" color="accent-background" @click="saveChanges"/>
+                </span>
+                <span style="margin: 0 5px">
+                    <v-btn prepend-icon="mdi-delete" text="Discard" color="error-background" @click="discardChanges"/>
+                </span>
+                <span style="margin-left: 5px">
+                    <v-btn prepend-icon="mdi-close-octagon" text="Cancel" color="primary" @click="showSaveConfirmation = !showSaveConfirmation"/>
+                </span>
+            </v-card-item>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script lang="ts">
@@ -40,6 +58,8 @@ export default {
         return {
             albumInformation: {} as AlbumType,
             albumContents: [] as JoinedAlbumContentLink[],
+            editMode: false,
+            showSaveConfirmation: false,
             page: 0,
             albumsList: [] as AlbumType[],
         }
@@ -86,6 +106,24 @@ export default {
         },
         toggleFullscreen() {
             this.$emit("toggleFullscreen", true);
+        },
+        clickToggleEditModeButton() {
+            if (this.editMode) {
+                this.showSaveConfirmation = true;
+            }
+            else this.toggleEditMode();
+        },
+        toggleEditMode() {
+            this.editMode = !this.editMode;
+        },
+        saveChanges() {
+            this.toggleEditMode();
+            this.showSaveConfirmation = false;
+        },
+        discardChanges() {
+            this.updateData();
+            this.toggleEditMode();
+            this.showSaveConfirmation = false;
         }
     },
     props:{
