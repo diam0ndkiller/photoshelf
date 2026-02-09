@@ -16,7 +16,7 @@ import AlbumSheet from './AlbumSheet.vue';
         </v-menu>
     </div>
     
-    <AlbumSheet :contents="pages(albumContents)[0]"/>
+    <AlbumSheet :color="albumInformation.background_color" :contents="pages(albumContents)[0]"/>
 </template>
 
 <script lang="ts">

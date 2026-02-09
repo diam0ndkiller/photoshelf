@@ -4,7 +4,8 @@ export interface ErrorResultObject {
 
 export interface BackendConfig {
     credentials: BackendConfigCredentials
-    databaseLocation: string
+    databaseLocation: string,
+    defaultBackgroundColor: string
 }
 
 export interface BackendConfigCredentials {

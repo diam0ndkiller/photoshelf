@@ -25,6 +25,7 @@ export default class PhotoshelfSQLite {
         CREATE TABLE "albums" (
             "id"	INTEGER NOT NULL UNIQUE,
             "name"	TEXT,
+            "background_color"  TEXT,
             PRIMARY KEY("id" AUTOINCREMENT)
         );
 

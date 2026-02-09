@@ -49,7 +49,7 @@ export default class DatabaseController {
             var exists = await database.get("SELECT * from 'albums' WHERE name = ?;", [name]);
             if (exists) return {err: {message: `Album ${name} already exists.`}};
 
-            var res = await database.run("INSERT INTO albums (name) VALUES (?);", [name]);
+            var res = await database.run("INSERT INTO albums (name, background_color) VALUES (?, ?);", [name, ConfigFileHelper.getDefaultBackgroundColor().defaultBackgroundColor]);
 
             return {success: true};
         } catch (err) { return { err } }

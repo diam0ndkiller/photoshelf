@@ -8,7 +8,8 @@ export interface Photo {
 
 export interface Album {
     id: number,
-    name: string
+    name: string,
+    background_color: string,
 };
 
 export interface PhotoLocation {

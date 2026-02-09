@@ -1,9 +1,10 @@
-import { BackendConfig, BackendConfigCredentials, ErrorResultObject } from '@shared/types.js';
+import { BackendConfig, BackendConfigCredentials, ErrorResultObject, TrueSuccessObject } from '@shared/types.js';
 import fs from 'fs';
 
 const DEFAULT_CONFIG: BackendConfig = {
     databaseLocation: "",
-    credentials: {}
+    credentials: {},
+    defaultBackgroundColor: "#99ccff",
 }
 
 export default class ConfigFileHelper {
@@ -18,7 +19,7 @@ export default class ConfigFileHelper {
         return { config };
     }
 
-    static writeConfig(config): ErrorResultObject | {config: BackendConfig} {
+    static writeConfig(config: BackendConfig): ErrorResultObject | {config: BackendConfig} {
         try { fs.writeFileSync('./config/config.json', JSON.stringify(config)); }
         catch (err) { return { err }; }
 
@@ -46,6 +47,25 @@ export default class ConfigFileHelper {
         if ('err' in r) return r;
         else return {credentials: r.config.credentials};
     }
+
+    
+    static getDefaultBackgroundColor() : {defaultBackgroundColor: string} {
+        var r = this.readConfig();
+        if ('err' in r) return {defaultBackgroundColor: DEFAULT_CONFIG.defaultBackgroundColor};
+        else return {defaultBackgroundColor: r.config.defaultBackgroundColor};
+    }
+
+    
+    static setDefaultBackgroundColor(defaultBackgroundColor: string) : ErrorResultObject | {config: BackendConfig} {
+        var r = this.readConfig();
+        if ('err' in r) return r;
+        
+        var config = r.config;
+        config.defaultBackgroundColor = defaultBackgroundColor;
+
+        return this.writeConfig(config);
+    }
+    
 
     static addUser(username: string, bcryptedPassword: string): ErrorResultObject | {config: BackendConfig} {
         var r = this.readConfig();

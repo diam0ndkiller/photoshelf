@@ -6,7 +6,7 @@ import type { PropType } from 'vue';
 
 <template>
     <div class="box-wrapper">
-        <div class="page-box">
+        <div class="page-box" :style="`background-color: ${backgroundColor};`">
             Content goes here
         </div>
     </div>
@@ -32,6 +32,10 @@ export default {
         contents: {
             type: Object as PropType<Array<JoinedAlbumContentLink>>,
             required: true
+        },
+        backgroundColor: {
+            type: String,
+            default: "#99ccff",
         }
     },
     emits: []
@@ -49,8 +53,5 @@ export default {
 .page-box {
   width: min(70vw, 70vh*(16/9));
   height: min(70vh, 70vw*(9/16));
-  
-  background-color: rgb(var(--v-theme-on-surface));
-  border: 10px solid rgb(var(--v-theme-on-background));
 }
 </style>
