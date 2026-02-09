@@ -1,7 +1,7 @@
 import FilesystemPhotoHelper from "../models/filesystemPhotoHelper.js";
 import PhotoshelfSQLite from "../models/photoshelfSqlite.js";
 import ConfigFileHelper from '../models/configFileHelper.js';
-import { Album, PhotoLocation, Photo, AlbumContentLink, JoinedAlbumContentLink } from "@shared/databasetypes.js";
+import { Album, PhotoLocation, Photo, AlbumContentLink, JoinedAlbumContentLink, JoinedPhotoLocationLink } from "@shared/databasetypes.js";
 import { ErrorResultObject, TrueSuccessObject } from "@shared/types.js";
 
 export default class DatabaseController {
@@ -82,14 +82,14 @@ export default class DatabaseController {
         return { album }
     }
 
-    static async listAllPhotos(): Promise<ErrorResultObject | {photos: Array<Photo>}> {
+    static async listAllPhotos(): Promise<ErrorResultObject | {photos: Array<JoinedPhotoLocationLink>}> {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }
         var database = r.database;
 
-        var photos: Array<Photo>;
+        var photos: Array<JoinedPhotoLocationLink>;
 
-        try { photos = await database.all<Photo>("SELECT photos.*, locations.path AS location_path from photos JOIN locations ON photos.location_id = locations.id ORDER BY path ASC;", []); }
+        try { photos = await database.all<JoinedPhotoLocationLink>("SELECT photos.*, locations.path AS location_path from photos JOIN locations ON photos.location_id = locations.id ORDER BY path ASC;", []); }
         catch (err) { return { err } }
         finally { database.closeDatabase(); }
 

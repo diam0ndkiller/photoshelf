@@ -66,7 +66,7 @@ export default {
             createErrorMessage: "",
             showDeleteAlbumPopup: false,
             albumToDelete: {id: -1, name: ''},
-            albums: [{id: -1, name: "Loading..."}],
+            albums: [] as AlbumType[],
         }
     },
     methods: {

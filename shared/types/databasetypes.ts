@@ -1,10 +1,13 @@
 export interface Photo {
     id: number,
     path: string,
-    capture_date: string,
+    capture_date: string
+};
+
+export interface JoinedPhotoLocationLink extends Photo {
     location_id: number,
     location_path: string
-};
+}
 
 export interface Album {
     id: number,
@@ -21,11 +24,11 @@ export interface AlbumContentLink {
     album_id: number,
     type: 'photo' | 'heading' | 'spacer',
     index: number,
-    photo_id: number,
-    title: string
+    photo_id?: number,
+    title?: string
 }
 
 export interface JoinedAlbumContentLink extends AlbumContentLink{
-    photo_path: string,
-    photo_capture_date: string
+    photo_path?: string,
+    photo_capture_date?: string
 }
