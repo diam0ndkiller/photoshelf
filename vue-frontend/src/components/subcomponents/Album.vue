@@ -116,21 +116,11 @@ export default {
         }
     },
     computed: {
-        paddedAlbumContents() {
-            const result = [...this.albumContents]
-            console.log(result);
-            while (result.length < 4 || result.length % 4 != 0) {
-                result.push({album_id: this.albumInformation.id,
-                            type: 'spacer',
-                            index: result.length,})
-            }
-            return result
-        },
         themeOnSheet() {
             return this.isLight(this.albumInformation.background_color) ? vuetify.theme.themes.value['light'] : vuetify.theme.themes.value['dark'];
         },
         styleOnSheet() {
-            return `background-color: ${this.albumInformation.background_color}; color: ${this.themeOnSheet.colors['on-background']};`
+            return `color: ${this.themeOnSheet.colors['on-background']};`
         },
         albumsListWithoutSelf() {
             const result: Array<AlbumType> = [];
@@ -140,7 +130,7 @@ export default {
             return result
         },
         totalPageNumber() {
-            return this.paddedAlbumContents.length / 4
+            return Math.round((this.albumContents.length / 4) + 0.4)
         },
         albumContentPages() {
             return this.getPages(this.albumContents);
