@@ -14,6 +14,7 @@ import Photo from './Photo.vue';
             </template>
             <v-color-picker/>
         </v-menu>
+        <v-btn icon="mdi-fullscreen" title="Toggle Fullscreen" @click="toggleFullscreen"/>
     </div>
 
     <div class="box-wrapper">
@@ -70,6 +71,9 @@ export default {
 
             return res;
         },
+        toggleFullscreen() {
+            this.$emit("toggleFullscreen", true);
+        }
     },
     props:{
         id: {
@@ -80,7 +84,7 @@ export default {
     async mounted() {
         this.updateData();
     },
-    emits: []
+    emits: ["toggleFullscreen"]
 }
 </script>
 

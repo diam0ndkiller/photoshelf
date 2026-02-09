@@ -15,7 +15,7 @@ import { Logger } from '@/utils/logger';
 
 <template>
     <v-app-bar
-            v-if="!showLogin"
+            v-if="!showLogin && !showInFullscreen"
             :elevation="2"
             color="primary"
     >
@@ -37,7 +37,7 @@ import { Logger } from '@/utils/logger';
 
     
     <v-navigation-drawer
-            v-if="showDefaultPageContent"
+            v-if="showDefaultPageContent && !showInFullscreen"
             v-model="showNavigationDrawer"
             permanent
     >
@@ -49,7 +49,7 @@ import { Logger } from '@/utils/logger';
     <InitialSetupPage v-if="!showLogin && showInitialSetup" v-model="showInitialSetup"/>
 
     <HomePage v-if="showDefaultPageContent && currentComponent == 'home'"/>
-    <AlbumsPage v-if="showDefaultPageContent && currentComponent == 'albums'" :current-path="currentPath" @updateNavigationDrawerItems="refreshNavigationDrawer"/>
+    <AlbumsPage v-if="showDefaultPageContent && currentComponent == 'albums'" :current-path="currentPath" @updateNavigationDrawerItems="refreshNavigationDrawer" @toggleFullscreen="showInFullscreen = !showInFullscreen"/>
     <PhotosPage v-if="showDefaultPageContent && currentComponent == 'photos'" :current-path="currentPath"/>
     <AppSettingsPage v-if="showDefaultPageContent && currentComponent == 'settings'" :current-path="currentPath"/>
     <DatabaseSettingsPage v-if="showDefaultPageContent && currentComponent == 'database'" :current-path="currentPath"/>
@@ -68,6 +68,7 @@ export default {
             showInitialSetup: true,
             initialSetupMessage: '',
             refreshNavigationDrawerKey: 0,
+            showInFullscreen: false,
         }
     },
     computed: {

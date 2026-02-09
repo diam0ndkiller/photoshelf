@@ -7,7 +7,7 @@ import type { Album as AlbumType } from '@shared/databasetypes';
 <template>
     <v-main>
         <div class="page-content">
-            <Album v-if="inAlbum" :id="albumId"/>
+            <Album v-if="inAlbum" :id="albumId" @toggleFullscreen="toggleFullscreen"/>
             <div v-else>
                 <div class="page-heading">
                     <h1>All Albums</h1>
@@ -112,6 +112,9 @@ export default {
         },
         updateNavigationDrawerItems() {
             this.$emit('updateNavigationDrawerItems', true);
+        },
+        toggleFullscreen() {
+            this.$emit("toggleFullscreen", true);
         }
     },
     computed: {
@@ -135,7 +138,7 @@ export default {
             required: true,
         }
     },
-    emits: ['updatePath', 'updateNavigationDrawerItems'],
+    emits: ['updatePath', 'updateNavigationDrawerItems', 'toggleFullscreen'],
     async mounted() {
         this.getAlbums();
     }
