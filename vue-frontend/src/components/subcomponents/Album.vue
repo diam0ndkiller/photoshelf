@@ -8,6 +8,10 @@ import Photo from './Photo.vue';
     <div class="page-heading">
         <h1>Album <b>{{ albumInformation.name }}</b></h1>
         <div class="flex-spacer"></div>
+        <v-btn :disabled="page <= 0" icon="mdi-chevron-left" @click="page--"/>
+        {{ page + 1 }} / {{ totalPageNumber }}
+        <v-btn :disabled="page+1 >= totalPageNumber" icon="mdi-chevron-right" @click="page++"/>
+        <div class="flex-spacer"></div>
         <v-menu v-if="editMode" :close-on-content-click="false">
             <template v-slot:activator="{ props }">
                 <v-btn prepend-icon="mdi-palette" v-bind="props" color="primary">Set Background Color</v-btn>
@@ -57,6 +61,9 @@ export default {
                 if (element.id != this.albumInformation.id) result.push(element);
             });
             return result
+        },
+        totalPageNumber() {
+            return this.paddedAlbumContents.length / 4
         },
     },
     watch: {
