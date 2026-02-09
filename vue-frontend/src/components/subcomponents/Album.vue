@@ -8,17 +8,22 @@ import vuetify from '@/plugins/vuetify';
 <template>
     <div class="page-heading">
         <h1>Album <b>{{ albumInformation.name }}</b></h1>
+
         <div class="flex-spacer"></div>
+
         <v-btn :disabled="page <= 0" icon="mdi-chevron-left" @click="page--"/>
         {{ page + 1 }} / {{ totalPageNumber }}
         <v-btn :disabled="page+1 >= totalPageNumber" icon="mdi-chevron-right" @click="page++"/>
+
         <div class="flex-spacer"></div>
+
         <v-menu v-if="editMode" :close-on-content-click="false">
             <template v-slot:activator="{ props }">
                 <v-btn prepend-icon="mdi-palette" v-bind="props" color="primary">Set Background Color</v-btn>
             </template>
             <v-color-picker mode="hex" v-model="albumInformation.background_color"/>
         </v-menu>
+
         <v-btn :icon="editMode ? 'mdi-content-save-edit' : 'mdi-pencil'" :title="editMode ? 'Save & Exit Edit Mode' : 'Enter Edit Mode'" @click="clickToggleEditModeButton"/>
         <v-btn icon="mdi-fullscreen" title="Toggle Fullscreen" @click="toggleFullscreen"/>
     </div>
@@ -85,18 +90,14 @@ import vuetify from '@/plugins/vuetify';
         <v-card>
             <v-card-item title="Do you want to save all changes?"/>
             <v-card-item>
-                <span style="margin-right: 5px">
+                <div style="display: flex; gap: 10px; align-items: center;">
                     <v-btn prepend-icon="mdi-content-save" text="Save" color="accent-background" @click="saveChanges"/>
-                </span>
-                <span style="margin: 0 5px">
                     <v-btn prepend-icon="mdi-delete" text="Discard" color="error-background" @click="discardChanges"/>
-                </span>
-                <span style="margin-left: 5px">
                     <v-btn prepend-icon="mdi-close-octagon" text="Cancel" color="primary" @click="showSaveConfirmation = !showSaveConfirmation"/>
-                </span>
-                <span style="color: rgb(var(--v-theme-error))">
-                    {{ errorMessage }}
-                </span>
+                    <span style="color: rgb(var(--v-theme-error))">
+                        {{ errorMessage }}
+                    </span>
+                </div>
             </v-card-item>
         </v-card>
     </v-dialog>
