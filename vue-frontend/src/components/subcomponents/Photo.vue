@@ -87,7 +87,7 @@ export default {
             return res;
         },
         openFullSizeView() {
-            window.open(this.imageUrl, "blank");
+            window.open(this.imageUrl, "_blank");
         },
         getAlbumMenuItems(): Array<MenuEntryType> {
             var output: Array<MenuEntryType> = [];
