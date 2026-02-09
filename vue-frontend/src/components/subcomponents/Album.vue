@@ -36,7 +36,7 @@ import vuetify from '@/plugins/vuetify';
                     <!-- DISPLAYING PHOTO -->
                     
                     <template v-if="contentItem.type == 'photo'">
-                        <Photo divHeight="100%" divWidth="100%" :imgHeight="editMode ? 'min(30vh, 30vw*(3/4))' : 'min(34vh, 34vw*(3/4))'"
+                        <Photo divHeight="100%" divWidth="100%" :scaleHeight="500" :imgHeight="editMode ? 'min(30vh, 30vw*(3/4))' : 'min(34vh, 34vw*(3/4))'"
                                 :photo="{id: contentItem.photo_id, path: contentItem.photo_path, capture_date: contentItem.photo_capture_date}"
                         />
                         <p v-if="!editMode" :style="styleOnSheet">{{ contentItem.title }}</p>

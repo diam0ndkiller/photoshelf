@@ -101,6 +101,11 @@ router.get('/get-file', async (req, res) => {
       )
     }
 
+    res.setHeader(
+      'Cache-Control',
+      'public, max-age=31536000, immutable'
+    );
+
     readStream.pipe(res);
 
   } catch (err) {
