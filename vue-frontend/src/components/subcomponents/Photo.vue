@@ -78,10 +78,11 @@ export default {
             return res;
         },
         getDivStyle() {
-            var res = "display: inline-block; text-align: center; vertical-align: center; padding: 10px;";
+            var res = "display: inline-block; text-align: center; vertical-align: center;";
 
             if (this.divHeight) res += "height: " + this.divHeight + ";";
             if (this.divWidth) res += "width: " + this.divWidth + ";";
+            if (this.padding) res +=  "padding:" + this.padding + ";";
 
             return res;
         },
@@ -180,6 +181,10 @@ export default {
         scaleHeight: {
             type: Number,
             default: undefined
+        },
+        padding: {
+            type: String,
+            default: undefined,
         },
         albums: {
             type: Array<AlbumType>,

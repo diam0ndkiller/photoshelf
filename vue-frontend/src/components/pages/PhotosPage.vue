@@ -26,6 +26,7 @@ import type { JoinedPhotoLocationLink } from '@shared/databasetypes';
                                 divHeight="25vh" divWidth="25%"
                                 imgHeight="25vh"
                                 :scaleHeight="250"
+                                padding="5px"
                                 :albums="albums"
                             />
                         </div>
