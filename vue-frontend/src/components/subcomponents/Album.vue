@@ -44,6 +44,38 @@ import vuetify from '@/plugins/vuetify';
                     <template v-if="contentItem.type == 'heading'">
                         <h1 v-if="!editMode" :style="styleOnSheet">{{ contentItem.title }}</h1>
                     </template>
+
+
+
+                    <!-- DISPLAYING EDIT OPTIONS -->
+                    
+                    <template v-if="editMode">
+                        <v-card style="padding: 3px; display: flex; align-items: center; width: 100%; gap: 5px;">
+                            
+                            <!-- PHOTO EDIT OPTIONS -->
+                            <template v-if="contentItem.type == 'photo'">
+                                <v-text-field hide-details v-model="contentItem.title" density="compact" label="Add Comment" single-line/>
+                                <v-btn icon="mdi-arrow-expand-vertical" title="Insert Spacer" density="comfortable" color="accent-background" @click="insertSpacer(contentItem.index)"/>
+                                <v-btn icon="mdi-format-header-pound" title="Insert Heading" density="comfortable" color="accent-background" @click="insertHeading(contentItem.index)"/>
+                            </template>
+                            
+                            <!-- HEADING EDIT OPTIONS -->
+                            <template v-if="contentItem.type == 'heading'">
+                                <v-text-field hide-details v-model="contentItem.title" label="Heading" single-line/>
+                            </template>
+
+                            <!-- SPACER EDIT OPTIONS -->
+                            <template v-if="contentItem.type == 'spacer'">
+                                <div class="flex-spacer"></div>
+                                (Spacer)
+                                <div class="flex-spacer"></div>
+                            </template>
+
+                            <!-- GENERAL EDIT OPTIONS -->
+                            <v-btn icon="mdi-delete" title="Delete Item" density="comfortable" color="error-background" @click="deleteContentItem(contentItem.index)"/>
+                        
+                        </v-card>
+                    </template>
                 </div>
             </div>
         </div>
@@ -166,6 +198,26 @@ export default {
 
             return brightness > 130 // threshold for "light" vs "dark"
         },
+
+        insertContentItem(index: number, item: JoinedAlbumContentLink) {
+            this.albumContents.splice(index, 0, item);
+            this.updateContentItemIndexes();
+        },
+        updateContentItemIndexes() {
+            this.albumContents.forEach((el, i) => {
+                el.index = i;
+            });
+        },
+        insertHeading(index: number) {
+            this.insertContentItem(index, {album_id: this.albumInformation.id, type: "heading", index, title: "New Heading"});
+        },
+        insertSpacer(index: number) {
+            this.insertContentItem(index, {album_id: this.albumInformation.id, type: "spacer", index});
+        },
+        deleteContentItem(index: number) {
+            this.albumContents.splice(index, 1);
+            this.updateContentItemIndexes();
+        }
     },
     props:{
         id: {
