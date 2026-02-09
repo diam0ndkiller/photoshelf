@@ -182,6 +182,11 @@ export default {
                 this.errorMessage = saveInformationResult.err.message;
                 return
             }
+            var saveContentsResult = await BackendHandler.saveAlbumContents(this.albumInformation.id, this.albumContents);
+            if ('err' in saveContentsResult) {
+                this.errorMessage = saveContentsResult.err.message;
+                return
+            }
             
             this.updateData();
             this.toggleEditMode();

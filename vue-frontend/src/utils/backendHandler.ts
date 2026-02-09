@@ -99,6 +99,10 @@ export class BackendHandler {
         return await this.fetchUrl(this.BASE_URL+'/albums/save-album-information', 'POST', {information});
     }
 
+    static async saveAlbumContents(albumId: number, contents: Array<JoinedAlbumContentLink>): Promise<ErrorResultObject | SuccessObject> {
+        return await this.fetchUrl(this.BASE_URL+'/albums/save-album-contents', 'POST', {albumId, contents});
+    }
+
     static async getPhotoLocations() {
         return await this.fetchUrl(this.BASE_URL+'/photos/get-photo-locations', 'GET');
     }

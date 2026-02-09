@@ -185,7 +185,85 @@ export default class DatabaseController {
 
         return {success: true}
     }
-    
+
+    static async saveAlbumContents(albumId: number, newContents: Array<JoinedAlbumContentLink>): Promise<ErrorResultObject | TrueSuccessObject> {
+        var r = await this.initializeDatabase();
+        if ('err' in r) return {err: r.err }
+        var database = r.database;
+
+        try {
+            const existing = await this.getAlbumContents(albumId.toString());
+            if ('err' in existing) return {err: existing.err};
+
+            const existingMap = new Map(existing.contents.map((item) => [item.index, item]));
+            const frontendMap = new Map(newContents.map((item) => [item.index, item]));
+
+            var toInsert: AlbumContentLink[] = [];
+            var toUpdate: AlbumContentLink[] = [];
+            var toDelete: AlbumContentLink[] = [];
+
+            var key: number;
+            var existingItem: AlbumContentLink;
+            var newItem: AlbumContentLink;
+
+            newContents.forEach(item => {
+                key = item.index;
+                existingItem = existingMap.get(key);
+
+                newItem = item as AlbumContentLink;
+
+                if (!existingItem) {
+                    toInsert.push(newItem);
+                } else if (
+                    existingItem.type !== newItem.type ||
+                    existingItem.photo_id !== newItem.photo_id ||
+                    existingItem.title !== newItem.title
+                ) {
+                    toUpdate.push(newItem);
+                }
+            });
+
+            existing.contents.forEach(item => {
+                if (!newContents.some((f) => f.index === item.index)) {
+                    toDelete.push(item);
+                }
+            });
+
+            await database.run("BEGIN TRANSACTION;");
+
+            try {
+                for (var item of toDelete) {
+                    await database.run(
+                        'DELETE FROM "albums_contents" WHERE "album_id" = ? AND "index" = ?',
+                        [item.album_id, item.index]
+                    );
+                }
+
+                for (var item of toInsert) {
+                    await database.run(
+                        'INSERT INTO "albums_contents" ("album_id", "index", "type", "photo_id", "title") VALUES (?, ?, ?, ?, ?)',
+                        [item.album_id, item.index, item.type, item.photo_id || null, item.title || null]
+                    )
+                }
+
+                for (var item of toUpdate) {
+                    await database.run(
+                        'UPDATE "albums_contents" SET "type" = ?, "photo_id" = ?, "title" = ? WHERE "album_id" = ? AND "index" = ?',
+                        [item.type, item.photo_id || null, item.title || null, item.album_id, item.index]
+                    )
+                }
+
+                await database.run('COMMIT');
+            } catch (e) {
+                await database.run('ROLLBACK');
+                throw e;
+            }
+        } catch (err) { return {err} }
+        finally { database.closeDatabase(); }
+
+        return {success: true}
+    }
+
     static async getPhotoLocations(): Promise<ErrorResultObject | {photoLocations: Array<PhotoLocation>}> {
         var r = await this.initializeDatabase();
         if ('err' in r) return { err: r.err }

@@ -139,4 +139,31 @@ router.post('/save-album-information', async (req, res) => {
   FeedbackUtils.logRouteCallEndSuccess();
 })
 
+router.post('/save-album-contents', async (req, res) => {
+  FeedbackUtils.logRouteCallStart('/albums/save-album-contents', 'POST');
+
+  var isAuthenticated = AuthenticationUtils.checkAuthentication(req);
+  if ('err' in isAuthenticated) return FeedbackUtils.throwHTTPResConsoleError(res, isAuthenticated.err.message);
+
+  const albumId = req.body.albumId;
+  if (!albumId || typeof albumId !== 'number') return FeedbackUtils.throwHTTPResConsoleError(res, 'Album ID required!', 400);
+
+  const reqContents = req.body.contents;
+  if (!reqContents) return FeedbackUtils.throwHTTPResConsoleError(res, 'Contents required!', 400);
+
+  var albumContents: Array<JoinedAlbumContentLink>;
+
+  try {
+    albumContents = reqContents as Array<JoinedAlbumContentLink>;
+  } catch (err) { return FeedbackUtils.throwHTTPResConsoleError(res, err.message, 400); }
+
+  var r = await DatabaseController.saveAlbumContents(albumId, albumContents);
+
+  if ('err' in r) return FeedbackUtils.throwHTTPResConsoleError(res, r.err.message, 500);
+
+  res.json(r);
+
+  FeedbackUtils.logRouteCallEndSuccess();
+})
+
 export default router;
