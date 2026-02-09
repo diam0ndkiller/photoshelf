@@ -81,8 +81,6 @@ export default {
                 splicedRes.push({location_path: groupedByLocation[i].location_path, photos: this.photos2D(groupedByLocation[i].photos)});
             }
 
-            Logger.debug(splicedRes);
-
             return splicedRes;
         },
         photos2D(photos: Array<JoinedPhotoLocationLink>) {
