@@ -13,6 +13,7 @@
     - [x] Save album contents to backend
     - [ ] Arrow keys navigate pages
     - [ ] Reorder photos
+    - [ ] Add empty items at last position
 - [x] View all photos
     - [x] Add photos to albums
     - [ ] Add links to jump in PhotosPage
@@ -21,3 +22,4 @@
 - [ ] Enable auth :)
 - [ ] App config page
 - [ ] Pin albums to sidebar
+- [ ] Migrate old database + configs
