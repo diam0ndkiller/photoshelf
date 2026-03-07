@@ -12,7 +12,7 @@
     - [x] Add comment per photo / subheadings
     - [x] Delete photo from album (ripple delete)
     - [x] Save album contents to backend
-    - [ ] Arrow keys navigate pages
+    - [x] Arrow keys navigate pages
     - [x] Jump to first / last page
     - [ ] Slideshow mode
     - [ ] Reorder photos

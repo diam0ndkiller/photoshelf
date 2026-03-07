@@ -235,6 +235,12 @@ export default {
         deleteContentItem(index: number) {
             this.albumContents.splice(index, 1);
             this.updateContentItemIndexes();
+        },
+        handleKey(e: KeyboardEvent) {
+            if (e.key === 'ArrowLeft') { if (this.page > 0) this.page-- }
+            else if (e.key === 'ArrowRight') { if (this.page + 1 < this.totalPageNumber) this.page++ }
+            else if (e.key === 'Home') { this.page = 0 }
+            else if (e.key === 'End') { this.page = this.totalPageNumber }
         }
     },
     props:{
@@ -244,7 +250,11 @@ export default {
         }
     },
     async mounted() {
+        window.addEventListener('keydown', this.handleKey);
         this.updateData();
+    },
+    beforeUnmount() {
+        window.removeEventListener('keydown', this.handleKey);
     },
     emits: ["toggleFullscreen"]
 }
