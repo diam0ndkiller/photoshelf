@@ -7,8 +7,8 @@ import vuetify from '@/plugins/vuetify';
 
 <template>
     <div class="page-content" :style="slideshowMode ? `background-color: ${albumInformation.background_color};` : ''">
-        <div class="page-heading">
-            <h1>Album <b>{{ albumInformation.name }}</b></h1>
+        <div class="page-heading" :style="slideshowMode ? styleOnSheet : ''">
+            <h1 v-if="!slideshowMode">Album <b>{{ albumInformation.name }}</b></h1>
 
             <div class="flex-spacer"></div>
 
