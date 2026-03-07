@@ -47,7 +47,7 @@ import vuetify from '@/plugins/vuetify';
                     <!-- DISPLAYING HEADING -->
 
                     <template v-if="contentItem.type == 'heading'">
-                        <h1 v-if="!editMode" :style="styleOnSheet">{{ contentItem.title }}</h1>
+                        <h1 style="text-align: center" v-if="!editMode" :style="styleOnSheet">{{ contentItem.title }}</h1>
                     </template>
 
 
@@ -60,8 +60,6 @@ import vuetify from '@/plugins/vuetify';
                             <!-- PHOTO EDIT OPTIONS -->
                             <template v-if="contentItem.type == 'photo'">
                                 <v-text-field hide-details v-model="contentItem.title" density="compact" label="Add Comment" single-line/>
-                                <v-btn icon="mdi-arrow-expand-vertical" title="Insert Spacer" density="comfortable" color="accent-background" @click="insertSpacer(contentItem.index)"/>
-                                <v-btn icon="mdi-format-header-pound" title="Insert Heading" density="comfortable" color="accent-background" @click="insertHeading(contentItem.index)"/>
                             </template>
                             
                             <!-- HEADING EDIT OPTIONS -->
@@ -77,6 +75,8 @@ import vuetify from '@/plugins/vuetify';
                             </template>
 
                             <!-- GENERAL EDIT OPTIONS -->
+                            <v-btn icon="mdi-arrow-expand-vertical" title="Insert Spacer" density="comfortable" color="accent-background" @click="insertSpacer(contentItem.index)"/>
+                            <v-btn icon="mdi-format-header-pound" title="Insert Heading" density="comfortable" color="accent-background" @click="insertHeading(contentItem.index)"/>
                             <v-btn icon="mdi-delete" title="Delete Item" density="comfortable" color="error-background" @click="deleteContentItem(contentItem.index)"/>
                         
                         </v-card>
