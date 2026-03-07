@@ -169,13 +169,24 @@ export default {
             else return this.albumContentPages.length
         },
         albumContentsNoSpacers(): JoinedAlbumContentLink[] {
-            return this.albumContents.filter(item => item.type !== 'spacer')
+            return this.paddedAlbumContents.filter(item => item.type !== 'spacer')
         },
         albumContentPages() {
-            return this.getPages(this.albumContents);
+            return this.getPages(this.paddedAlbumContents);
         },
         slideshowPageContents() {
             return this.albumContentsNoSpacers[this.page];
+        },
+        paddedAlbumContents() {
+            var newContents = this.albumContents.slice();
+
+            newContents.push({
+                album_id: this.albumInformation.id,
+                type: 'last-item',
+                index: this.albumContents.length,
+            })
+
+            return newContents
         }
     },
     watch: {
@@ -200,16 +211,8 @@ export default {
         getPages(contents: Array<JoinedAlbumContentLink>) {
             var res = [];
 
-            var newContents = contents.slice();
-
-            newContents.push({
-                album_id: this.albumInformation.id,
-                type: 'last-item',
-                index: contents.length,
-            })
-
-            for (let i = 0; i < newContents.length; i += 4) {
-                res.push(newContents.slice(i, i + 4));
+            for (let i = 0; i < contents.length; i += 4) {
+                res.push(contents.slice(i, i + 4));
             }
 
             return res;
