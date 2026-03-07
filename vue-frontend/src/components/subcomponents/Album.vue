@@ -6,84 +6,115 @@ import vuetify from '@/plugins/vuetify';
 </script>
 
 <template>
-    <div class="page-heading">
-        <h1>Album <b>{{ albumInformation.name }}</b></h1>
+    <div class="page-content" :style="slideshowMode ? `background-color: ${albumInformation.background_color};` : ''">
+        <div class="page-heading">
+            <h1>Album <b>{{ albumInformation.name }}</b></h1>
 
-        <div class="flex-spacer"></div>
+            <div class="flex-spacer"></div>
 
-        <v-btn :disabled="page <= 0" icon="mdi-chevron-double-left" @click="page = 0"/>
-        <v-btn :disabled="page <= 0" icon="mdi-chevron-left" @click="page--"/>
-        {{ page + 1 }} / {{ totalPageNumber }}
-        <v-btn :disabled="page+1 >= totalPageNumber" icon="mdi-chevron-right" @click="page++"/>
-        <v-btn :disabled="page+1 >= totalPageNumber" icon="mdi-chevron-double-right" @click="page = totalPageNumber-1"/>
+            <v-btn :disabled="page <= 0" icon="mdi-chevron-double-left" @click="page = 0"/>
+            <v-btn :disabled="page <= 0" icon="mdi-chevron-left" @click="page--"/>
+            {{ page + 1 }} / {{ totalPageNumber }}
+            <v-btn :disabled="page+1 >= totalPageNumber" icon="mdi-chevron-right" @click="page++"/>
+            <v-btn :disabled="page+1 >= totalPageNumber" icon="mdi-chevron-double-right" @click="page = totalPageNumber-1"/>
 
-        <div class="flex-spacer"></div>
+            <div class="flex-spacer"></div>
 
-        <v-menu v-if="editMode" :close-on-content-click="false">
-            <template v-slot:activator="{ props }">
-                <v-btn prepend-icon="mdi-palette" v-bind="props" color="primary">Set Background Color</v-btn>
-            </template>
-            <v-color-picker mode="hex" v-model="albumInformation.background_color"/>
-        </v-menu>
+            <v-menu v-if="editMode" :close-on-content-click="false">
+                <template v-slot:activator="{ props }">
+                    <v-btn icon="mdi-palette" v-bind="props" color="primary" title="Set Background Color"/>
+                </template>
+                <v-color-picker mode="hex" v-model="albumInformation.background_color"/>
+            </v-menu>
 
-        <v-btn :icon="editMode ? 'mdi-content-save-edit' : 'mdi-pencil'" :title="editMode ? 'Save & Exit Edit Mode' : 'Enter Edit Mode'" @click="clickToggleEditModeButton"/>
-        <v-btn icon="mdi-fullscreen" title="Toggle Fullscreen" @click="toggleFullscreen"/>
-    </div>
+            <v-btn v-if="!editMode" icon="mdi-presentation-play" title="Toggle Slideshow" @click="toggleSlideshow"/>
 
-    <div class="box-wrapper">
-        <div class="page-box" :style="`background-color: ${albumInformation.background_color};`">
-            <div class="double-page-grid">
-                <div class="cell" v-for="contentItem in albumContentPages[page]">
+            <v-btn v-if="!slideshowMode" :icon="editMode ? 'mdi-content-save-edit' : 'mdi-pencil'" :title="editMode ? 'Save & Exit Edit Mode' : 'Enter Edit Mode'" @click="clickToggleEditModeButton"/>
+            <v-btn icon="mdi-fullscreen" title="Toggle Fullscreen" @click="toggleFullscreen"/>
+        </div>
 
-                    <!-- DISPLAYING PHOTO -->
-                    
-                    <template v-if="contentItem.type == 'photo'">
-                        <Photo divHeight="100%" divWidth="100%" :scaleHeight="500" :imgHeight="editMode ? 'min(30vh, 30vw*(3/4))' : 'min(34vh, 34vw*(3/4))'"
-                                :photo="{id: contentItem.photo_id, path: contentItem.photo_path, capture_date: contentItem.photo_capture_date}"
-                        />
-                        <p v-if="!editMode" :style="styleOnSheet">{{ contentItem.title }}</p>
-                    </template>
+        <div class="box-wrapper">
+            <div class="page-box" :style="`background-color: ${albumInformation.background_color};`">
 
+                <!-- SLIDESHOW VIEW MODE -->
 
+                <template v-if="slideshowMode">
+                    <div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column; font-size:large">
 
-                    <!-- DISPLAYING HEADING -->
+                        <template v-if="slideshowPageContents.type == 'photo'">
+                            <Photo divHeight="min(75vh, 75vw*(3/4))" divWidth="100%" :scaleHeight="1000" imgHeight="min(75vh, 75vw*(3/4))"
+                                    :photo="{id: slideshowPageContents.photo_id, path: slideshowPageContents.photo_path, capture_date: slideshowPageContents.photo_capture_date}"
+                            />
+                            <p v-if="!editMode" :style="styleOnSheet">{{ slideshowPageContents.title }}</p>
+                        </template>
 
-                    <template v-if="contentItem.type == 'heading'">
-                        <h1 style="text-align: center" v-if="!editMode" :style="styleOnSheet">{{ contentItem.title }}</h1>
-                    </template>
+                        <template v-if="slideshowPageContents.type == 'heading'">
+                            <h1 v-if="!editMode" :style="styleOnSheet">{{ slideshowPageContents.title }}</h1>
+                        </template>
 
+                        <template v-if="slideshowPageContents.type == 'last-item'">
+                            <p v-if="!editMode" :style="styleOnSheet">(end of album)</p>
+                        </template>
+                    </div>
+                </template>
 
+                <!-- GRID VIEW MODE -->
 
-                    <!-- DISPLAYING EDIT OPTIONS -->
-                    
-                    <template v-if="editMode">
-                        <v-card style="padding: 3px; display: flex; align-items: center; width: 100%; gap: 5px;">
+                <template v-else>
+                    <div class="double-page-grid">
+                        <div class="cell" v-for="contentItem in albumContentPages[page]">
+
+                            <!-- DISPLAYING PHOTO -->
                             
-                            <!-- PHOTO EDIT OPTIONS -->
                             <template v-if="contentItem.type == 'photo'">
-                                <v-text-field hide-details v-model="contentItem.title" density="compact" label="Add Comment" single-line/>
+                                <Photo divHeight="100%" divWidth="100%" :scaleHeight="500" :imgHeight="editMode ? 'min(30vh, 30vw*(3/4))' : 'min(34vh, 34vw*(3/4))'"
+                                        :photo="{id: contentItem.photo_id, path: contentItem.photo_path, capture_date: contentItem.photo_capture_date}"
+                                />
+                                <p v-if="!editMode" :style="styleOnSheet">{{ contentItem.title }}</p>
                             </template>
-                            
-                            <!-- HEADING EDIT OPTIONS -->
+
+
+
+                            <!-- DISPLAYING HEADING -->
+
                             <template v-if="contentItem.type == 'heading'">
-                                <v-text-field hide-details v-model="contentItem.title" label="Heading" single-line/>
+                                <h1 style="text-align: center" v-if="!editMode" :style="styleOnSheet">{{ contentItem.title }}</h1>
                             </template>
 
-                            <!-- SPACER EDIT OPTIONS -->
-                            <template v-if="contentItem.type == 'spacer' || contentItem.type == 'last-item'">
-                                <div class="flex-spacer"></div>
-                                {{ contentItem.type == 'spacer' ? "(Spacer)" : "(End of Album)" }}
-                                <div class="flex-spacer"></div>
-                            </template>
 
-                            <!-- GENERAL EDIT OPTIONS -->
-                            <v-btn icon="mdi-arrow-expand-vertical" title="Insert Spacer" density="comfortable" color="accent-background" @click="insertSpacer(contentItem.index)"/>
-                            <v-btn icon="mdi-format-header-pound" title="Insert Heading" density="comfortable" color="accent-background" @click="insertHeading(contentItem.index)"/>
-                            <v-btn v-if="contentItem.type != 'last-item'" icon="mdi-delete" title="Delete Item" density="comfortable" color="error-background" @click="deleteContentItem(contentItem.index)"/>
-                        
-                        </v-card>
-                    </template>
-                </div>
+
+                            <!-- DISPLAYING EDIT OPTIONS -->
+                            
+                            <template v-if="editMode">
+                                <v-card style="padding: 3px; display: flex; align-items: center; width: 100%; gap: 5px;">
+                                    
+                                    <!-- PHOTO EDIT OPTIONS -->
+                                    <template v-if="contentItem.type == 'photo'">
+                                        <v-text-field hide-details v-model="contentItem.title" density="compact" label="Add Comment" single-line/>
+                                    </template>
+                                    
+                                    <!-- HEADING EDIT OPTIONS -->
+                                    <template v-if="contentItem.type == 'heading'">
+                                        <v-text-field hide-details v-model="contentItem.title" label="Heading" single-line/>
+                                    </template>
+
+                                <!-- SPACER EDIT OPTIONS -->
+                                <template v-if="contentItem.type == 'spacer' || contentItem.type == 'last-item'">
+                                    <div class="flex-spacer"></div>
+                                    {{ contentItem.type == 'spacer' ? "(Spacer)" : "(End of Album)" }}
+                                    <div class="flex-spacer"></div>
+                                </template>
+
+                                <!-- GENERAL EDIT OPTIONS -->
+                                <v-btn icon="mdi-arrow-expand-vertical" title="Insert Spacer" density="comfortable" color="accent-background" @click="insertSpacer(contentItem.index)"/>
+                                <v-btn icon="mdi-format-header-pound" title="Insert Heading" density="comfortable" color="accent-background" @click="insertHeading(contentItem.index)"/>
+                                <v-btn v-if="contentItem.type != 'last-item'" icon="mdi-delete" title="Delete Item" density="comfortable" color="error-background" @click="deleteContentItem(contentItem.index)"/>
+                            
+                            </v-card>
+                        </template>
+                    </div>
+                    </div>
+                </template>
             </div>
         </div>
     </div>
@@ -116,6 +147,7 @@ export default {
             showSaveConfirmation: false,
             page: 0,
             errorMessage: "",
+            slideshowMode: false,
         }
     },
     computed: {
@@ -136,8 +168,14 @@ export default {
             if (this.slideshowMode) return this.albumContentsNoSpacers.length
             else return this.albumContentPages.length
         },
+        albumContentsNoSpacers(): JoinedAlbumContentLink[] {
+            return this.albumContents.filter(item => item.type !== 'spacer')
+        },
         albumContentPages() {
             return this.getPages(this.albumContents);
+        },
+        slideshowPageContents() {
+            return this.albumContentsNoSpacers[this.page];
         }
     },
     watch: {
@@ -178,6 +216,17 @@ export default {
         },
         toggleFullscreen() {
             this.$emit("toggleFullscreen", true);
+        },
+        toggleSlideshow() {
+            this.slideshowMode = !this.slideshowMode;
+            if (this.slideshowMode) {
+                var firstItemNoSpacer = this.albumContents.filter(e => e.index >= this.page*4 - 1)[0];
+                var itemIndex = 0;
+                if (firstItemNoSpacer == undefined) itemIndex = this.albumContentsNoSpacers.length - 1;
+                else itemIndex = firstItemNoSpacer.index;
+                this.page = itemIndex;
+            }
+            else this.page = Math.round(this.albumContentsNoSpacers[this.page].index / 4 - .49)
         },
         clickToggleEditModeButton() {
             if (this.editMode) {

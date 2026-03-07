@@ -14,7 +14,7 @@
     - [x] Save album contents to backend
     - [x] Arrow keys navigate pages
     - [x] Jump to first / last page
-    - [ ] Slideshow mode
+    - [x] Slideshow mode
     - [ ] Reorder photos
     - [x] Add empty items at last position
 - [x] View all photos

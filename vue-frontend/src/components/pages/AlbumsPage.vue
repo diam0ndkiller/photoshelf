@@ -6,24 +6,22 @@ import type { Album as AlbumType } from '@shared/databasetypes';
 
 <template>
     <v-main>
-        <div class="page-content">
-            <Album v-if="inAlbum" :id="albumId" @toggleFullscreen="toggleFullscreen"/>
-            <div v-else>
-                <div class="page-heading">
-                    <h1>All Albums</h1>
-                    <div class="flex-spacer"></div>
-                    <span style="color: rgb(var(--v-theme-accent))">{{ statusMessage }}</span>
-                    <span style="color: rgb(var(--v-theme-error))">{{ errorMessage }}</span>
-                    <div><v-btn color="accent-background" prepend-icon='mdi-plus-circle' text='New Album' @click="toggleAddAlbum()"/></div>
-                </div>
-                <ul>
-                    <template v-for="album in albums">
-                        <li v-if="album.id != -1">
-                            {{ album.name }} <v-btn prepend-icon="mdi-delete" color="error-background" text="Delete album" @click="prepareDeleteAlbum(album)"/>
-                        </li>
-                    </template>
-                </ul>
+        <Album v-if="inAlbum" :id="albumId" @toggleFullscreen="toggleFullscreen"/>
+        <div v-else class="page-content">
+            <div class="page-heading">
+                <h1>All Albums</h1>
+                <div class="flex-spacer"></div>
+                <span style="color: rgb(var(--v-theme-accent))">{{ statusMessage }}</span>
+                <span style="color: rgb(var(--v-theme-error))">{{ errorMessage }}</span>
+                <div><v-btn color="accent-background" prepend-icon='mdi-plus-circle' text='New Album' @click="toggleAddAlbum()"/></div>
             </div>
+            <ul>
+                <template v-for="album in albums">
+                    <li v-if="album.id != -1">
+                        {{ album.name }} <v-btn prepend-icon="mdi-delete" color="error-background" text="Delete album" @click="prepareDeleteAlbum(album)"/>
+                    </li>
+                </template>
+            </ul>
         </div>
         <v-dialog width="50%" v-model="showAddAlbumPopup">
             <v-card>
