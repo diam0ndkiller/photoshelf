@@ -13,7 +13,7 @@
     - [x] Delete photo from album (ripple delete)
     - [x] Save album contents to backend
     - [ ] Arrow keys navigate pages
-    - [ ] Jump to first / last page
+    - [x] Jump to first / last page
     - [ ] Slideshow mode
     - [ ] Reorder photos
     - [x] Add empty items at last position

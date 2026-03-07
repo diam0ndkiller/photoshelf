@@ -11,9 +11,11 @@ import vuetify from '@/plugins/vuetify';
 
         <div class="flex-spacer"></div>
 
+        <v-btn :disabled="page <= 0" icon="mdi-chevron-double-left" @click="page = 0"/>
         <v-btn :disabled="page <= 0" icon="mdi-chevron-left" @click="page--"/>
         {{ page + 1 }} / {{ totalPageNumber }}
         <v-btn :disabled="page+1 >= totalPageNumber" icon="mdi-chevron-right" @click="page++"/>
+        <v-btn :disabled="page+1 >= totalPageNumber" icon="mdi-chevron-double-right" @click="page = totalPageNumber-1"/>
 
         <div class="flex-spacer"></div>
 
