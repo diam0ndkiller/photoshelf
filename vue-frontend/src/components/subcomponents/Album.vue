@@ -111,10 +111,10 @@ export default {
         return {
             albumInformation: {} as AlbumType,
             albumContents: [] as JoinedAlbumContentLink[],
+            albumsList: [] as AlbumType[],
             editMode: false,
             showSaveConfirmation: false,
             page: 0,
-            albumsList: [] as AlbumType[],
             errorMessage: "",
         }
     },
@@ -141,13 +141,23 @@ export default {
         }
     },
     watch: {
-        
+        async id() {
+            await this.reset();
+        }
     },
     methods: {
         async updateData() {
             this.albumInformation = (await BackendHandler.getAlbumInformation(this.id)).album;
             this.albumContents = (await BackendHandler.getAlbumContents(this.id)).contents;
             this.albumsList = (await BackendHandler.listAlbums()).albums;
+        },
+        async reset() {
+            this.editMode = false;
+            this.showSaveConfirmation = false;
+            this.page = 0;
+            this.errorMessage = "";
+            this.slideshowMode = false;
+            await this.updateData();
         },
         getPages(contents: Array<JoinedAlbumContentLink>) {
             var res = [];
