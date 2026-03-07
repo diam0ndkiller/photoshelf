@@ -2,7 +2,7 @@
 import { BackendHandler } from '@/utils/backendHandler';
 import Photo from '../subcomponents/Photo.vue';
 import { Logger } from '@/utils/logger';
-import type { JoinedPhotoLocationLink } from '@shared/databasetypes';
+import type { Album as AlbumType, JoinedPhotoLocationLink } from '@shared/databasetypes';
 </script>
 
 <template>
@@ -46,8 +46,8 @@ export default {
         return {
             errorMessage: '',
             statusMessage: '',
-            photos: [{id: 0, path: '', capture_date: '', location_id: 0, location_path: ''}],
-            albums: [{id: -1, name: ''}],
+            photos: [{}] as JoinedPhotoLocationLink[],
+            albums: [{}] as AlbumType[],
             locationsExpanded: {} as {[key: string]: boolean}
         }
     },
