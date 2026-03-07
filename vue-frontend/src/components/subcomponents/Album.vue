@@ -223,13 +223,11 @@ export default {
         toggleSlideshow() {
             this.slideshowMode = !this.slideshowMode;
             if (this.slideshowMode) {
-                var firstItemNoSpacer = this.albumContents.filter(e => e.index >= this.page*4 - 1)[0];
-                var itemIndex = 0;
-                if (firstItemNoSpacer == undefined) itemIndex = this.albumContentsNoSpacers.length - 1;
-                else itemIndex = firstItemNoSpacer.index;
-                this.page = itemIndex;
+                var firstItemNoSpacer = this.albumContentsNoSpacers.find(e => e.index >= this.page*4);
+                if (firstItemNoSpacer == undefined) this.page = this.albumContentsNoSpacers.length - 1;
+                else this.page = this.albumContentsNoSpacers.indexOf(firstItemNoSpacer)
             }
-            else this.page = Math.round(this.albumContentsNoSpacers[this.page].index / 4 - .49)
+            else this.page = Math.round(this.albumContentsNoSpacers[this.page].index / 4 - .24)
         },
         clickToggleEditModeButton() {
             if (this.editMode) {
