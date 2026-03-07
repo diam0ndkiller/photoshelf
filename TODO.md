@@ -2,7 +2,7 @@
 ## Main Ideas:
 - [ ] View ablum overview
     - [x] Create / Delete albums
-    - [x] Rename albums
+    - [ ] Rename albums
 - [x] View albums
     - 4 spots per page
         - Photo (+Comment)
