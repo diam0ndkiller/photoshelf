@@ -16,23 +16,26 @@ import type { JoinedPhotoLocationLink } from '@shared/databasetypes';
                 <div style="display: inline-block"><v-btn color="primary" prepend-icon='mdi-refresh' text='Scan for new photos' @click="scanNewPhotos()"/></div>
                 <div style="display: inline-block"><v-btn color="error-background" prepend-icon='mdi-refresh' text='Rescan all photos' @click="rescanPhotos()"/></div>
             </div>
-
-            <v-infinite-scroll>
-                <template v-for="photoLocationGroup in photos3D(photos)">
-                    <h2>{{ photoLocationGroup.location_path }}:</h2>
-                    <template v-for="photoRow in photoLocationGroup.photos">
-                        <div>
-                            <Photo v-for="photo in photoRow" :photo="photo"
-                                divHeight="25vh" divWidth="25%"
-                                imgHeight="25vh"
-                                :scaleHeight="250"
-                                padding="5px"
-                                :albums="albums"
-                            />
-                        </div>
-                    </template>   
-                </template>             
-            </v-infinite-scroll>
+            <template v-for="photoLocationGroup in photos3D(photos)">
+                <button class="link-btn" @click="locationsExpanded[photoLocationGroup.location_path] = !locationsExpanded[photoLocationGroup.location_path]">
+                    <h2>
+                        <v-icon v-if="locationsExpanded[photoLocationGroup.location_path]">mdi-chevron-down</v-icon>
+                        <v-icon v-else>mdi-chevron-right</v-icon>
+                        {{ photoLocationGroup.location_path }}:
+                    </h2>
+                </button>
+                <template v-if="locationsExpanded[photoLocationGroup.location_path]" v-for="photoRow in photoLocationGroup.photos" :key="photoRow[0]?.id">
+                    <div>
+                        <Photo v-for="photo in photoRow" :photo="photo"
+                            divHeight="25vh" divWidth="25%"
+                            imgHeight="25vh"
+                            :scaleHeight="250"
+                            padding="5px"
+                            :albums="albums"
+                        />
+                    </div>
+                </template>   
+            </template>
         </div>
     </v-main>
 </template>
@@ -45,6 +48,7 @@ export default {
             statusMessage: '',
             photos: [{id: 0, path: '', capture_date: '', location_id: 0, location_path: ''}],
             albums: [{id: -1, name: ''}],
+            locationsExpanded: {} as {[key: string]: boolean}
         }
     },
     computed: {
@@ -73,6 +77,7 @@ export default {
                     groupedByLocation.push({location_path: currentLocationPath, photos: new Array<JoinedPhotoLocationLink>()});
                 }
                 groupedByLocation[currentLocationIndex].photos.push(photos[i]);
+                if (!(photos[i].location_path in this.locationsExpanded)) this.locationsExpanded[photos[i].location_path] = false;
             }
 
             var splicedRes = [];
@@ -132,4 +137,10 @@ export default {
 
 <style>
 @import url('../../assets/style/page.css');
+
+.link-btn {
+  all: unset;
+  cursor: pointer;
+  display: inline-block;
+}
 </style>

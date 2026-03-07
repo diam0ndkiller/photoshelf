@@ -2,6 +2,7 @@
 ## Main Ideas:
 - [ ] View ablum overview
     - [x] Create / Delete albums
+    - [x] Rename albums
 - [x] View albums
     - 4 spots per page
         - Photo (+Comment)
@@ -16,7 +17,7 @@
     - [ ] Add empty items at last position
 - [x] View all photos
     - [x] Add photos to albums
-    - [ ] Add links to jump in PhotosPage
+    - [x] Collapse PhotosPage sections by default ~~Add links to jump in PhotosPage~~
 - [ ] Home page
 - [ ] Update install scripts
 - [ ] Enable auth :)
