@@ -68,16 +68,16 @@ import vuetify from '@/plugins/vuetify';
                             </template>
 
                             <!-- SPACER EDIT OPTIONS -->
-                            <template v-if="contentItem.type == 'spacer'">
+                            <template v-if="contentItem.type == 'spacer' || contentItem.type == 'last-item'">
                                 <div class="flex-spacer"></div>
-                                (Spacer)
+                                {{ contentItem.type == 'spacer' ? "(Spacer)" : "(End of Album)" }}
                                 <div class="flex-spacer"></div>
                             </template>
 
                             <!-- GENERAL EDIT OPTIONS -->
                             <v-btn icon="mdi-arrow-expand-vertical" title="Insert Spacer" density="comfortable" color="accent-background" @click="insertSpacer(contentItem.index)"/>
                             <v-btn icon="mdi-format-header-pound" title="Insert Heading" density="comfortable" color="accent-background" @click="insertHeading(contentItem.index)"/>
-                            <v-btn icon="mdi-delete" title="Delete Item" density="comfortable" color="error-background" @click="deleteContentItem(contentItem.index)"/>
+                            <v-btn v-if="contentItem.type != 'last-item'" icon="mdi-delete" title="Delete Item" density="comfortable" color="error-background" @click="deleteContentItem(contentItem.index)"/>
                         
                         </v-card>
                     </template>
@@ -131,7 +131,8 @@ export default {
             return result
         },
         totalPageNumber() {
-            return Math.round((this.albumContents.length / 4) + 0.4)
+            if (this.slideshowMode) return this.albumContentsNoSpacers.length
+            else return this.albumContentPages.length
         },
         albumContentPages() {
             return this.getPages(this.albumContents);
@@ -149,8 +150,16 @@ export default {
         getPages(contents: Array<JoinedAlbumContentLink>) {
             var res = [];
 
-            for (let i = 0; i < contents.length; i += 4) {
-                res.push(contents.slice(i, i + 4));
+            var newContents = contents.slice();
+
+            newContents.push({
+                album_id: this.albumInformation.id,
+                type: 'last-item',
+                index: contents.length,
+            })
+
+            for (let i = 0; i < newContents.length; i += 4) {
+                res.push(newContents.slice(i, i + 4));
             }
 
             return res;

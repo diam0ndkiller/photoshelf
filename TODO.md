@@ -16,7 +16,7 @@
     - [ ] Jump to first / last page
     - [ ] Slideshow mode
     - [ ] Reorder photos
-    - [ ] Add empty items at last position
+    - [x] Add empty items at last position
 - [x] View all photos
     - [x] Add photos to albums
     - [x] Collapse PhotosPage sections by default ~~Add links to jump in PhotosPage~~

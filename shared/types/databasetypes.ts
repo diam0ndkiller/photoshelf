@@ -22,7 +22,7 @@ export interface PhotoLocation {
 
 export interface AlbumContentLink {
     album_id: number,
-    type: 'photo' | 'heading' | 'spacer',
+    type: 'photo' | 'heading' | 'spacer' | 'last-item',
     index: number,
     photo_id?: number,
     title?: string
