@@ -227,7 +227,7 @@ export default {
                 if (firstItemNoSpacer == undefined) this.page = this.albumContentsNoSpacers.length - 1;
                 else this.page = this.albumContentsNoSpacers.indexOf(firstItemNoSpacer)
             }
-            else this.page = Math.round(this.albumContentsNoSpacers[this.page].index / 4 - .24)
+            else this.page = Math.round(this.albumContentsNoSpacers[this.page].index / 4 - 0.49)
         },
         clickToggleEditModeButton() {
             if (this.editMode) {
